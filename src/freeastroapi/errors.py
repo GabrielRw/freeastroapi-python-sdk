@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datetime import UTC, datetime
+from email.utils import parsedate_to_datetime
 from typing import Any
 
 import httpx
@@ -56,6 +58,21 @@ class TimeoutError(NetworkError):
     pass
 
 
+def _retry_after_seconds(value: str | None) -> float | None:
+    if value is None:
+        return None
+    try:
+        return max(0.0, float(value))
+    except ValueError:
+        try:
+            retry_at = parsedate_to_datetime(value)
+            if retry_at.tzinfo is None:
+                retry_at = retry_at.replace(tzinfo=UTC)
+            return max(0.0, (retry_at - datetime.now(UTC)).total_seconds())
+        except (TypeError, ValueError, OverflowError):
+            return None
+
+
 def error_from_response(response: httpx.Response) -> FreeAstroError:
     try:
         payload: dict[str, Any] = response.json()
@@ -92,11 +109,7 @@ def error_from_response(response: httpx.Response) -> FreeAstroError:
     if response.status_code == 409:
         return error(ConflictError)
     if response.status_code == 429:
-        retry_after_header = response.headers.get("retry-after")
-        try:
-            retry_after = float(retry_after_header) if retry_after_header is not None else None
-        except ValueError:
-            retry_after = None
+        retry_after = _retry_after_seconds(response.headers.get("retry-after"))
         return RateLimitError(
             message,
             retry_after=retry_after,

@@ -98,7 +98,8 @@ class _ClientSettings:
         self.headers = dict(headers or {})
 
     def request_headers(self, options: RequestOptions) -> dict[str, str]:
-        headers = {**self.headers, **options.headers, "accept": "application/json", "x-api-key": self.api_key}
+        headers = {key.lower(): value for key, value in {**self.headers, **options.headers}.items()}
+        headers.update({"accept": "application/json", "x-api-key": self.api_key})
         if options.idempotency_key:
             headers["idempotency-key"] = options.idempotency_key
         return headers
@@ -179,7 +180,7 @@ class FreeAstro:
                     params=params,
                     json=json,
                     headers=self._settings.request_headers(options),
-                    timeout=options.timeout or self._settings.timeout,
+                    timeout=options.timeout if options.timeout is not None else self._settings.timeout,
                 )
             except httpx.TimeoutException as exc:
                 if retry and attempt < retry.retries:
@@ -270,7 +271,7 @@ class AsyncFreeAstro:
                     params=params,
                     json=json,
                     headers=self._settings.request_headers(options),
-                    timeout=options.timeout or self._settings.timeout,
+                    timeout=options.timeout if options.timeout is not None else self._settings.timeout,
                 )
             except httpx.TimeoutException as exc:
                 if retry and attempt < retry.retries:
