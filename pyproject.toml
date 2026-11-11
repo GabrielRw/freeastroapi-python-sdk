@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "freeastroapi"
-version = "0.2.0"
+version = "0.3.0"
 description = "Official Python SDK for FreeAstroAPI"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -48,6 +48,10 @@ packages = ["src/freeastroapi"]
 addopts = "-q"
 asyncio_mode = "auto"
 testpaths = ["tests"]
+markers = [
+  "contract: calls every operation against a Prism mock; skipped unless PRISM_URL is set",
+  "live: calls the production API; skipped unless FREEASTRO_TEST_API_KEY is set",
+]
 
 [tool.ruff]
 line-length = 120

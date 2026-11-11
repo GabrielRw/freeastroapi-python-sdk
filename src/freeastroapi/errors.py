@@ -41,6 +41,9 @@ class ConflictError(FreeAstroError):
 
 
 class RateLimitError(FreeAstroError):
+    """HTTP 429. ``retry_after`` is the suggested wait in seconds (``Retry-After`` header or
+    ``retry_after_ms`` in the body), or ``None``."""
+
     def __init__(self, message: str, *, retry_after: float | None = None, **kwargs: Any) -> None:
         super().__init__(message, **kwargs)
         self.retry_after = retry_after
@@ -73,23 +76,63 @@ def _retry_after_seconds(value: str | None) -> float | None:
             return None
 
 
-def error_from_response(response: httpx.Response) -> FreeAstroError:
+def _payload(response: httpx.Response) -> dict[str, Any]:
     try:
-        payload: dict[str, Any] = response.json()
+        payload = response.json()
     except (ValueError, TypeError):
-        payload = {}
+        return {}
+    return payload if isinstance(payload, dict) else {"detail": payload}
 
+
+def retry_after(response: httpx.Response) -> float | None:
+    """Seconds to wait before retrying: the ``Retry-After`` header (seconds or an HTTP date),
+    else ``retry_after_ms`` in the error body."""
+    seconds = _retry_after_seconds(response.headers.get("retry-after"))
+    if seconds is not None:
+        return seconds
+    milliseconds = _payload(response).get("retry_after_ms")
+    if isinstance(milliseconds, int | float) and not isinstance(milliseconds, bool):
+        return max(0.0, milliseconds / 1000)
+    return None
+
+
+def _text(value: Any) -> str | None:
+    return value if isinstance(value, str) and value.strip() else None
+
+
+def _validation_message(detail: Any) -> str | None:
+    """``"body.year: Field required"`` for the first item of an ``HTTPValidationError``."""
+    if not isinstance(detail, list) or not detail or not isinstance(detail[0], dict):
+        return None
+    first = detail[0]
+    message = _text(first.get("msg"))
+    location = first.get("loc")
+    if message and isinstance(location, list) and location:
+        return f"{'.'.join(str(part) for part in location)}: {message}"
+    return message
+
+
+def error_from_response(response: httpx.Response) -> FreeAstroError:
+    """The typed error for a non-2xx response.
+
+    Error bodies follow the spec's ``ErrorResponse``: ``detail`` is a message or an object with
+    an ``error`` code and a ``message``; gateway errors carry a top-level ``error`` code.
+    """
+    payload = _payload(response)
     detail = payload.get("detail")
-    message_value = (
-        detail
-        if isinstance(detail, str) and detail.strip()
-        else payload.get("message") or payload.get("error") or response.reason_phrase or f"HTTP {response.status_code}"
+    detail_object: dict[str, Any] = detail if isinstance(detail, dict) else {}
+
+    message = (
+        _text(detail)
+        or _text(detail_object.get("message"))
+        or _text(payload.get("message"))
+        or _text(payload.get("error"))
+        or _validation_message(detail)
+        or response.reason_phrase
+        or f"HTTP {response.status_code}"
     )
-    message = message_value if isinstance(message_value, str) else str(message_value)
-    code_value = payload.get("code")
-    code = code_value if isinstance(code_value, str) else None
-    request_id_value = response.headers.get("x-request-id") or payload.get("trace_id")
-    request_id = request_id_value if isinstance(request_id_value, str) else None
+    code = _text(payload.get("code")) or _text(payload.get("error")) or _text(detail_object.get("error"))
+    request_id = _text(response.headers.get("x-request-id")) or _text(payload.get("trace_id"))
 
     def error(error_type: type[FreeAstroError]) -> FreeAstroError:
         return error_type(
@@ -109,10 +152,9 @@ def error_from_response(response: httpx.Response) -> FreeAstroError:
     if response.status_code == 409:
         return error(ConflictError)
     if response.status_code == 429:
-        retry_after = _retry_after_seconds(response.headers.get("retry-after"))
         return RateLimitError(
             message,
-            retry_after=retry_after,
+            retry_after=retry_after(response),
             status=response.status_code,
             code=code,
             request_id=request_id,
