@@ -10,6 +10,7 @@ from typing import Any, Generic, TypeVar
 
 import httpx
 
+from ._generated import AsyncGeneratedResources, GeneratedResources
 from .errors import NetworkError, TimeoutError, error_from_response
 from .resources import (
     AsyncGeoResource,
@@ -114,7 +115,15 @@ class _ClientSettings:
         return options.retry if isinstance(options.retry, RetryConfig) else self.retry
 
 
-class FreeAstro:
+class FreeAstro(GeneratedResources):
+    """FreeAstroAPI client.
+
+    Resources follow the API paths: ``client.western.natal.insights(...)`` calls
+    ``POST /api/v1/western/natal/insights``. Where an operation exists in several API versions,
+    the plain method name calls the latest one and older ones carry a suffix
+    (``client.vedic.chart`` is v2, ``client.vedic.chart_v1`` is v1).
+    """
+
     def __init__(
         self,
         *,
@@ -137,6 +146,7 @@ class FreeAstro:
         self.moon = MoonResource(self)
         self.sky_events = SkyEventsResource(self)
         self.western = WesternResource(self)
+        self._init_generated_resources(self)
 
     def __enter__(self) -> FreeAstro:
         return self
@@ -205,7 +215,9 @@ class FreeAstro:
             raise error_from_response(response)
 
 
-class AsyncFreeAstro:
+class AsyncFreeAstro(AsyncGeneratedResources):
+    """Async FreeAstroAPI client with the same resources as :class:`FreeAstro`."""
+
     def __init__(
         self,
         *,
@@ -228,6 +240,7 @@ class AsyncFreeAstro:
         self.moon = AsyncMoonResource(self)
         self.sky_events = AsyncSkyEventsResource(self)
         self.western = AsyncWesternResource(self)
+        self._init_generated_resources(self)
 
     async def __aenter__(self) -> AsyncFreeAstro:
         return self

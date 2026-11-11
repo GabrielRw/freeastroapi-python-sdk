@@ -4,6 +4,16 @@ from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel
 
+from ._generated import (
+    AsyncGeoResourceBase,
+    AsyncMoonResourceBase,
+    AsyncSkyEventsResourceBase,
+    AsyncWesternResourceBase,
+    GeoResourceBase,
+    MoonResourceBase,
+    SkyEventsResourceBase,
+    WesternResourceBase,
+)
 from .models import (
     CitySearchResponse,
     GeoSearchParams,
@@ -25,9 +35,7 @@ def _params(model: BaseModel) -> dict[str, Any]:
     return model.model_dump(mode="json", exclude_none=True)
 
 
-class GeoResource:
-    def __init__(self, client: FreeAstro) -> None:
-        self._client = client
+class GeoResource(GeoResourceBase):
 
     def search(
         self,
@@ -43,9 +51,7 @@ class GeoResource:
         )
 
 
-class MoonResource:
-    def __init__(self, client: FreeAstro) -> None:
-        self._client = client
+class MoonResource(MoonResourceBase):
 
     def phase(
         self, params: MoonPhaseParams | None = None, *, options: RequestOptions | None = None
@@ -61,9 +67,7 @@ class MoonResource:
         )
 
 
-class SkyEventsResource:
-    def __init__(self, client: FreeAstro) -> None:
-        self._client = client
+class SkyEventsResource(SkyEventsResourceBase):
 
     def list(self, params: SkyEventsParams, *, options: RequestOptions | None = None) -> SkyEventsResponse:
         return SkyEventsResponse.model_validate(
@@ -103,14 +107,13 @@ class WesternSignsResource:
         )
 
 
-class WesternResource:
+class WesternResource(WesternResourceBase):
     def __init__(self, client: FreeAstro) -> None:
+        super().__init__(client)
         self.signs = WesternSignsResource(client)
 
 
-class AsyncGeoResource:
-    def __init__(self, client: AsyncFreeAstro) -> None:
-        self._client = client
+class AsyncGeoResource(AsyncGeoResourceBase):
 
     async def search(
         self,
@@ -125,9 +128,7 @@ class AsyncGeoResource:
         return CitySearchResponse.model_validate(data)
 
 
-class AsyncMoonResource:
-    def __init__(self, client: AsyncFreeAstro) -> None:
-        self._client = client
+class AsyncMoonResource(AsyncMoonResourceBase):
 
     async def phase(
         self, params: MoonPhaseParams | None = None, *, options: RequestOptions | None = None
@@ -141,9 +142,7 @@ class AsyncMoonResource:
         return MoonMonthResponse.model_validate(data)
 
 
-class AsyncSkyEventsResource:
-    def __init__(self, client: AsyncFreeAstro) -> None:
-        self._client = client
+class AsyncSkyEventsResource(AsyncSkyEventsResourceBase):
 
     async def list(self, params: SkyEventsParams, *, options: RequestOptions | None = None) -> SkyEventsResponse:
         data = await self._client.request("GET", "/api/v1/sky-events", params=_params(params), options=options)
@@ -185,6 +184,7 @@ class AsyncWesternSignsResource:
         return WesternSignResponse.model_validate(data)
 
 
-class AsyncWesternResource:
+class AsyncWesternResource(AsyncWesternResourceBase):
     def __init__(self, client: AsyncFreeAstro) -> None:
+        super().__init__(client)
         self.signs = AsyncWesternSignsResource(client)

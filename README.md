@@ -2,13 +2,9 @@
 
 [![CI](https://github.com/GabrielRw/freeastroapi-python-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/GabrielRw/freeastroapi-python-sdk/actions/workflows/ci.yml)
 
-Official Python client for [FreeAstroAPI](https://www.freeastroapi.com), with sync and async transports and Pydantic v2 response models.
-
-> v0.1.0 is source-ready but has not been published to PyPI yet.
+Official Python client for [FreeAstroAPI](https://www.freeastroapi.com), with sync and async transports and typed methods for every public endpoint.
 
 ## Install
-
-After the first registry release:
 
 ```sh
 pip install freeastroapi
@@ -41,20 +37,51 @@ async with AsyncFreeAstro(api_key=os.environ["FREEASTRO_API_KEY"]) as client:
     cities = await client.geo.search("Paris", limit=3)
 ```
 
-## Typed resources in v0.1.0
+## Resources
+
+Every public operation in the [FreeAstroAPI OpenAPI document](spec/freeastro.json) has a typed method on both clients. Resources follow the API paths:
 
 ```python
-client.geo.search(...)
-client.moon.phase(...)
-client.moon.month(...)
-client.sky_events.list(...)
-client.western.signs.sun(...)
-client.western.signs.moon(...)
-client.western.signs.rising(...)
-client.western.signs.midheaven(...)
+from freeastroapi import FreeAstro, schemas
+
+with FreeAstro(api_key="YOUR_API_KEY") as client:
+    # POST /api/v1/natal/calculate?include_minor=true
+    chart = client.natal.calculate(
+        {"year": 1990, "month": 6, "day": 15, "hour": 14, "minute": 30, "city": "Paris"},
+        include_minor=True,
+    )
+
+    # POST /api/v2/vedic/panchang
+    request: schemas.PanchangRequestV2 = {"year": 2026, "month": 1, "day": 14, "hour": 6, "minute": 0, "city": "Delhi"}
+    panchang = client.vedic.panchang(request)
+
+    # POST /api/v1/western/progressions/secondary/exact-aspects
+    hits = client.western.progressions.secondary_exact_aspects(progressions_request)
+
+    # GET /api/v1/chinese/calendar/{date}
+    day = client.chinese.calendar("2026-02-17", lang="en")
+
+    # GET /api/v3/horoscope/daily/sign
+    horoscope = client.horoscope.daily.sign(sign="aries")
 ```
 
-These methods match the reviewed operations in `public-spec/openapi/freeastro.yaml`. Use `client.request(...)` for another documented endpoint and keep its response behind an application-owned model.
+Path parameters are positional, the JSON body (when there is one) comes next, and query parameters are keyword-only. Every method also takes `options=RequestOptions(...)`.
+
+When an operation exists in several API versions, the plain method name calls the latest version and older versions carry a suffix: `client.vedic.chart` calls `/api/v2/vedic/chart` and `client.vedic.chart_v1` calls `/api/v1/vedic/chart`; `client.horoscope.daily.sign_v1` / `sign_v2` reach the older daily horoscopes.
+
+Resource groups: `ai`, `chinese`, `ephemeris`, `geo`, `horoscope`, `moon`, `natal`, `numerology`, `sky_events`, `space`, `transits`, `vedic`, and `western` (with `astrocartography`, `directions`, `electional`, `natal`, `progressions`, `signs`, `transits` and more). `freeastroapi.OPERATIONS` lists every operation with its client method.
+
+### Types
+
+Request bodies and responses are typed with `TypedDict`s generated from the spec's component schemas, in `freeastroapi.schemas`. They are plain dictionaries at runtime: responses are returned as parsed JSON without validation, so additive API fields never break your code. Where the spec does not describe a response, the method returns `Any`.
+
+Chart render endpoints (`client.vedic.kp_render`, `client.vedic.visual.chart`) return SVG as text; use `client.request_raw(...)` for PNG output.
+
+### v0.1 methods
+
+`client.geo.search`, `client.moon.phase`, `client.moon.month`, `client.sky_events.list` and `client.western.signs.*` keep their v0.1 signatures and return Pydantic v2 models.
+
+Use `client.request(...)` for any other endpoint.
 
 ## Western sign example
 
@@ -88,6 +115,12 @@ uv run mypy
 uv run pytest
 uv run python -m build
 ```
+
+`src/freeastroapi/_generated.py` and `src/freeastroapi/schemas.py` are generated from `spec/freeastro.json`. To update them, copy the API's `public-spec/openapi/freeastro.json` into `spec/` and run `uv run python scripts/generate.py`. CI runs `python scripts/generate.py --check`.
+
+## Releasing
+
+Bump `version` in `pyproject.toml` and `__version__` in `src/freeastroapi/__init__.py`, update `CHANGELOG.md`, then push a matching tag (`git tag v0.2.0 && git push origin v0.2.0`). The `Release` workflow runs the checks, builds, and publishes to PyPI with trusted publishing.
 
 Issues and contributions are welcome on [GitHub](https://github.com/GabrielRw/freeastroapi-python-sdk).
 
