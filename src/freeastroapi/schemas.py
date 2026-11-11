@@ -327,6 +327,39 @@ class AtomicReportRequest(TypedDict):
     template: NotRequired[str]
 
 
+class BaseChartRequestV1(TypedDict):
+    """Base request with birth data."""
+    year: int
+    month: int
+    day: int
+    hour: int
+    minute: int
+    city: NotRequired[str]
+    lat: NotRequired[Union[float, None]]
+    lng: NotRequired[Union[float, None]]
+    tz_str: NotRequired[str]
+    ayanamsha: NotRequired[str]
+    house_system: NotRequired[str]
+    node_type: NotRequired[str]
+
+
+class BaseChartRequestV2(TypedDict):
+    year: int
+    month: int
+    day: int
+    hour: int
+    minute: int
+    second: NotRequired[int]
+    city: NotRequired[str]
+    lat: NotRequired[Union[float, None]]
+    lng: NotRequired[Union[float, None]]
+    tz_str: NotRequired[str]
+    ayanamsha: NotRequired[str]
+    house_system: NotRequired[str]
+    node_type: NotRequired[str]
+    reference_date: NotRequired[Union[str, None]]
+
+
 class BaziFlowRequest(TypedDict):
     year: int
     month: int
@@ -1429,6 +1462,43 @@ class DashaMetadata(TypedDict):
     levels_requested: int
     reference_date: str
     dasha_mode: Literal["classical", "astrosage"]
+
+
+class DashaRequestV1(TypedDict):
+    """Dasha-specific request."""
+    year: int
+    month: int
+    day: int
+    hour: int
+    minute: int
+    city: NotRequired[str]
+    lat: NotRequired[Union[float, None]]
+    lng: NotRequired[Union[float, None]]
+    tz_str: NotRequired[str]
+    ayanamsha: NotRequired[str]
+    house_system: NotRequired[str]
+    node_type: NotRequired[str]
+    levels: NotRequired[int]
+    full_history: NotRequired[bool]
+
+
+class DashaRequestV2(TypedDict):
+    year: int
+    month: int
+    day: int
+    hour: int
+    minute: int
+    second: NotRequired[int]
+    city: NotRequired[str]
+    lat: NotRequired[Union[float, None]]
+    lng: NotRequired[Union[float, None]]
+    tz_str: NotRequired[str]
+    ayanamsha: NotRequired[str]
+    house_system: NotRequired[str]
+    node_type: NotRequired[str]
+    reference_date: NotRequired[Union[str, None]]
+    levels: NotRequired[int]
+    dasha_mode: NotRequired[Literal["classical", "astrosage"]]
 
 
 class DashaV2Response(TypedDict):
@@ -3874,6 +3944,38 @@ class PanchangRequestTime(TypedDict):
     moon_sign: "PanchangSign"
 
 
+class PanchangRequestV1(TypedDict):
+    year: int
+    month: int
+    day: int
+    hour: NotRequired[int]
+    minute: NotRequired[int]
+    city: NotRequired[str]
+    lat: NotRequired[Union[float, None]]
+    lng: NotRequired[Union[float, None]]
+    tz_str: NotRequired[str]
+    ayanamsha: NotRequired[str]
+
+
+class PanchangRequestV2(TypedDict):
+    year: int
+    month: int
+    day: int
+    hour: int
+    minute: int
+    second: NotRequired[int]
+    city: NotRequired[str]
+    lat: NotRequired[Union[float, None]]
+    lng: NotRequired[Union[float, None]]
+    tz_str: NotRequired[str]
+    ayanamsha: NotRequired[str]
+    house_system: NotRequired[str]
+    node_type: NotRequired[str]
+    reference_date: NotRequired[Union[str, None]]
+    year_convention: NotRequired[Literal["chaitra_shukladi", "chaitra_krishnadi", "kartika_shukladi"]]
+    lang: NotRequired[Literal["en", "hi"]]
+
+
 class PanchangSign(TypedDict):
     sign_id: int
     name: str
@@ -3943,6 +4045,31 @@ class PersonalCycles(TypedDict):
     personal_year: "NumberResult"
     personal_month: "NumberResult"
     personal_day: "NumberResult"
+
+
+class PersonalHoroscopeRequestV1(TypedDict):
+    birth: "NatalChartRequest"
+    date: NotRequired[Union[str, None]]
+    timezone: NotRequired[str]
+    tz_str: NotRequired[Union[str, None]]
+    locale: NotRequired[str]
+
+
+class PersonalHoroscopeRequestV2(TypedDict):
+    birth: "NatalChartRequest"
+    date: NotRequired[Union[str, None]]
+    timezone: NotRequired[str]
+    tz_str: NotRequired[Union[str, None]]
+    locale: NotRequired[str]
+
+
+class PersonalHoroscopeRequestV3(TypedDict):
+    birth: "NatalChartRequest"
+    date: NotRequired[Union[str, None]]
+    timezone: NotRequired[str]
+    tz_str: NotRequired[Union[str, None]]
+    locale: NotRequired[str]
+    include_interpretation_blocks: NotRequired[bool]
 
 
 class PhaseMarkerEvent(TypedDict):
@@ -6907,133 +7034,6 @@ class ZodiacData(TypedDict):
     sign_id: str
     degree: float
     zodiac_type: NotRequired[str]
-
-
-class PersonalHoroscopeRequestV1(TypedDict):
-    birth: "NatalChartRequest"
-    date: NotRequired[Union[str, None]]
-    timezone: NotRequired[str]
-    tz_str: NotRequired[Union[str, None]]
-    locale: NotRequired[str]
-
-
-class BaseChartRequestV1(TypedDict):
-    """Base request with birth data."""
-    year: int
-    month: int
-    day: int
-    hour: int
-    minute: int
-    city: NotRequired[str]
-    lat: NotRequired[Union[float, None]]
-    lng: NotRequired[Union[float, None]]
-    tz_str: NotRequired[str]
-    ayanamsha: NotRequired[str]
-    house_system: NotRequired[str]
-    node_type: NotRequired[str]
-
-
-class DashaRequestV1(TypedDict):
-    """Dasha-specific request."""
-    year: int
-    month: int
-    day: int
-    hour: int
-    minute: int
-    city: NotRequired[str]
-    lat: NotRequired[Union[float, None]]
-    lng: NotRequired[Union[float, None]]
-    tz_str: NotRequired[str]
-    ayanamsha: NotRequired[str]
-    house_system: NotRequired[str]
-    node_type: NotRequired[str]
-    levels: NotRequired[int]
-    full_history: NotRequired[bool]
-
-
-class PanchangRequestV1(TypedDict):
-    year: int
-    month: int
-    day: int
-    hour: NotRequired[int]
-    minute: NotRequired[int]
-    city: NotRequired[str]
-    lat: NotRequired[Union[float, None]]
-    lng: NotRequired[Union[float, None]]
-    tz_str: NotRequired[str]
-    ayanamsha: NotRequired[str]
-
-
-class PersonalHoroscopeRequestV2(TypedDict):
-    birth: "NatalChartRequest"
-    date: NotRequired[Union[str, None]]
-    timezone: NotRequired[str]
-    tz_str: NotRequired[Union[str, None]]
-    locale: NotRequired[str]
-
-
-class BaseChartRequestV2(TypedDict):
-    year: int
-    month: int
-    day: int
-    hour: int
-    minute: int
-    second: NotRequired[int]
-    city: NotRequired[str]
-    lat: NotRequired[Union[float, None]]
-    lng: NotRequired[Union[float, None]]
-    tz_str: NotRequired[str]
-    ayanamsha: NotRequired[str]
-    house_system: NotRequired[str]
-    node_type: NotRequired[str]
-    reference_date: NotRequired[Union[str, None]]
-
-
-class DashaRequestV2(TypedDict):
-    year: int
-    month: int
-    day: int
-    hour: int
-    minute: int
-    second: NotRequired[int]
-    city: NotRequired[str]
-    lat: NotRequired[Union[float, None]]
-    lng: NotRequired[Union[float, None]]
-    tz_str: NotRequired[str]
-    ayanamsha: NotRequired[str]
-    house_system: NotRequired[str]
-    node_type: NotRequired[str]
-    reference_date: NotRequired[Union[str, None]]
-    levels: NotRequired[int]
-    dasha_mode: NotRequired[Literal["classical", "astrosage"]]
-
-
-class PanchangRequestV2(TypedDict):
-    year: int
-    month: int
-    day: int
-    hour: int
-    minute: int
-    second: NotRequired[int]
-    city: NotRequired[str]
-    lat: NotRequired[Union[float, None]]
-    lng: NotRequired[Union[float, None]]
-    tz_str: NotRequired[str]
-    ayanamsha: NotRequired[str]
-    house_system: NotRequired[str]
-    node_type: NotRequired[str]
-    reference_date: NotRequired[Union[str, None]]
-    year_convention: NotRequired[Literal["chaitra_shukladi", "chaitra_krishnadi", "kartika_shukladi"]]
-    lang: NotRequired[Literal["en", "hi"]]
-
-
-class PersonalHoroscopeRequestV3(TypedDict):
-    birth: "NatalChartRequest"
-    date: NotRequired[Union[str, None]]
-    timezone: NotRequired[str]
-    tz_str: NotRequired[Union[str, None]]
-    locale: NotRequired[str]
-    include_interpretation_blocks: NotRequired[bool]
 
 
 __all__ = [

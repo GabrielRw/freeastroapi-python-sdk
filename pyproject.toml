@@ -48,6 +48,10 @@ packages = ["src/freeastroapi"]
 addopts = "-q"
 asyncio_mode = "auto"
 testpaths = ["tests"]
+markers = [
+  "contract: calls every operation against a Prism mock; skipped unless PRISM_URL is set",
+  "live: calls the production API; skipped unless FREEASTRO_TEST_API_KEY is set",
+]
 
 [tool.ruff]
 line-length = 120

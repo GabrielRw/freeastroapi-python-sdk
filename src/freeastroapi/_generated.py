@@ -64,21 +64,6 @@ class ChineseResource:
         """
         return self._client.request("POST", "/api/v1/chinese/bazi", params=None, json=body, options=options)
 
-    def bazi_flow(
-        self,
-        body: schemas.BaziFlowRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Calculate BaZi Flow (Annual/Monthly Pillars)
-
-        Calculate annual and monthly flow pillars for a specific target year.
-        Used for professional timing and predictive analysis.
-
-        ``POST /api/v1/chinese/bazi/flow``
-        """
-        return self._client.request("POST", "/api/v1/chinese/bazi/flow", params=None, json=body, options=options)
-
     def bazi_dictionary(
         self,
         *,
@@ -94,21 +79,78 @@ class ChineseResource:
         """
         return self._client.request("GET", "/api/v1/chinese/bazi/dictionary", params=_query({"lang": lang}), json=None, options=options)
 
-    def today(
+    def bazi_flow(
         self,
+        body: schemas.BaziFlowRequest,
         *,
-        include_pinyin: bool | None = None,
-        lang: str | None = None,
         options: RequestOptions | None = None,
     ) -> Any:
-        """Get Current BaZi Pillars (Time Now)
+        """Calculate BaZi Flow (Annual/Monthly Pillars)
 
-        Get current year, month, day, and hour pillars for the present moment.
-        Useful for "Today's energy" or quick transit checks.
+        Calculate annual and monthly flow pillars for a specific target year.
+        Used for professional timing and predictive analysis.
 
-        ``GET /api/v1/chinese/today``
+        ``POST /api/v1/chinese/bazi/flow``
         """
-        return self._client.request("GET", "/api/v1/chinese/today", params=_query({"include_pinyin": include_pinyin, "lang": lang}), json=None, options=options)
+        return self._client.request("POST", "/api/v1/chinese/bazi/flow", params=None, json=body, options=options)
+
+    def bazi_health(
+        self,
+        body: schemas.BaziHealthRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Analyze BaZi Constitution & Health Tendencies
+
+        Analyze BaZi chart for constitution and health tendency themes.
+
+        ``POST /api/v1/chinese/bazi/health``
+        """
+        return self._client.request("POST", "/api/v1/chinese/bazi/health", params=None, json=body, options=options)
+
+    def bazi_lifespan(
+        self,
+        body: schemas.BaziLifespanRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Calculate Neijing Life Curve (Jing/Qi/Shen)
+
+        Experimental: Calculate energy trajectory (Jing, Qi, Shen) across 0-120y lifespan.
+        Based on Neijing 7/8 year cycles + DaYun/Annual modifier simulation.
+
+        ``POST /api/v1/chinese/bazi/lifespan``
+        """
+        return self._client.request("POST", "/api/v1/chinese/bazi/lifespan", params=None, json=body, options=options)
+
+    def bazi_synastry(
+        self,
+        body: schemas.BaziSynastryRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Calculate Bazi Compatibility (Synastry)
+
+        Compare two charts for compatibility.
+
+        ``POST /api/v1/chinese/bazi/synastry``
+        """
+        return self._client.request("POST", "/api/v1/chinese/bazi/synastry", params=None, json=body, options=options)
+
+    def bazi_time_correction(
+        self,
+        body: schemas.BaziTimeCorrectionRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Calculate True Solar Time Corrections
+
+        Get detailed breakdown of True Solar Time corrections.
+        Returns Civil, LMT, and True Solar (Relative & Absolute).
+
+        ``POST /api/v1/chinese/bazi/time-correction``
+        """
+        return self._client.request("POST", "/api/v1/chinese/bazi/time-correction", params=None, json=body, options=options)
 
     def calendar(
         self,
@@ -127,80 +169,26 @@ class ChineseResource:
         """
         return cast("schemas.ChineseCalendarResponse", self._client.request("GET", f"/api/v1/chinese/calendar/{_path(date)}", params=_query({"lang": lang}), json=None, options=options))
 
-    def bazi_time_correction(
+    def today(
         self,
-        body: schemas.BaziTimeCorrectionRequest,
         *,
+        include_pinyin: bool | None = None,
+        lang: str | None = None,
         options: RequestOptions | None = None,
     ) -> Any:
-        """Calculate True Solar Time Corrections
+        """Get Current BaZi Pillars (Time Now)
 
-        Get detailed breakdown of True Solar Time corrections.
-        Returns Civil, LMT, and True Solar (Relative & Absolute).
+        Get current year, month, day, and hour pillars for the present moment.
+        Useful for "Today's energy" or quick transit checks.
 
-        ``POST /api/v1/chinese/bazi/time-correction``
+        ``GET /api/v1/chinese/today``
         """
-        return self._client.request("POST", "/api/v1/chinese/bazi/time-correction", params=None, json=body, options=options)
-
-    def bazi_synastry(
-        self,
-        body: schemas.BaziSynastryRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Calculate Bazi Compatibility (Synastry)
-
-        Compare two charts for compatibility.
-
-        ``POST /api/v1/chinese/bazi/synastry``
-        """
-        return self._client.request("POST", "/api/v1/chinese/bazi/synastry", params=None, json=body, options=options)
-
-    def bazi_lifespan(
-        self,
-        body: schemas.BaziLifespanRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Calculate Neijing Life Curve (Jing/Qi/Shen)
-
-        Experimental: Calculate energy trajectory (Jing, Qi, Shen) across 0-120y lifespan.
-        Based on Neijing 7/8 year cycles + DaYun/Annual modifier simulation.
-
-        ``POST /api/v1/chinese/bazi/lifespan``
-        """
-        return self._client.request("POST", "/api/v1/chinese/bazi/lifespan", params=None, json=body, options=options)
-
-    def bazi_health(
-        self,
-        body: schemas.BaziHealthRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Analyze BaZi Constitution & Health Tendencies
-
-        Analyze BaZi chart for constitution and health tendency themes.
-
-        ``POST /api/v1/chinese/bazi/health``
-        """
-        return self._client.request("POST", "/api/v1/chinese/bazi/health", params=None, json=body, options=options)
+        return self._client.request("GET", "/api/v1/chinese/today", params=_query({"include_pinyin": include_pinyin, "lang": lang}), json=None, options=options)
 
 
 class EphemerisResource:
     def __init__(self, client: FreeAstro) -> None:
         self._client = client
-
-    def calculate(
-        self,
-        body: schemas.EphemerisRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Calculate Ephemeris
-
-        ``POST /api/v1/ephemeris/calculate``
-        """
-        return self._client.request("POST", "/api/v1/ephemeris/calculate", params=None, json=body, options=options)
 
     def get(
         self,
@@ -245,6 +233,18 @@ class EphemerisResource:
         """
         return self._client.request("GET", "/api/v1/ephemeris", params=_query({"start": start, "end": end, "step": step, "zodiac_type": zodiac_type, "sidereal_ayanamsa": sidereal_ayanamsa, "house_system": house_system, "bodies": bodies, "include_angles": include_angles, "include_houses": include_houses, "include_speed": include_speed, "include_retrograde": include_retrograde, "include_dignity": include_dignity, "include_sign_degree": include_sign_degree, "include_aspects": include_aspects, "include_minor_aspects": include_minor_aspects, "include_moon_void_of_course": include_moon_void_of_course, "include_fixed_stars": include_fixed_stars, "fixed_stars": fixed_stars, "fixed_star_packs": fixed_star_packs, "lat": lat, "lng": lng, "tz_str": tz_str, "timezone": timezone, "dst_policy": dst_policy, "format": format, "response_mode": response_mode, "table_style": table_style, "include_sidereal_time": include_sidereal_time, "cell_format": cell_format, "include_chart_links": include_chart_links, "sign_display": sign_display, "show_motion_markers": show_motion_markers}), json=None, options=options)
 
+    def calculate(
+        self,
+        body: schemas.EphemerisRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Calculate Ephemeris
+
+        ``POST /api/v1/ephemeris/calculate``
+        """
+        return self._client.request("POST", "/api/v1/ephemeris/calculate", params=None, json=body, options=options)
+
 
 class GeoResourceBase:
     def __init__(self, client: FreeAstro) -> None:
@@ -273,28 +273,6 @@ class GeoResourceBase:
 class HoroscopeDailyResource:
     def __init__(self, client: FreeAstro) -> None:
         self._client = client
-
-    def sign_v1(
-        self,
-        *,
-        sign: str,
-        date: str | None = None,
-        timezone: str | None = None,
-        tz_str: str | None = None,
-        lang: str | None = None,
-        locale: str | None = None,
-        type: str | None = None,
-        style: str | None = None,
-        variant: str | None = None,
-        options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
-        """Get Sign Horoscope
-
-        Get generic daily horoscope for a specific sign.
-
-        ``GET /api/v1/horoscope/daily/sign``
-        """
-        return cast("dict[str, Any]", self._client.request("GET", "/api/v1/horoscope/daily/sign", params=_query({"sign": sign, "date": date, "timezone": timezone, "tz_str": tz_str, "lang": lang, "locale": locale, "type": type, "style": style, "variant": variant}), json=None, options=options))
 
     def bulk(
         self,
@@ -327,6 +305,40 @@ class HoroscopeDailyResource:
         """
         return cast("dict[str, Any]", self._client.request("POST", "/api/v1/horoscope/daily/personal", params=None, json=body, options=options))
 
+    def sign_v1(
+        self,
+        *,
+        sign: str,
+        date: str | None = None,
+        timezone: str | None = None,
+        tz_str: str | None = None,
+        lang: str | None = None,
+        locale: str | None = None,
+        type: str | None = None,
+        style: str | None = None,
+        variant: str | None = None,
+        options: RequestOptions | None = None,
+    ) -> dict[str, Any]:
+        """Get Sign Horoscope
+
+        Get generic daily horoscope for a specific sign.
+
+        ``GET /api/v1/horoscope/daily/sign``
+        """
+        return cast("dict[str, Any]", self._client.request("GET", "/api/v1/horoscope/daily/sign", params=_query({"sign": sign, "date": date, "timezone": timezone, "tz_str": tz_str, "lang": lang, "locale": locale, "type": type, "style": style, "variant": variant}), json=None, options=options))
+
+    def personal_v2(
+        self,
+        body: schemas.PersonalHoroscopeRequestV2,
+        *,
+        options: RequestOptions | None = None,
+    ) -> dict[str, Any]:
+        """Get Personal Horoscope
+
+        ``POST /api/v2/horoscope/daily/personal``
+        """
+        return cast("dict[str, Any]", self._client.request("POST", "/api/v2/horoscope/daily/personal", params=None, json=body, options=options))
+
     def sign_v2(
         self,
         *,
@@ -343,17 +355,17 @@ class HoroscopeDailyResource:
         """
         return cast("dict[str, Any]", self._client.request("GET", "/api/v2/horoscope/daily/sign", params=_query({"sign": sign, "date": date, "tz_str": tz_str, "lang": lang, "locale": locale}), json=None, options=options))
 
-    def personal_v2(
+    def personal(
         self,
-        body: schemas.PersonalHoroscopeRequestV2,
+        body: schemas.PersonalHoroscopeRequestV3,
         *,
         options: RequestOptions | None = None,
     ) -> dict[str, Any]:
         """Get Personal Horoscope
 
-        ``POST /api/v2/horoscope/daily/personal``
+        ``POST /api/v3/horoscope/daily/personal``
         """
-        return cast("dict[str, Any]", self._client.request("POST", "/api/v2/horoscope/daily/personal", params=None, json=body, options=options))
+        return cast("dict[str, Any]", self._client.request("POST", "/api/v3/horoscope/daily/personal", params=None, json=body, options=options))
 
     def sign(
         self,
@@ -378,18 +390,6 @@ class HoroscopeDailyResource:
         ``GET /api/v3/horoscope/daily/sign``
         """
         return cast("dict[str, Any]", self._client.request("GET", "/api/v3/horoscope/daily/sign", params=_query({"sign": sign, "date": date, "timezone": timezone, "tz_str": tz_str, "lang": lang, "locale": locale, "type": type, "style": style, "variant": variant}), json=None, options=options))
-
-    def personal(
-        self,
-        body: schemas.PersonalHoroscopeRequestV3,
-        *,
-        options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
-        """Get Personal Horoscope
-
-        ``POST /api/v3/horoscope/daily/personal``
-        """
-        return cast("dict[str, Any]", self._client.request("POST", "/api/v3/horoscope/daily/personal", params=None, json=body, options=options))
 
 
 class HoroscopeWeeklyResource:
@@ -425,22 +425,6 @@ class NatalExperimentalResource:
     def __init__(self, client: FreeAstro) -> None:
         self._client = client
 
-    def transits(
-        self,
-        body: schemas.ExperimentalTransitChartRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Experimental Transits Chart
-
-        Generate a bi-wheel chart with natal planets inside and transits outside.
-
-        ``POST /api/v1/natal/experimental/transits``
-
-        .. deprecated:: this operation is deprecated by the API.
-        """
-        return self._client.request("POST", "/api/v1/natal/experimental/transits", params=None, json=body, options=options)
-
     def solar_return(
         self,
         body: schemas.ExperimentalSolarReturnChartRequest,
@@ -457,26 +441,27 @@ class NatalExperimentalResource:
         """
         return self._client.request("POST", "/api/v1/natal/experimental/solar-return", params=None, json=body, options=options)
 
+    def transits(
+        self,
+        body: schemas.ExperimentalTransitChartRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Experimental Transits Chart
+
+        Generate a bi-wheel chart with natal planets inside and transits outside.
+
+        ``POST /api/v1/natal/experimental/transits``
+
+        .. deprecated:: this operation is deprecated by the API.
+        """
+        return self._client.request("POST", "/api/v1/natal/experimental/transits", params=None, json=body, options=options)
+
 
 class NatalResource:
     def __init__(self, client: FreeAstro) -> None:
         self._client = client
         self.experimental = NatalExperimentalResource(client)
-
-    def simple(
-        self,
-        body: schemas.SimpleNatalRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Calculate Simple Natal
-
-        A simplified natal endpoint for developer-facing apps.
-        Returns a compact response with curated planets, houses, and useful summary fields.
-
-        ``POST /natal``
-        """
-        return self._client.request("POST", "/natal", params=None, json=body, options=options)
 
     def calculate(
         self,
@@ -493,6 +478,106 @@ class NatalResource:
         ``POST /api/v1/natal/calculate``
         """
         return self._client.request("POST", "/api/v1/natal/calculate", params=_query({"include_minor": include_minor, "include_stelliums": include_stelliums}), json=body, options=options)
+
+    def chart(
+        self,
+        body: schemas.ExperimentalNatalChartRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Experimental Natal Chart
+
+        Render a natal chart using the bundled natal library.
+
+        ``POST /api/v1/natal/chart/``
+        """
+        return self._client.request("POST", "/api/v1/natal/chart/", params=None, json=body, options=options)
+
+    def chart_composite(
+        self,
+        body: schemas.ExperimentalCompositeChartRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Experimental Composite Chart
+
+        Midpoint composite single-wheel chart endpoint.
+        Renders a standalone composite chart from two people, reusing the natal SVG renderer.
+
+        ``POST /api/v1/natal/chart/composite``
+        """
+        return self._client.request("POST", "/api/v1/natal/chart/composite", params=None, json=body, options=options)
+
+    def chart_progressions(
+        self,
+        body: schemas.ExperimentalSecondaryProgressionsChartRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Experimental Secondary Progressions Chart
+
+        Generate a bi-wheel chart with natal planets inside and secondary progressed planets outside.
+
+        ``POST /api/v1/natal/chart/progressions``
+        """
+        return self._client.request("POST", "/api/v1/natal/chart/progressions", params=None, json=body, options=options)
+
+    def chart_secondary_progressions(
+        self,
+        body: schemas.ExperimentalSecondaryProgressionsChartRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Experimental Secondary Progressions Chart
+
+        Generate a bi-wheel chart with natal planets inside and secondary progressed planets outside.
+
+        ``POST /api/v1/natal/chart/secondary-progressions``
+        """
+        return self._client.request("POST", "/api/v1/natal/chart/secondary-progressions", params=None, json=body, options=options)
+
+    def chart_solar_return(
+        self,
+        body: schemas.ExperimentalSolarReturnChartRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Experimental Solar Return Chart
+
+        Generate a bi-wheel or standalone chart for the exact solar return in a target year.
+
+        ``POST /api/v1/natal/chart/solar-return``
+        """
+        return self._client.request("POST", "/api/v1/natal/chart/solar-return", params=None, json=body, options=options)
+
+    def chart_synastry(
+        self,
+        body: schemas.ExperimentalSynastryChartRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Experimental Synastry Chart
+
+        Synastry bi-wheel chart endpoint.
+        Renders person A (outer) and person B (inner) with optional B house ring and inter-aspects.
+
+        ``POST /api/v1/natal/chart/synastry``
+        """
+        return self._client.request("POST", "/api/v1/natal/chart/synastry", params=None, json=body, options=options)
+
+    def chart_transits(
+        self,
+        body: schemas.ExperimentalTransitChartRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Experimental Transits Chart
+
+        Generate a bi-wheel chart with natal planets inside and transits outside.
+
+        ``POST /api/v1/natal/chart/transits``
+        """
+        return self._client.request("POST", "/api/v1/natal/chart/transits", params=None, json=body, options=options)
 
     def report_credits(
         self,
@@ -519,121 +604,25 @@ class NatalResource:
         """
         return self._client.request("GET", f"/api/v1/natal/report/{_path(job_id)}", params=_query({"format": format, "include_profile_branding_logo": include_profile_branding_logo}), json=None, options=options)
 
-    def chart(
+    def simple(
         self,
-        body: schemas.ExperimentalNatalChartRequest,
+        body: schemas.SimpleNatalRequest,
         *,
         options: RequestOptions | None = None,
     ) -> Any:
-        """Experimental Natal Chart
+        """Calculate Simple Natal
 
-        Render a natal chart using the bundled natal library.
+        A simplified natal endpoint for developer-facing apps.
+        Returns a compact response with curated planets, houses, and useful summary fields.
 
-        ``POST /api/v1/natal/chart/``
+        ``POST /natal``
         """
-        return self._client.request("POST", "/api/v1/natal/chart/", params=None, json=body, options=options)
-
-    def chart_transits(
-        self,
-        body: schemas.ExperimentalTransitChartRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Experimental Transits Chart
-
-        Generate a bi-wheel chart with natal planets inside and transits outside.
-
-        ``POST /api/v1/natal/chart/transits``
-        """
-        return self._client.request("POST", "/api/v1/natal/chart/transits", params=None, json=body, options=options)
-
-    def chart_solar_return(
-        self,
-        body: schemas.ExperimentalSolarReturnChartRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Experimental Solar Return Chart
-
-        Generate a bi-wheel or standalone chart for the exact solar return in a target year.
-
-        ``POST /api/v1/natal/chart/solar-return``
-        """
-        return self._client.request("POST", "/api/v1/natal/chart/solar-return", params=None, json=body, options=options)
-
-    def chart_secondary_progressions(
-        self,
-        body: schemas.ExperimentalSecondaryProgressionsChartRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Experimental Secondary Progressions Chart
-
-        Generate a bi-wheel chart with natal planets inside and secondary progressed planets outside.
-
-        ``POST /api/v1/natal/chart/secondary-progressions``
-        """
-        return self._client.request("POST", "/api/v1/natal/chart/secondary-progressions", params=None, json=body, options=options)
-
-    def chart_progressions(
-        self,
-        body: schemas.ExperimentalSecondaryProgressionsChartRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Experimental Secondary Progressions Chart
-
-        Generate a bi-wheel chart with natal planets inside and secondary progressed planets outside.
-
-        ``POST /api/v1/natal/chart/progressions``
-        """
-        return self._client.request("POST", "/api/v1/natal/chart/progressions", params=None, json=body, options=options)
-
-    def chart_composite(
-        self,
-        body: schemas.ExperimentalCompositeChartRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Experimental Composite Chart
-
-        Midpoint composite single-wheel chart endpoint.
-        Renders a standalone composite chart from two people, reusing the natal SVG renderer.
-
-        ``POST /api/v1/natal/chart/composite``
-        """
-        return self._client.request("POST", "/api/v1/natal/chart/composite", params=None, json=body, options=options)
-
-    def chart_synastry(
-        self,
-        body: schemas.ExperimentalSynastryChartRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Experimental Synastry Chart
-
-        Synastry bi-wheel chart endpoint.
-        Renders person A (outer) and person B (inner) with optional B house ring and inter-aspects.
-
-        ``POST /api/v1/natal/chart/synastry``
-        """
-        return self._client.request("POST", "/api/v1/natal/chart/synastry", params=None, json=body, options=options)
+        return self._client.request("POST", "/natal", params=None, json=body, options=options)
 
 
 class NumerologyResource:
     def __init__(self, client: FreeAstro) -> None:
         self._client = client
-
-    def methods(
-        self,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.NumerologyMethodsResponse:
-        """List supported numerology methods and policies
-
-        ``GET /api/v1/numerology/methods``
-        """
-        return cast("schemas.NumerologyMethodsResponse", self._client.request("GET", "/api/v1/numerology/methods", params=None, json=None, options=options))
 
     def alphabets(
         self,
@@ -645,6 +634,17 @@ class NumerologyResource:
         ``GET /api/v1/numerology/alphabets``
         """
         return cast("schemas.NumerologyAlphabetsResponse", self._client.request("GET", "/api/v1/numerology/alphabets", params=None, json=None, options=options))
+
+    def methods(
+        self,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.NumerologyMethodsResponse:
+        """List supported numerology methods and policies
+
+        ``GET /api/v1/numerology/methods``
+        """
+        return cast("schemas.NumerologyMethodsResponse", self._client.request("GET", "/api/v1/numerology/methods", params=None, json=None, options=options))
 
     def profile(
         self,
@@ -717,25 +717,6 @@ class TransitsResource:
         return self._client.request("POST", "/api/v1/transits/calculate", params=_query({"include_minor": include_minor}), json=body, options=options)
 
 
-class VedicTransitsResource:
-    def __init__(self, client: FreeAstro) -> None:
-        self._client = client
-
-    def insights(
-        self,
-        body: schemas.VedicTransitInsightsRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.VedicTransitInsightsResponse:
-        """Get Transit Insights
-
-        Get Vedic gochar snapshot facts comparing a transit date against the natal chart.
-
-        ``POST /api/v1/vedic/transits/insights``
-        """
-        return cast("schemas.VedicTransitInsightsResponse", self._client.request("POST", "/api/v1/vedic/transits/insights", params=None, json=body, options=options))
-
-
 class VedicGocharResource:
     def __init__(self, client: FreeAstro) -> None:
         self._client = client
@@ -797,51 +778,28 @@ class VedicGocharResource:
         return cast("schemas.VedicGocharTimelineInsightsV2Response", self._client.request("POST", "/api/v2/vedic/gochar/timeline/insights", params=None, json=body, options=options))
 
 
-class VedicVisualResource:
+class VedicTransitsResource:
     def __init__(self, client: FreeAstro) -> None:
         self._client = client
 
-    def chart(
+    def insights(
         self,
-        body: schemas.VedicVisualChartRequest,
+        body: schemas.VedicTransitInsightsRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> str:
-        """Render Vedic Visual Chart (v2)
+    ) -> schemas.VedicTransitInsightsResponse:
+        """Get Transit Insights
 
-        Render requested V2 divisional charts as a raw SVG or PNG image.
+        Get Vedic gochar snapshot facts comparing a transit date against the natal chart.
 
-        ``POST /api/v2/vedic/visual/chart``
-
-        Returns the image body as text; use ``request_raw`` for binary formats such as PNG.
+        ``POST /api/v1/vedic/transits/insights``
         """
-        return cast("str", self._client.request("POST", "/api/v2/vedic/visual/chart", params=None, json=body, options=options))
+        return cast("schemas.VedicTransitInsightsResponse", self._client.request("POST", "/api/v1/vedic/transits/insights", params=None, json=body, options=options))
 
 
 class VedicHoroscopeResource:
     def __init__(self, client: FreeAstro) -> None:
         self._client = client
-
-    def daily_sign(
-        self,
-        *,
-        sign: Literal["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"],
-        target_date: str | None = None,
-        tz_str: str | None = None,
-        ayanamsha: Literal["lahiri", "raman", "kp", "yukteshwar", "fagan_bradley", "true_pushya", "pushya"] | None = None,
-        node_type: Literal["mean", "true"] | None = None,
-        include_interpretation: bool | None = None,
-        lang: Literal["en", "hi"] | None = None,
-        language: Literal["en", "hi"] | None = None,
-        options: RequestOptions | None = None,
-    ) -> schemas.DailyRashifalSignResponse:
-        """Get General Daily Vedic Rashifal for One Moon Sign (v2)
-
-        General Moon-sign forecast with calculated transits and optional English or Hindi readings. No birth details required.
-
-        ``GET /api/v2/vedic/horoscope/daily/sign``
-        """
-        return cast("schemas.DailyRashifalSignResponse", self._client.request("GET", "/api/v2/vedic/horoscope/daily/sign", params=_query({"sign": sign, "target_date": target_date, "tz_str": tz_str, "ayanamsha": ayanamsha, "node_type": node_type, "include_interpretation": include_interpretation, "lang": lang, "language": language}), json=None, options=options))
 
     def daily_bulk(
         self,
@@ -878,24 +836,31 @@ class VedicHoroscopeResource:
         """
         return cast("schemas.DailyVedicHoroscopeV2Response", self._client.request("POST", "/api/v2/vedic/horoscope/daily/personal", params=None, json=body, options=options))
 
+    def daily_sign(
+        self,
+        *,
+        sign: Literal["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"],
+        target_date: str | None = None,
+        tz_str: str | None = None,
+        ayanamsha: Literal["lahiri", "raman", "kp", "yukteshwar", "fagan_bradley", "true_pushya", "pushya"] | None = None,
+        node_type: Literal["mean", "true"] | None = None,
+        include_interpretation: bool | None = None,
+        lang: Literal["en", "hi"] | None = None,
+        language: Literal["en", "hi"] | None = None,
+        options: RequestOptions | None = None,
+    ) -> schemas.DailyRashifalSignResponse:
+        """Get General Daily Vedic Rashifal for One Moon Sign (v2)
+
+        General Moon-sign forecast with calculated transits and optional English or Hindi readings. No birth details required.
+
+        ``GET /api/v2/vedic/horoscope/daily/sign``
+        """
+        return cast("schemas.DailyRashifalSignResponse", self._client.request("GET", "/api/v2/vedic/horoscope/daily/sign", params=_query({"sign": sign, "target_date": target_date, "tz_str": tz_str, "ayanamsha": ayanamsha, "node_type": node_type, "include_interpretation": include_interpretation, "lang": lang, "language": language}), json=None, options=options))
+
 
 class VedicMuhuratResource:
     def __init__(self, client: FreeAstro) -> None:
         self._client = client
-
-    def search(
-        self,
-        body: schemas.VedicMuhuratSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.VedicMuhuratSearchResponse:
-        """Search auspicious Vedic windows (v2)
-
-        Search a monthly date range for auspicious windows.
-
-        ``POST /api/v2/vedic/muhurat/search``
-        """
-        return cast("schemas.VedicMuhuratSearchResponse", self._client.request("POST", "/api/v2/vedic/muhurat/search", params=None, json=body, options=options))
 
     def personalized_search(
         self,
@@ -911,30 +876,81 @@ class VedicMuhuratResource:
         """
         return cast("schemas.VedicMuhuratSearchResponse", self._client.request("POST", "/api/v2/vedic/muhurat/personalized-search", params=None, json=body, options=options))
 
+    def search(
+        self,
+        body: schemas.VedicMuhuratSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.VedicMuhuratSearchResponse:
+        """Search auspicious Vedic windows (v2)
+
+        Search a monthly date range for auspicious windows.
+
+        ``POST /api/v2/vedic/muhurat/search``
+        """
+        return cast("schemas.VedicMuhuratSearchResponse", self._client.request("POST", "/api/v2/vedic/muhurat/search", params=None, json=body, options=options))
+
+
+class VedicVisualResource:
+    def __init__(self, client: FreeAstro) -> None:
+        self._client = client
+
+    def chart(
+        self,
+        body: schemas.VedicVisualChartRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> str:
+        """Render Vedic Visual Chart (v2)
+
+        Render requested V2 divisional charts as a raw SVG or PNG image.
+
+        ``POST /api/v2/vedic/visual/chart``
+
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v2/vedic/visual/chart", ..., response_type="bytes")``.
+        """
+        return cast("str", self._client.request("POST", "/api/v2/vedic/visual/chart", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
+
 
 class VedicResource:
     def __init__(self, client: FreeAstro) -> None:
         self._client = client
-        self.transits = VedicTransitsResource(client)
         self.gochar = VedicGocharResource(client)
-        self.visual = VedicVisualResource(client)
+        self.transits = VedicTransitsResource(client)
         self.horoscope = VedicHoroscopeResource(client)
         self.muhurat = VedicMuhuratResource(client)
+        self.visual = VedicVisualResource(client)
 
-    def match_v1(
+    def batch(
         self,
-        body: schemas.MatchRequest,
+        body: schemas.VedicBatchRequest,
         *,
         options: RequestOptions | None = None,
     ) -> Any:
-        """Match Birth Details
+        """Run Vedic Batch
 
-        Calculate compatibility using birth details directly.
-        Computes Moon Nakshatra/Sign internally to avoid ID lookup errors.
+        Run up to 6 single-person Vedic endpoint calls in one HTTP request.
+        Items execute sequentially to keep compute bounded and preserve per-item order.
 
-        ``POST /api/v1/vedic/match``
+        ``POST /api/v1/vedic/batch``
         """
-        return self._client.request("POST", "/api/v1/vedic/match", params=None, json=body, options=options)
+        return self._client.request("POST", "/api/v1/vedic/batch", params=None, json=body, options=options)
+
+    def calculate_v1(
+        self,
+        body: schemas.VedicChartRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Calculate Full Chart
+
+        Full Vedic chart with all optional features.
+        Use feature toggles to customize response.
+
+        ``POST /api/v1/vedic/calculate``
+        """
+        return self._client.request("POST", "/api/v1/vedic/calculate", params=None, json=body, options=options)
 
     def chart_v1(
         self,
@@ -951,20 +967,20 @@ class VedicResource:
         """
         return self._client.request("POST", "/api/v1/vedic/chart", params=None, json=body, options=options)
 
-    def calculate_v1(
+    def compatibility_v1(
         self,
-        body: schemas.VedicChartRequest,
+        body: schemas.CompatibilityRequest,
         *,
         options: RequestOptions | None = None,
     ) -> Any:
-        """Calculate Full Chart
+        """Calculate Compatibility
 
-        Full Vedic chart with all optional features.
-        Use feature toggles to customize response.
+        Calculate Ashtakoota (8-point) compatibility.
+        Returns score out of 36.
 
-        ``POST /api/v1/vedic/calculate``
+        ``POST /api/v1/vedic/compatibility``
         """
-        return self._client.request("POST", "/api/v1/vedic/calculate", params=None, json=body, options=options)
+        return self._client.request("POST", "/api/v1/vedic/compatibility", params=None, json=body, options=options)
 
     def dasha_v1(
         self,
@@ -994,19 +1010,34 @@ class VedicResource:
         """
         return cast("schemas.VedicDashaInsightsResponse", self._client.request("POST", "/api/v1/vedic/dasha/insights", params=None, json=body, options=options))
 
-    def yogas_v1(
+    def match_v1(
         self,
-        body: schemas.BaseChartRequestV1,
+        body: schemas.MatchRequest,
         *,
         options: RequestOptions | None = None,
     ) -> Any:
-        """Get Yogas
+        """Match Birth Details
 
-        Get detected Yogas only (Manglik, Kala Sarpa, Raj Yogas, etc).
+        Calculate compatibility using birth details directly.
+        Computes Moon Nakshatra/Sign internally to avoid ID lookup errors.
 
-        ``POST /api/v1/vedic/yogas``
+        ``POST /api/v1/vedic/match``
         """
-        return self._client.request("POST", "/api/v1/vedic/yogas", params=None, json=body, options=options)
+        return self._client.request("POST", "/api/v1/vedic/match", params=None, json=body, options=options)
+
+    def panchang_v1(
+        self,
+        body: schemas.PanchangRequestV1,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Get Panchang
+
+        Get Panchang (daily almanac): Tithi, Nakshatra, Yoga, Karana, Rahu Kalam.
+
+        ``POST /api/v1/vedic/panchang``
+        """
+        return self._client.request("POST", "/api/v1/vedic/panchang", params=None, json=body, options=options)
 
     def strength_v1(
         self,
@@ -1036,63 +1067,19 @@ class VedicResource:
         """
         return self._client.request("POST", "/api/v1/vedic/vargas", params=None, json=body, options=options)
 
-    def compatibility_v1(
+    def yogas_v1(
         self,
-        body: schemas.CompatibilityRequest,
+        body: schemas.BaseChartRequestV1,
         *,
         options: RequestOptions | None = None,
     ) -> Any:
-        """Calculate Compatibility
+        """Get Yogas
 
-        Calculate Ashtakoota (8-point) compatibility.
-        Returns score out of 36.
+        Get detected Yogas only (Manglik, Kala Sarpa, Raj Yogas, etc).
 
-        ``POST /api/v1/vedic/compatibility``
+        ``POST /api/v1/vedic/yogas``
         """
-        return self._client.request("POST", "/api/v1/vedic/compatibility", params=None, json=body, options=options)
-
-    def panchang_v1(
-        self,
-        body: schemas.PanchangRequestV1,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Get Panchang
-
-        Get Panchang (daily almanac): Tithi, Nakshatra, Yoga, Karana, Rahu Kalam.
-
-        ``POST /api/v1/vedic/panchang``
-        """
-        return self._client.request("POST", "/api/v1/vedic/panchang", params=None, json=body, options=options)
-
-    def batch(
-        self,
-        body: schemas.VedicBatchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Run Vedic Batch
-
-        Run up to 6 single-person Vedic endpoint calls in one HTTP request.
-        Items execute sequentially to keep compute bounded and preserve per-item order.
-
-        ``POST /api/v1/vedic/batch``
-        """
-        return self._client.request("POST", "/api/v1/vedic/batch", params=None, json=body, options=options)
-
-    def chat(
-        self,
-        body: schemas.VedicChatRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.VedicChatResponse:
-        """Hosted Vedic Chat (v2)
-
-        Hosted Vedic Chat orchestration.
-
-        ``POST /api/v2/vedic/chat``
-        """
-        return cast("schemas.VedicChatResponse", self._client.request("POST", "/api/v2/vedic/chat", params=None, json=body, options=options))
+        return self._client.request("POST", "/api/v1/vedic/yogas", params=None, json=body, options=options)
 
     def calculate(
         self,
@@ -1108,36 +1095,6 @@ class VedicResource:
         """
         return cast("schemas.CalculateV2Response", self._client.request("POST", "/api/v2/vedic/calculate", params=None, json=body, options=options))
 
-    def kp(
-        self,
-        body: schemas.KPChartRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.KPChartResponse:
-        """Get Complete KP Chart (v2)
-
-        Return a complete Krishnamurti Paddhati calculation contract.
-
-        ``POST /api/v2/vedic/kp``
-        """
-        return cast("schemas.KPChartResponse", self._client.request("POST", "/api/v2/vedic/kp", params=None, json=body, options=options))
-
-    def kp_render(
-        self,
-        body: schemas.KPChartRenderRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> str:
-        """Render KP Chart and Tables (v2)
-
-        Render the same complete KP calculation as an accessible SVG or PNG.
-
-        ``POST /api/v2/vedic/kp/render``
-
-        Returns the image body as text; use ``request_raw`` for binary formats such as PNG.
-        """
-        return cast("str", self._client.request("POST", "/api/v2/vedic/kp/render", params=None, json=body, options=options))
-
     def chart(
         self,
         body: schemas.ChartRequest,
@@ -1152,19 +1109,33 @@ class VedicResource:
         """
         return cast("schemas.ChartV2Response", self._client.request("POST", "/api/v2/vedic/chart", params=None, json=body, options=options))
 
-    def vargas(
+    def chat(
         self,
-        body: schemas.VargasRequest,
+        body: schemas.VedicChatRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> schemas.VargasV2Response:
-        """Get Vedic Vargas (v2)
+    ) -> schemas.VedicChatResponse:
+        """Hosted Vedic Chat (v2)
 
-        Return V2 divisional chart rows and whole-sign divisional layouts.
+        Hosted Vedic Chat orchestration.
 
-        ``POST /api/v2/vedic/vargas``
+        ``POST /api/v2/vedic/chat``
         """
-        return cast("schemas.VargasV2Response", self._client.request("POST", "/api/v2/vedic/vargas", params=None, json=body, options=options))
+        return cast("schemas.VedicChatResponse", self._client.request("POST", "/api/v2/vedic/chat", params=None, json=body, options=options))
+
+    def compatibility(
+        self,
+        body: schemas.CompatibilityV2Request,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.CompatibilityV2Response:
+        """Get Vedic Compatibility (v2)
+
+        Return an AstroSage-style V2 Ashtakoota compatibility payload.
+
+        ``POST /api/v2/vedic/compatibility``
+        """
+        return cast("schemas.CompatibilityV2Response", self._client.request("POST", "/api/v2/vedic/compatibility", params=None, json=body, options=options))
 
     def dasha(
         self,
@@ -1194,47 +1165,36 @@ class VedicResource:
         """
         return cast("schemas.VedicDashaInsightsResponse", self._client.request("POST", "/api/v2/vedic/dasha/insights", params=None, json=body, options=options))
 
-    def yogas(
+    def kp(
         self,
-        body: schemas.BaseChartRequestV2,
+        body: schemas.KPChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> schemas.YogasV2Response:
-        """Get Vedic Yogas (v2)
+    ) -> schemas.KPChartResponse:
+        """Get Complete KP Chart (v2)
 
-        Evaluate a classical V2 yoga catalog and return active and inactive results with evidence.
+        Return a complete Krishnamurti Paddhati calculation contract.
 
-        ``POST /api/v2/vedic/yogas``
+        ``POST /api/v2/vedic/kp``
         """
-        return cast("schemas.YogasV2Response", self._client.request("POST", "/api/v2/vedic/yogas", params=None, json=body, options=options))
+        return cast("schemas.KPChartResponse", self._client.request("POST", "/api/v2/vedic/kp", params=None, json=body, options=options))
 
-    def strength(
+    def kp_render(
         self,
-        body: schemas.BaseChartRequestV2,
+        body: schemas.KPChartRenderRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> schemas.StrengthV2Response:
-        """Get Vedic Strength (v2)
+    ) -> str:
+        """Render KP Chart and Tables (v2)
 
-        Return V2 strength data with classical Shadbala and classical Ashtakavarga.
+        Render the same complete KP calculation as an accessible SVG or PNG.
 
-        ``POST /api/v2/vedic/strength``
+        ``POST /api/v2/vedic/kp/render``
+
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v2/vedic/kp/render", ..., response_type="bytes")``.
         """
-        return cast("schemas.StrengthV2Response", self._client.request("POST", "/api/v2/vedic/strength", params=None, json=body, options=options))
-
-    def compatibility(
-        self,
-        body: schemas.CompatibilityV2Request,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.CompatibilityV2Response:
-        """Get Vedic Compatibility (v2)
-
-        Return an AstroSage-style V2 Ashtakoota compatibility payload.
-
-        ``POST /api/v2/vedic/compatibility``
-        """
-        return cast("schemas.CompatibilityV2Response", self._client.request("POST", "/api/v2/vedic/compatibility", params=None, json=body, options=options))
+        return cast("str", self._client.request("POST", "/api/v2/vedic/kp/render", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
 
     def match(
         self,
@@ -1279,51 +1239,66 @@ class VedicResource:
         """
         return cast("schemas.VedicQAResponse", self._client.request("POST", "/api/v2/vedic/qa", params=None, json=body, options=options))
 
-
-class WesternSolarResource:
-    def __init__(self, client: FreeAstro) -> None:
-        self._client = client
-
-    def calculate(
+    def strength(
         self,
-        body: schemas.SolarReturnRequest,
+        body: schemas.BaseChartRequestV2,
         *,
         options: RequestOptions | None = None,
-    ) -> schemas.SolarReturnResponse:
-        """Get Solar Return
+    ) -> schemas.StrengthV2Response:
+        """Get Vedic Strength (v2)
 
-        Computes purely deterministic Solar Return chart against the Natal chart.
-        Returns structurally identical core chart blocks (planets, aspects) as
-        well as exact cross-aspects and angularity, without scoring or archetype models.
+        Return V2 strength data with classical Shadbala and classical Ashtakavarga.
 
-        ``POST /api/v1/western/solar/calculate``
+        ``POST /api/v2/vedic/strength``
         """
-        return cast("schemas.SolarReturnResponse", self._client.request("POST", "/api/v1/western/solar/calculate", params=None, json=body, options=options))
+        return cast("schemas.StrengthV2Response", self._client.request("POST", "/api/v2/vedic/strength", params=None, json=body, options=options))
 
-
-class WesternReturnsResource:
-    def __init__(self, client: FreeAstro) -> None:
-        self._client = client
-
-    def calculate(
+    def vargas(
         self,
-        body: schemas.PlanetReturnRequest,
+        body: schemas.VargasRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> schemas.PlanetReturnResponse:
-        """Get Planet Return
+    ) -> schemas.VargasV2Response:
+        """Get Vedic Vargas (v2)
 
-        Computes a deterministic planetary return chart against the natal chart.
-        The return target is selected by body plus a date anchor and selection mode.
+        Return V2 divisional chart rows and whole-sign divisional layouts.
 
-        ``POST /api/v1/western/returns/calculate``
+        ``POST /api/v2/vedic/vargas``
         """
-        return cast("schemas.PlanetReturnResponse", self._client.request("POST", "/api/v1/western/returns/calculate", params=None, json=body, options=options))
+        return cast("schemas.VargasV2Response", self._client.request("POST", "/api/v2/vedic/vargas", params=None, json=body, options=options))
+
+    def yogas(
+        self,
+        body: schemas.BaseChartRequestV2,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.YogasV2Response:
+        """Get Vedic Yogas (v2)
+
+        Evaluate a classical V2 yoga catalog and return active and inactive results with evidence.
+
+        ``POST /api/v2/vedic/yogas``
+        """
+        return cast("schemas.YogasV2Response", self._client.request("POST", "/api/v2/vedic/yogas", params=None, json=body, options=options))
 
 
 class WesternAstrocartographyResource:
     def __init__(self, client: FreeAstro) -> None:
         self._client = client
+
+    def city_check(
+        self,
+        body: schemas.AstrocartographyCityCheckRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> dict[str, Any]:
+        """Get Astrocartography City Check
+
+        Score a single city across the five primary relocation-oriented focus areas.
+
+        ``POST /api/v1/western/astrocartography/city-check``
+        """
+        return cast("dict[str, Any]", self._client.request("POST", "/api/v1/western/astrocartography/city-check", params=None, json=body, options=options))
 
     def lines(
         self,
@@ -1339,20 +1314,6 @@ class WesternAstrocartographyResource:
         """
         return cast("dict[str, Any]", self._client.request("POST", "/api/v1/western/astrocartography/lines", params=None, json=body, options=options))
 
-    def recommendations(
-        self,
-        body: schemas.AstrocartographyRecommendationsRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
-        """Get Astrocartography Recommendations
-
-        Rank candidate cities for a focus-oriented astrocartography search.
-
-        ``POST /api/v1/western/astrocartography/recommendations``
-        """
-        return cast("dict[str, Any]", self._client.request("POST", "/api/v1/western/astrocartography/recommendations", params=None, json=body, options=options))
-
     def parans(
         self,
         body: schemas.AstrocartographyParansRequest,
@@ -1366,6 +1327,20 @@ class WesternAstrocartographyResource:
         ``POST /api/v1/western/astrocartography/parans``
         """
         return cast("dict[str, Any]", self._client.request("POST", "/api/v1/western/astrocartography/parans", params=None, json=body, options=options))
+
+    def recommendations(
+        self,
+        body: schemas.AstrocartographyRecommendationsRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> dict[str, Any]:
+        """Get Astrocartography Recommendations
+
+        Rank candidate cities for a focus-oriented astrocartography search.
+
+        ``POST /api/v1/western/astrocartography/recommendations``
+        """
+        return cast("dict[str, Any]", self._client.request("POST", "/api/v1/western/astrocartography/recommendations", params=None, json=body, options=options))
 
     def relocation(
         self,
@@ -1381,19 +1356,60 @@ class WesternAstrocartographyResource:
         """
         return cast("dict[str, Any]", self._client.request("POST", "/api/v1/western/astrocartography/relocation", params=None, json=body, options=options))
 
-    def city_check(
+
+class WesternDirectionsResource:
+    def __init__(self, client: FreeAstro) -> None:
+        self._client = client
+
+    def primary(
         self,
-        body: schemas.AstrocartographyCityCheckRequest,
+        body: schemas.PrimaryDirectionsRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
-        """Get Astrocartography City Check
+    ) -> schemas.PrimaryDirectionsResponse:
+        """Get Primary Directions
 
-        Score a single city across the five primary relocation-oriented focus areas.
+        Compute primary directions for a natal chart over a date range.
 
-        ``POST /api/v1/western/astrocartography/city-check``
+        ``POST /api/v1/western/directions/primary``
         """
-        return cast("dict[str, Any]", self._client.request("POST", "/api/v1/western/astrocartography/city-check", params=None, json=body, options=options))
+        return cast("schemas.PrimaryDirectionsResponse", self._client.request("POST", "/api/v1/western/directions/primary", params=None, json=body, options=options))
+
+    def primary_calendar(
+        self,
+        body: schemas.PrimaryDirectionsRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.PrimaryDirectionsCalendarResponse:
+        """Get Primary Directions Calendar
+
+        ``POST /api/v1/western/directions/primary/calendar``
+        """
+        return cast("schemas.PrimaryDirectionsCalendarResponse", self._client.request("POST", "/api/v1/western/directions/primary/calendar", params=None, json=body, options=options))
+
+    def primary_exact_aspects(
+        self,
+        body: schemas.PrimaryDirectionsRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.PrimaryDirectionsResponse:
+        """Get Primary Directions Exact Aspects
+
+        ``POST /api/v1/western/directions/primary/exact-aspects``
+        """
+        return cast("schemas.PrimaryDirectionsResponse", self._client.request("POST", "/api/v1/western/directions/primary/exact-aspects", params=None, json=body, options=options))
+
+    def primary_search(
+        self,
+        body: schemas.PrimaryDirectionsRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.PrimaryDirectionsResponse:
+        """Search Primary Directions
+
+        ``POST /api/v1/western/directions/primary/search``
+        """
+        return cast("schemas.PrimaryDirectionsResponse", self._client.request("POST", "/api/v1/western/directions/primary/search", params=None, json=body, options=options))
 
 
 class WesternNatalResource:
@@ -1429,6 +1445,321 @@ class WesternNatalResource:
         return cast("schemas.NatalInsightsIndexDocumentsResponse", self._client.request("POST", "/api/v1/western/natal/insights/index-documents", params=None, json=body, options=options))
 
 
+class WesternProfectionsResource:
+    def __init__(self, client: FreeAstro) -> None:
+        self._client = client
+
+    def annual(
+        self,
+        body: schemas.AnnualProfectionRequest,
+        *,
+        include: list[str] | None = None,
+        options: RequestOptions | None = None,
+    ) -> schemas.AnnualProfectionResponse:
+        """Get Annual Profections
+
+        Annual profections endpoint with a solar-return-style envelope and a timing-oriented body.
+
+        ``POST /api/v1/western/profections/annual``
+        """
+        return cast("schemas.AnnualProfectionResponse", self._client.request("POST", "/api/v1/western/profections/annual", params=_query({"include": include}), json=body, options=options))
+
+
+class WesternProgressionsResource:
+    def __init__(self, client: FreeAstro) -> None:
+        self._client = client
+
+    def converse_secondary(
+        self,
+        body: schemas.ConverseSecondaryProgressionsRequest,
+        *,
+        response_mode: Literal["full", "table"] | None = None,
+        options: RequestOptions | None = None,
+    ) -> schemas.ProgressionChartResponse | schemas.ProgressionTableResponse:
+        """Get Converse Secondary Progressions
+
+        ``POST /api/v1/western/progressions/converse-secondary``
+        """
+        return cast("schemas.ProgressionChartResponse | schemas.ProgressionTableResponse", self._client.request("POST", "/api/v1/western/progressions/converse-secondary", params=_query({"response_mode": response_mode}), json=body, options=options))
+
+    def converse_secondary_calendar(
+        self,
+        body: schemas.ProgressionCalendarRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ProgressionCalendarResponse:
+        """Get Converse Secondary Progressions Calendar
+
+        ``POST /api/v1/western/progressions/converse-secondary/calendar``
+        """
+        return cast("schemas.ProgressionCalendarResponse", self._client.request("POST", "/api/v1/western/progressions/converse-secondary/calendar", params=None, json=body, options=options))
+
+    def converse_secondary_exact_aspects(
+        self,
+        body: schemas.ExactAspectSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ExactAspectSearchResponse:
+        """Search Converse Secondary Exact Aspects
+
+        ``POST /api/v1/western/progressions/converse-secondary/exact-aspects``
+        """
+        return cast("schemas.ExactAspectSearchResponse", self._client.request("POST", "/api/v1/western/progressions/converse-secondary/exact-aspects", params=None, json=body, options=options))
+
+    def converse_secondary_exact_ingresses(
+        self,
+        body: schemas.ExactIngressSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ExactIngressSearchResponse:
+        """Search Converse Secondary Exact Ingresses
+
+        ``POST /api/v1/western/progressions/converse-secondary/exact-ingresses``
+        """
+        return cast("schemas.ExactIngressSearchResponse", self._client.request("POST", "/api/v1/western/progressions/converse-secondary/exact-ingresses", params=None, json=body, options=options))
+
+    def quaternary(
+        self,
+        body: schemas.QuaternaryProgressionsRequest,
+        *,
+        response_mode: Literal["full", "table"] | None = None,
+        options: RequestOptions | None = None,
+    ) -> schemas.ProgressionChartResponse | schemas.ProgressionTableResponse:
+        """Get Quaternary Progressions
+
+        ``POST /api/v1/western/progressions/quaternary``
+        """
+        return cast("schemas.ProgressionChartResponse | schemas.ProgressionTableResponse", self._client.request("POST", "/api/v1/western/progressions/quaternary", params=_query({"response_mode": response_mode}), json=body, options=options))
+
+    def quaternary_calendar(
+        self,
+        body: schemas.ProgressionCalendarRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ProgressionCalendarResponse:
+        """Get Quaternary Progressions Calendar
+
+        ``POST /api/v1/western/progressions/quaternary/calendar``
+        """
+        return cast("schemas.ProgressionCalendarResponse", self._client.request("POST", "/api/v1/western/progressions/quaternary/calendar", params=None, json=body, options=options))
+
+    def quaternary_exact_aspects(
+        self,
+        body: schemas.ExactAspectSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ExactAspectSearchResponse:
+        """Search Quaternary Exact Aspects
+
+        ``POST /api/v1/western/progressions/quaternary/exact-aspects``
+        """
+        return cast("schemas.ExactAspectSearchResponse", self._client.request("POST", "/api/v1/western/progressions/quaternary/exact-aspects", params=None, json=body, options=options))
+
+    def quaternary_exact_ingresses(
+        self,
+        body: schemas.ExactIngressSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ExactIngressSearchResponse:
+        """Search Quaternary Exact Ingresses
+
+        ``POST /api/v1/western/progressions/quaternary/exact-ingresses``
+        """
+        return cast("schemas.ExactIngressSearchResponse", self._client.request("POST", "/api/v1/western/progressions/quaternary/exact-ingresses", params=None, json=body, options=options))
+
+    def quotidian(
+        self,
+        body: schemas.QuotidianProgressionsRequest,
+        *,
+        response_mode: Literal["full", "table"] | None = None,
+        options: RequestOptions | None = None,
+    ) -> schemas.ProgressionChartResponse | schemas.ProgressionTableResponse:
+        """Get Quotidian Progressions
+
+        ``POST /api/v1/western/progressions/quotidian``
+        """
+        return cast("schemas.ProgressionChartResponse | schemas.ProgressionTableResponse", self._client.request("POST", "/api/v1/western/progressions/quotidian", params=_query({"response_mode": response_mode}), json=body, options=options))
+
+    def quotidian_calendar(
+        self,
+        body: schemas.ProgressionCalendarRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ProgressionCalendarResponse:
+        """Get Quotidian Progressions Calendar
+
+        ``POST /api/v1/western/progressions/quotidian/calendar``
+        """
+        return cast("schemas.ProgressionCalendarResponse", self._client.request("POST", "/api/v1/western/progressions/quotidian/calendar", params=None, json=body, options=options))
+
+    def quotidian_exact_aspects(
+        self,
+        body: schemas.ExactAspectSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ExactAspectSearchResponse:
+        """Search Quotidian Exact Aspects
+
+        ``POST /api/v1/western/progressions/quotidian/exact-aspects``
+        """
+        return cast("schemas.ExactAspectSearchResponse", self._client.request("POST", "/api/v1/western/progressions/quotidian/exact-aspects", params=None, json=body, options=options))
+
+    def quotidian_exact_ingresses(
+        self,
+        body: schemas.ExactIngressSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ExactIngressSearchResponse:
+        """Search Quotidian Exact Ingresses
+
+        ``POST /api/v1/western/progressions/quotidian/exact-ingresses``
+        """
+        return cast("schemas.ExactIngressSearchResponse", self._client.request("POST", "/api/v1/western/progressions/quotidian/exact-ingresses", params=None, json=body, options=options))
+
+    def secondary(
+        self,
+        body: schemas.SecondaryProgressionsRequest,
+        *,
+        include: list[str] | None = None,
+        response_mode: Literal["full", "table"] | None = None,
+        options: RequestOptions | None = None,
+    ) -> schemas.SecondaryProgressionsResponse | schemas.ProgressionTableResponse:
+        """Get Secondary Progressions
+
+        Compute a secondary progressed chart using the classic symbolic timing rule:
+        1 day after birth = 1 year of life.
+
+        ``POST /api/v1/western/progressions/secondary``
+        """
+        return cast("schemas.SecondaryProgressionsResponse | schemas.ProgressionTableResponse", self._client.request("POST", "/api/v1/western/progressions/secondary", params=_query({"include": include, "response_mode": response_mode}), json=body, options=options))
+
+    def secondary_calendar(
+        self,
+        body: schemas.ProgressionCalendarRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ProgressionCalendarResponse:
+        """Get Secondary Progressions Calendar
+
+        ``POST /api/v1/western/progressions/secondary/calendar``
+        """
+        return cast("schemas.ProgressionCalendarResponse", self._client.request("POST", "/api/v1/western/progressions/secondary/calendar", params=None, json=body, options=options))
+
+    def secondary_exact_aspects(
+        self,
+        body: schemas.ExactAspectSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ExactAspectSearchResponse:
+        """Search Secondary Exact Aspects
+
+        ``POST /api/v1/western/progressions/secondary/exact-aspects``
+        """
+        return cast("schemas.ExactAspectSearchResponse", self._client.request("POST", "/api/v1/western/progressions/secondary/exact-aspects", params=None, json=body, options=options))
+
+    def secondary_exact_ingresses(
+        self,
+        body: schemas.ExactIngressSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ExactIngressSearchResponse:
+        """Search Secondary Exact Ingresses
+
+        ``POST /api/v1/western/progressions/secondary/exact-ingresses``
+        """
+        return cast("schemas.ExactIngressSearchResponse", self._client.request("POST", "/api/v1/western/progressions/secondary/exact-ingresses", params=None, json=body, options=options))
+
+    def tertiary(
+        self,
+        body: schemas.TertiaryProgressionsRequest,
+        *,
+        response_mode: Literal["full", "table"] | None = None,
+        options: RequestOptions | None = None,
+    ) -> schemas.ProgressionChartResponse | schemas.ProgressionTableResponse:
+        """Get Tertiary Progressions
+
+        ``POST /api/v1/western/progressions/tertiary``
+        """
+        return cast("schemas.ProgressionChartResponse | schemas.ProgressionTableResponse", self._client.request("POST", "/api/v1/western/progressions/tertiary", params=_query({"response_mode": response_mode}), json=body, options=options))
+
+    def tertiary_calendar(
+        self,
+        body: schemas.ProgressionCalendarRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ProgressionCalendarResponse:
+        """Get Tertiary Progressions Calendar
+
+        ``POST /api/v1/western/progressions/tertiary/calendar``
+        """
+        return cast("schemas.ProgressionCalendarResponse", self._client.request("POST", "/api/v1/western/progressions/tertiary/calendar", params=None, json=body, options=options))
+
+    def tertiary_exact_aspects(
+        self,
+        body: schemas.ExactAspectSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ExactAspectSearchResponse:
+        """Search Tertiary Exact Aspects
+
+        ``POST /api/v1/western/progressions/tertiary/exact-aspects``
+        """
+        return cast("schemas.ExactAspectSearchResponse", self._client.request("POST", "/api/v1/western/progressions/tertiary/exact-aspects", params=None, json=body, options=options))
+
+    def tertiary_exact_ingresses(
+        self,
+        body: schemas.ExactIngressSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ExactIngressSearchResponse:
+        """Search Tertiary Exact Ingresses
+
+        ``POST /api/v1/western/progressions/tertiary/exact-ingresses``
+        """
+        return cast("schemas.ExactIngressSearchResponse", self._client.request("POST", "/api/v1/western/progressions/tertiary/exact-ingresses", params=None, json=body, options=options))
+
+
+class WesternReturnsResource:
+    def __init__(self, client: FreeAstro) -> None:
+        self._client = client
+
+    def calculate(
+        self,
+        body: schemas.PlanetReturnRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.PlanetReturnResponse:
+        """Get Planet Return
+
+        Computes a deterministic planetary return chart against the natal chart.
+        The return target is selected by body plus a date anchor and selection mode.
+
+        ``POST /api/v1/western/returns/calculate``
+        """
+        return cast("schemas.PlanetReturnResponse", self._client.request("POST", "/api/v1/western/returns/calculate", params=None, json=body, options=options))
+
+
+class WesternSolarResource:
+    def __init__(self, client: FreeAstro) -> None:
+        self._client = client
+
+    def calculate(
+        self,
+        body: schemas.SolarReturnRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.SolarReturnResponse:
+        """Get Solar Return
+
+        Computes purely deterministic Solar Return chart against the Natal chart.
+        Returns structurally identical core chart blocks (planets, aspects) as
+        well as exact cross-aspects and angularity, without scoring or archetype models.
+
+        ``POST /api/v1/western/solar/calculate``
+        """
+        return cast("schemas.SolarReturnResponse", self._client.request("POST", "/api/v1/western/solar/calculate", params=None, json=body, options=options))
+
+
 class WesternTransitsResource:
     def __init__(self, client: FreeAstro) -> None:
         self._client = client
@@ -1446,6 +1777,20 @@ class WesternTransitsResource:
         ``POST /api/v1/western/transits/insights``
         """
         return cast("schemas.TransitInsightsResponse", self._client.request("POST", "/api/v1/western/transits/insights", params=None, json=body, options=options))
+
+    def search(
+        self,
+        body: schemas.TransitSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.TransitSearchResponse:
+        """Search Transits
+
+        Search a long-range date or age window for all passes of one transit planet against one natal point.
+
+        ``POST /api/v1/western/transits/search``
+        """
+        return cast("schemas.TransitSearchResponse", self._client.request("POST", "/api/v1/western/transits/search", params=None, json=body, options=options))
 
     def timeline(
         self,
@@ -1475,349 +1820,6 @@ class WesternTransitsResource:
         """
         return cast("schemas.TransitTimelineIndexDocumentsResponse", self._client.request("POST", "/api/v1/western/transits/timeline/index-documents", params=None, json=body, options=options))
 
-    def search(
-        self,
-        body: schemas.TransitSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.TransitSearchResponse:
-        """Search Transits
-
-        Search a long-range date or age window for all passes of one transit planet against one natal point.
-
-        ``POST /api/v1/western/transits/search``
-        """
-        return cast("schemas.TransitSearchResponse", self._client.request("POST", "/api/v1/western/transits/search", params=None, json=body, options=options))
-
-
-class WesternProfectionsResource:
-    def __init__(self, client: FreeAstro) -> None:
-        self._client = client
-
-    def annual(
-        self,
-        body: schemas.AnnualProfectionRequest,
-        *,
-        include: list[str] | None = None,
-        options: RequestOptions | None = None,
-    ) -> schemas.AnnualProfectionResponse:
-        """Get Annual Profections
-
-        Annual profections endpoint with a solar-return-style envelope and a timing-oriented body.
-
-        ``POST /api/v1/western/profections/annual``
-        """
-        return cast("schemas.AnnualProfectionResponse", self._client.request("POST", "/api/v1/western/profections/annual", params=_query({"include": include}), json=body, options=options))
-
-
-class WesternProgressionsResource:
-    def __init__(self, client: FreeAstro) -> None:
-        self._client = client
-
-    def secondary(
-        self,
-        body: schemas.SecondaryProgressionsRequest,
-        *,
-        include: list[str] | None = None,
-        response_mode: Literal["full", "table"] | None = None,
-        options: RequestOptions | None = None,
-    ) -> schemas.SecondaryProgressionsResponse | schemas.ProgressionTableResponse:
-        """Get Secondary Progressions
-
-        Compute a secondary progressed chart using the classic symbolic timing rule:
-        1 day after birth = 1 year of life.
-
-        ``POST /api/v1/western/progressions/secondary``
-        """
-        return cast("schemas.SecondaryProgressionsResponse | schemas.ProgressionTableResponse", self._client.request("POST", "/api/v1/western/progressions/secondary", params=_query({"include": include, "response_mode": response_mode}), json=body, options=options))
-
-    def converse_secondary(
-        self,
-        body: schemas.ConverseSecondaryProgressionsRequest,
-        *,
-        response_mode: Literal["full", "table"] | None = None,
-        options: RequestOptions | None = None,
-    ) -> schemas.ProgressionChartResponse | schemas.ProgressionTableResponse:
-        """Get Converse Secondary Progressions
-
-        ``POST /api/v1/western/progressions/converse-secondary``
-        """
-        return cast("schemas.ProgressionChartResponse | schemas.ProgressionTableResponse", self._client.request("POST", "/api/v1/western/progressions/converse-secondary", params=_query({"response_mode": response_mode}), json=body, options=options))
-
-    def tertiary(
-        self,
-        body: schemas.TertiaryProgressionsRequest,
-        *,
-        response_mode: Literal["full", "table"] | None = None,
-        options: RequestOptions | None = None,
-    ) -> schemas.ProgressionChartResponse | schemas.ProgressionTableResponse:
-        """Get Tertiary Progressions
-
-        ``POST /api/v1/western/progressions/tertiary``
-        """
-        return cast("schemas.ProgressionChartResponse | schemas.ProgressionTableResponse", self._client.request("POST", "/api/v1/western/progressions/tertiary", params=_query({"response_mode": response_mode}), json=body, options=options))
-
-    def quotidian(
-        self,
-        body: schemas.QuotidianProgressionsRequest,
-        *,
-        response_mode: Literal["full", "table"] | None = None,
-        options: RequestOptions | None = None,
-    ) -> schemas.ProgressionChartResponse | schemas.ProgressionTableResponse:
-        """Get Quotidian Progressions
-
-        ``POST /api/v1/western/progressions/quotidian``
-        """
-        return cast("schemas.ProgressionChartResponse | schemas.ProgressionTableResponse", self._client.request("POST", "/api/v1/western/progressions/quotidian", params=_query({"response_mode": response_mode}), json=body, options=options))
-
-    def quaternary(
-        self,
-        body: schemas.QuaternaryProgressionsRequest,
-        *,
-        response_mode: Literal["full", "table"] | None = None,
-        options: RequestOptions | None = None,
-    ) -> schemas.ProgressionChartResponse | schemas.ProgressionTableResponse:
-        """Get Quaternary Progressions
-
-        ``POST /api/v1/western/progressions/quaternary``
-        """
-        return cast("schemas.ProgressionChartResponse | schemas.ProgressionTableResponse", self._client.request("POST", "/api/v1/western/progressions/quaternary", params=_query({"response_mode": response_mode}), json=body, options=options))
-
-    def secondary_exact_ingresses(
-        self,
-        body: schemas.ExactIngressSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ExactIngressSearchResponse:
-        """Search Secondary Exact Ingresses
-
-        ``POST /api/v1/western/progressions/secondary/exact-ingresses``
-        """
-        return cast("schemas.ExactIngressSearchResponse", self._client.request("POST", "/api/v1/western/progressions/secondary/exact-ingresses", params=None, json=body, options=options))
-
-    def converse_secondary_exact_ingresses(
-        self,
-        body: schemas.ExactIngressSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ExactIngressSearchResponse:
-        """Search Converse Secondary Exact Ingresses
-
-        ``POST /api/v1/western/progressions/converse-secondary/exact-ingresses``
-        """
-        return cast("schemas.ExactIngressSearchResponse", self._client.request("POST", "/api/v1/western/progressions/converse-secondary/exact-ingresses", params=None, json=body, options=options))
-
-    def tertiary_exact_ingresses(
-        self,
-        body: schemas.ExactIngressSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ExactIngressSearchResponse:
-        """Search Tertiary Exact Ingresses
-
-        ``POST /api/v1/western/progressions/tertiary/exact-ingresses``
-        """
-        return cast("schemas.ExactIngressSearchResponse", self._client.request("POST", "/api/v1/western/progressions/tertiary/exact-ingresses", params=None, json=body, options=options))
-
-    def quotidian_exact_ingresses(
-        self,
-        body: schemas.ExactIngressSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ExactIngressSearchResponse:
-        """Search Quotidian Exact Ingresses
-
-        ``POST /api/v1/western/progressions/quotidian/exact-ingresses``
-        """
-        return cast("schemas.ExactIngressSearchResponse", self._client.request("POST", "/api/v1/western/progressions/quotidian/exact-ingresses", params=None, json=body, options=options))
-
-    def quaternary_exact_ingresses(
-        self,
-        body: schemas.ExactIngressSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ExactIngressSearchResponse:
-        """Search Quaternary Exact Ingresses
-
-        ``POST /api/v1/western/progressions/quaternary/exact-ingresses``
-        """
-        return cast("schemas.ExactIngressSearchResponse", self._client.request("POST", "/api/v1/western/progressions/quaternary/exact-ingresses", params=None, json=body, options=options))
-
-    def secondary_exact_aspects(
-        self,
-        body: schemas.ExactAspectSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ExactAspectSearchResponse:
-        """Search Secondary Exact Aspects
-
-        ``POST /api/v1/western/progressions/secondary/exact-aspects``
-        """
-        return cast("schemas.ExactAspectSearchResponse", self._client.request("POST", "/api/v1/western/progressions/secondary/exact-aspects", params=None, json=body, options=options))
-
-    def converse_secondary_exact_aspects(
-        self,
-        body: schemas.ExactAspectSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ExactAspectSearchResponse:
-        """Search Converse Secondary Exact Aspects
-
-        ``POST /api/v1/western/progressions/converse-secondary/exact-aspects``
-        """
-        return cast("schemas.ExactAspectSearchResponse", self._client.request("POST", "/api/v1/western/progressions/converse-secondary/exact-aspects", params=None, json=body, options=options))
-
-    def tertiary_exact_aspects(
-        self,
-        body: schemas.ExactAspectSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ExactAspectSearchResponse:
-        """Search Tertiary Exact Aspects
-
-        ``POST /api/v1/western/progressions/tertiary/exact-aspects``
-        """
-        return cast("schemas.ExactAspectSearchResponse", self._client.request("POST", "/api/v1/western/progressions/tertiary/exact-aspects", params=None, json=body, options=options))
-
-    def quotidian_exact_aspects(
-        self,
-        body: schemas.ExactAspectSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ExactAspectSearchResponse:
-        """Search Quotidian Exact Aspects
-
-        ``POST /api/v1/western/progressions/quotidian/exact-aspects``
-        """
-        return cast("schemas.ExactAspectSearchResponse", self._client.request("POST", "/api/v1/western/progressions/quotidian/exact-aspects", params=None, json=body, options=options))
-
-    def quaternary_exact_aspects(
-        self,
-        body: schemas.ExactAspectSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ExactAspectSearchResponse:
-        """Search Quaternary Exact Aspects
-
-        ``POST /api/v1/western/progressions/quaternary/exact-aspects``
-        """
-        return cast("schemas.ExactAspectSearchResponse", self._client.request("POST", "/api/v1/western/progressions/quaternary/exact-aspects", params=None, json=body, options=options))
-
-    def secondary_calendar(
-        self,
-        body: schemas.ProgressionCalendarRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ProgressionCalendarResponse:
-        """Get Secondary Progressions Calendar
-
-        ``POST /api/v1/western/progressions/secondary/calendar``
-        """
-        return cast("schemas.ProgressionCalendarResponse", self._client.request("POST", "/api/v1/western/progressions/secondary/calendar", params=None, json=body, options=options))
-
-    def converse_secondary_calendar(
-        self,
-        body: schemas.ProgressionCalendarRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ProgressionCalendarResponse:
-        """Get Converse Secondary Progressions Calendar
-
-        ``POST /api/v1/western/progressions/converse-secondary/calendar``
-        """
-        return cast("schemas.ProgressionCalendarResponse", self._client.request("POST", "/api/v1/western/progressions/converse-secondary/calendar", params=None, json=body, options=options))
-
-    def tertiary_calendar(
-        self,
-        body: schemas.ProgressionCalendarRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ProgressionCalendarResponse:
-        """Get Tertiary Progressions Calendar
-
-        ``POST /api/v1/western/progressions/tertiary/calendar``
-        """
-        return cast("schemas.ProgressionCalendarResponse", self._client.request("POST", "/api/v1/western/progressions/tertiary/calendar", params=None, json=body, options=options))
-
-    def quotidian_calendar(
-        self,
-        body: schemas.ProgressionCalendarRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ProgressionCalendarResponse:
-        """Get Quotidian Progressions Calendar
-
-        ``POST /api/v1/western/progressions/quotidian/calendar``
-        """
-        return cast("schemas.ProgressionCalendarResponse", self._client.request("POST", "/api/v1/western/progressions/quotidian/calendar", params=None, json=body, options=options))
-
-    def quaternary_calendar(
-        self,
-        body: schemas.ProgressionCalendarRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ProgressionCalendarResponse:
-        """Get Quaternary Progressions Calendar
-
-        ``POST /api/v1/western/progressions/quaternary/calendar``
-        """
-        return cast("schemas.ProgressionCalendarResponse", self._client.request("POST", "/api/v1/western/progressions/quaternary/calendar", params=None, json=body, options=options))
-
-
-class WesternDirectionsResource:
-    def __init__(self, client: FreeAstro) -> None:
-        self._client = client
-
-    def primary(
-        self,
-        body: schemas.PrimaryDirectionsRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.PrimaryDirectionsResponse:
-        """Get Primary Directions
-
-        Compute primary directions for a natal chart over a date range.
-
-        ``POST /api/v1/western/directions/primary``
-        """
-        return cast("schemas.PrimaryDirectionsResponse", self._client.request("POST", "/api/v1/western/directions/primary", params=None, json=body, options=options))
-
-    def primary_exact_aspects(
-        self,
-        body: schemas.PrimaryDirectionsRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.PrimaryDirectionsResponse:
-        """Get Primary Directions Exact Aspects
-
-        ``POST /api/v1/western/directions/primary/exact-aspects``
-        """
-        return cast("schemas.PrimaryDirectionsResponse", self._client.request("POST", "/api/v1/western/directions/primary/exact-aspects", params=None, json=body, options=options))
-
-    def primary_search(
-        self,
-        body: schemas.PrimaryDirectionsRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.PrimaryDirectionsResponse:
-        """Search Primary Directions
-
-        ``POST /api/v1/western/directions/primary/search``
-        """
-        return cast("schemas.PrimaryDirectionsResponse", self._client.request("POST", "/api/v1/western/directions/primary/search", params=None, json=body, options=options))
-
-    def primary_calendar(
-        self,
-        body: schemas.PrimaryDirectionsRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.PrimaryDirectionsCalendarResponse:
-        """Get Primary Directions Calendar
-
-        ``POST /api/v1/western/directions/primary/calendar``
-        """
-        return cast("schemas.PrimaryDirectionsCalendarResponse", self._client.request("POST", "/api/v1/western/directions/primary/calendar", params=None, json=body, options=options))
-
 
 class WesternChartSimilarityResource:
     def __init__(self, client: FreeAstro) -> None:
@@ -1840,29 +1842,17 @@ class WesternElectionalResource:
     def __init__(self, client: FreeAstro) -> None:
         self._client = client
 
-    def wedding_search(
+    def invest_money_search(
         self,
-        body: schemas.WeddingElectionSearchRequest,
+        body: schemas.InvestMoneyElectionSearchRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> schemas.WeddingElectionSearchResponse:
-        """Search Wedding Elections
+    ) -> schemas.InvestMoneyElectionSearchResponse:
+        """Search Invest Money Elections
 
-        ``POST /api/v2/western/electional/wedding/search``
+        ``POST /api/v2/western/electional/invest-money/search``
         """
-        return cast("schemas.WeddingElectionSearchResponse", self._client.request("POST", "/api/v2/western/electional/wedding/search", params=None, json=body, options=options))
-
-    def making_contracts_search(
-        self,
-        body: schemas.MakingContractsElectionSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.MakingContractsElectionSearchResponse:
-        """Search Making Contracts Elections
-
-        ``POST /api/v2/western/electional/making-contracts/search``
-        """
-        return cast("schemas.MakingContractsElectionSearchResponse", self._client.request("POST", "/api/v2/western/electional/making-contracts/search", params=None, json=body, options=options))
+        return cast("schemas.InvestMoneyElectionSearchResponse", self._client.request("POST", "/api/v2/western/electional/invest-money/search", params=None, json=body, options=options))
 
     def job_audition_search(
         self,
@@ -1876,29 +1866,29 @@ class WesternElectionalResource:
         """
         return cast("schemas.JobAuditionElectionSearchResponse", self._client.request("POST", "/api/v2/western/electional/job-audition/search", params=None, json=body, options=options))
 
-    def purchase_property_search(
+    def legal_proceedings_search(
         self,
-        body: schemas.PurchasePropertyElectionSearchRequest,
+        body: schemas.LegalProceedingsElectionSearchRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> schemas.PurchasePropertyElectionSearchResponse:
-        """Search Purchase Property Elections
+    ) -> schemas.LegalProceedingsElectionSearchResponse:
+        """Search Legal Proceedings Elections
 
-        ``POST /api/v2/western/electional/purchase-property/search``
+        ``POST /api/v2/western/electional/legal-proceedings/search``
         """
-        return cast("schemas.PurchasePropertyElectionSearchResponse", self._client.request("POST", "/api/v2/western/electional/purchase-property/search", params=None, json=body, options=options))
+        return cast("schemas.LegalProceedingsElectionSearchResponse", self._client.request("POST", "/api/v2/western/electional/legal-proceedings/search", params=None, json=body, options=options))
 
-    def purchase_car_search(
+    def making_contracts_search(
         self,
-        body: schemas.PurchaseCarElectionSearchRequest,
+        body: schemas.MakingContractsElectionSearchRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> schemas.PurchaseCarElectionSearchResponse:
-        """Search Purchase Car Elections
+    ) -> schemas.MakingContractsElectionSearchResponse:
+        """Search Making Contracts Elections
 
-        ``POST /api/v2/western/electional/purchase-car/search``
+        ``POST /api/v2/western/electional/making-contracts/search``
         """
-        return cast("schemas.PurchaseCarElectionSearchResponse", self._client.request("POST", "/api/v2/western/electional/purchase-car/search", params=None, json=body, options=options))
+        return cast("schemas.MakingContractsElectionSearchResponse", self._client.request("POST", "/api/v2/western/electional/making-contracts/search", params=None, json=body, options=options))
 
     def move_into_new_home_search(
         self,
@@ -1912,30 +1902,6 @@ class WesternElectionalResource:
         """
         return cast("schemas.MoveIntoNewHomeElectionSearchResponse", self._client.request("POST", "/api/v2/western/electional/move-into-new-home/search", params=None, json=body, options=options))
 
-    def starting_journey_search(
-        self,
-        body: schemas.StartingJourneyElectionSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.StartingJourneyElectionSearchResponse:
-        """Search Starting Journey Elections
-
-        ``POST /api/v2/western/electional/starting-journey/search``
-        """
-        return cast("schemas.StartingJourneyElectionSearchResponse", self._client.request("POST", "/api/v2/western/electional/starting-journey/search", params=None, json=body, options=options))
-
-    def legal_proceedings_search(
-        self,
-        body: schemas.LegalProceedingsElectionSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.LegalProceedingsElectionSearchResponse:
-        """Search Legal Proceedings Elections
-
-        ``POST /api/v2/western/electional/legal-proceedings/search``
-        """
-        return cast("schemas.LegalProceedingsElectionSearchResponse", self._client.request("POST", "/api/v2/western/electional/legal-proceedings/search", params=None, json=body, options=options))
-
     def physical_examination_search(
         self,
         body: schemas.PhysicalExaminationElectionSearchRequest,
@@ -1948,30 +1914,66 @@ class WesternElectionalResource:
         """
         return cast("schemas.PhysicalExaminationElectionSearchResponse", self._client.request("POST", "/api/v2/western/electional/physical-examination/search", params=None, json=body, options=options))
 
-    def invest_money_search(
+    def purchase_car_search(
         self,
-        body: schemas.InvestMoneyElectionSearchRequest,
+        body: schemas.PurchaseCarElectionSearchRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> schemas.InvestMoneyElectionSearchResponse:
-        """Search Invest Money Elections
+    ) -> schemas.PurchaseCarElectionSearchResponse:
+        """Search Purchase Car Elections
 
-        ``POST /api/v2/western/electional/invest-money/search``
+        ``POST /api/v2/western/electional/purchase-car/search``
         """
-        return cast("schemas.InvestMoneyElectionSearchResponse", self._client.request("POST", "/api/v2/western/electional/invest-money/search", params=None, json=body, options=options))
+        return cast("schemas.PurchaseCarElectionSearchResponse", self._client.request("POST", "/api/v2/western/electional/purchase-car/search", params=None, json=body, options=options))
+
+    def purchase_property_search(
+        self,
+        body: schemas.PurchasePropertyElectionSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.PurchasePropertyElectionSearchResponse:
+        """Search Purchase Property Elections
+
+        ``POST /api/v2/western/electional/purchase-property/search``
+        """
+        return cast("schemas.PurchasePropertyElectionSearchResponse", self._client.request("POST", "/api/v2/western/electional/purchase-property/search", params=None, json=body, options=options))
+
+    def starting_journey_search(
+        self,
+        body: schemas.StartingJourneyElectionSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.StartingJourneyElectionSearchResponse:
+        """Search Starting Journey Elections
+
+        ``POST /api/v2/western/electional/starting-journey/search``
+        """
+        return cast("schemas.StartingJourneyElectionSearchResponse", self._client.request("POST", "/api/v2/western/electional/starting-journey/search", params=None, json=body, options=options))
+
+    def wedding_search(
+        self,
+        body: schemas.WeddingElectionSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.WeddingElectionSearchResponse:
+        """Search Wedding Elections
+
+        ``POST /api/v2/western/electional/wedding/search``
+        """
+        return cast("schemas.WeddingElectionSearchResponse", self._client.request("POST", "/api/v2/western/electional/wedding/search", params=None, json=body, options=options))
 
 
 class WesternResourceBase:
     def __init__(self, client: FreeAstro) -> None:
         self._client = client
-        self.solar = WesternSolarResource(client)
-        self.returns = WesternReturnsResource(client)
         self.astrocartography = WesternAstrocartographyResource(client)
+        self.directions = WesternDirectionsResource(client)
         self.natal = WesternNatalResource(client)
-        self.transits = WesternTransitsResource(client)
         self.profections = WesternProfectionsResource(client)
         self.progressions = WesternProgressionsResource(client)
-        self.directions = WesternDirectionsResource(client)
+        self.returns = WesternReturnsResource(client)
+        self.solar = WesternSolarResource(client)
+        self.transits = WesternTransitsResource(client)
         self.chart_similarity = WesternChartSimilarityResource(client)
         self.electional = WesternElectionalResource(client)
 
@@ -2000,6 +2002,26 @@ class WesternResourceBase:
         ``POST /api/v1/western/synastry``
         """
         return cast("schemas.SynastryResponse", self._client.request("POST", "/api/v1/western/synastry", params=_query({"aspects": aspects, "overlays": overlays, "scores": scores, "archetypes": archetypes, "text": text, "display_point_labels": display_point_labels, "display_aspect_labels": display_aspect_labels, "strength_labels": strength_labels, "ranges": ranges, "scoring_bucket_definitions": scoring_bucket_definitions}), json=body, options=options))
+
+    def synastry_horoscope_v1(
+        self,
+        body: schemas.CouplesHoroscopeRequest,
+        *,
+        relationship_context: Literal["romantic", "friendship"] | None = None,
+        include_timing: bool | None = None,
+        options: RequestOptions | None = None,
+    ) -> schemas.CouplesHoroscopeResponse:
+        """Get Couples Horoscope
+
+        Daily Couples Horoscope V2.
+        - Multi-dimensional scoring (Romance, Stability, Tension, etc.)
+        - Dual-perspective transits (Composite & Synastry)
+        - Deterministic narrative bands (Theme, Core, Shadow)
+        - Integrated relational rituals
+
+        ``POST /api/v1/western/synastry/horoscope``
+        """
+        return cast("schemas.CouplesHoroscopeResponse", self._client.request("POST", "/api/v1/western/synastry/horoscope", params=_query({"relationship_context": relationship_context, "include_timing": include_timing}), json=body, options=options))
 
     def synastry_simplified(
         self,
@@ -2051,26 +2073,6 @@ class WesternResourceBase:
         """
         return cast("schemas.SynastryCardsResponse", self._client.request("POST", "/api/v1/western/synastrycards", params=_query({"relationship_context": relationship_context, "include_minor_cards": include_minor_cards}), json=body, options=options))
 
-    def synastry_horoscope_v1(
-        self,
-        body: schemas.CouplesHoroscopeRequest,
-        *,
-        relationship_context: Literal["romantic", "friendship"] | None = None,
-        include_timing: bool | None = None,
-        options: RequestOptions | None = None,
-    ) -> schemas.CouplesHoroscopeResponse:
-        """Get Couples Horoscope
-
-        Daily Couples Horoscope V2.
-        - Multi-dimensional scoring (Romance, Stability, Tension, etc.)
-        - Dual-perspective transits (Composite & Synastry)
-        - Deterministic narrative bands (Theme, Core, Shadow)
-        - Integrated relational rituals
-
-        ``POST /api/v1/western/synastry/horoscope``
-        """
-        return cast("schemas.CouplesHoroscopeResponse", self._client.request("POST", "/api/v1/western/synastry/horoscope", params=_query({"relationship_context": relationship_context, "include_timing": include_timing}), json=body, options=options))
-
     def chat(
         self,
         body: schemas.WesternChatRequest,
@@ -2107,6 +2109,19 @@ class WesternResourceBase:
         """
         return cast("schemas.SynastryResponse", self._client.request("POST", "/api/v2/western/synastry", params=_query({"aspects": aspects, "overlays": overlays, "scores": scores, "archetypes": archetypes, "text": text, "display_point_labels": display_point_labels, "display_aspect_labels": display_aspect_labels, "strength_labels": strength_labels, "ranges": ranges, "scoring_bucket_definitions": scoring_bucket_definitions}), json=body, options=options))
 
+    def synastry_horoscope(
+        self,
+        body: schemas.CouplesHoroscopeV2Request,
+        *,
+        include_timing: bool | None = None,
+        options: RequestOptions | None = None,
+    ) -> schemas.CouplesHoroscopeV2Response:
+        """Get Couples Horoscope V2
+
+        ``POST /api/v2/western/synastry/horoscope``
+        """
+        return cast("schemas.CouplesHoroscopeV2Response", self._client.request("POST", "/api/v2/western/synastry/horoscope", params=_query({"include_timing": include_timing}), json=body, options=options))
+
     def synastrycards(
         self,
         body: schemas.SynastryRequest,
@@ -2120,19 +2135,6 @@ class WesternResourceBase:
         ``POST /api/v2/western/synastrycards``
         """
         return cast("schemas.SynastryCardsResponse", self._client.request("POST", "/api/v2/western/synastrycards", params=_query({"relationship_context": relationship_context, "include_minor_cards": include_minor_cards}), json=body, options=options))
-
-    def synastry_horoscope(
-        self,
-        body: schemas.CouplesHoroscopeV2Request,
-        *,
-        include_timing: bool | None = None,
-        options: RequestOptions | None = None,
-    ) -> schemas.CouplesHoroscopeV2Response:
-        """Get Couples Horoscope V2
-
-        ``POST /api/v2/western/synastry/horoscope``
-        """
-        return cast("schemas.CouplesHoroscopeV2Response", self._client.request("POST", "/api/v2/western/synastry/horoscope", params=_query({"include_timing": include_timing}), json=body, options=options))
 
 
 class AsyncAiResource:
@@ -2176,21 +2178,6 @@ class AsyncChineseResource:
         """
         return await self._client.request("POST", "/api/v1/chinese/bazi", params=None, json=body, options=options)
 
-    async def bazi_flow(
-        self,
-        body: schemas.BaziFlowRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Calculate BaZi Flow (Annual/Monthly Pillars)
-
-        Calculate annual and monthly flow pillars for a specific target year.
-        Used for professional timing and predictive analysis.
-
-        ``POST /api/v1/chinese/bazi/flow``
-        """
-        return await self._client.request("POST", "/api/v1/chinese/bazi/flow", params=None, json=body, options=options)
-
     async def bazi_dictionary(
         self,
         *,
@@ -2206,21 +2193,78 @@ class AsyncChineseResource:
         """
         return await self._client.request("GET", "/api/v1/chinese/bazi/dictionary", params=_query({"lang": lang}), json=None, options=options)
 
-    async def today(
+    async def bazi_flow(
         self,
+        body: schemas.BaziFlowRequest,
         *,
-        include_pinyin: bool | None = None,
-        lang: str | None = None,
         options: RequestOptions | None = None,
     ) -> Any:
-        """Get Current BaZi Pillars (Time Now)
+        """Calculate BaZi Flow (Annual/Monthly Pillars)
 
-        Get current year, month, day, and hour pillars for the present moment.
-        Useful for "Today's energy" or quick transit checks.
+        Calculate annual and monthly flow pillars for a specific target year.
+        Used for professional timing and predictive analysis.
 
-        ``GET /api/v1/chinese/today``
+        ``POST /api/v1/chinese/bazi/flow``
         """
-        return await self._client.request("GET", "/api/v1/chinese/today", params=_query({"include_pinyin": include_pinyin, "lang": lang}), json=None, options=options)
+        return await self._client.request("POST", "/api/v1/chinese/bazi/flow", params=None, json=body, options=options)
+
+    async def bazi_health(
+        self,
+        body: schemas.BaziHealthRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Analyze BaZi Constitution & Health Tendencies
+
+        Analyze BaZi chart for constitution and health tendency themes.
+
+        ``POST /api/v1/chinese/bazi/health``
+        """
+        return await self._client.request("POST", "/api/v1/chinese/bazi/health", params=None, json=body, options=options)
+
+    async def bazi_lifespan(
+        self,
+        body: schemas.BaziLifespanRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Calculate Neijing Life Curve (Jing/Qi/Shen)
+
+        Experimental: Calculate energy trajectory (Jing, Qi, Shen) across 0-120y lifespan.
+        Based on Neijing 7/8 year cycles + DaYun/Annual modifier simulation.
+
+        ``POST /api/v1/chinese/bazi/lifespan``
+        """
+        return await self._client.request("POST", "/api/v1/chinese/bazi/lifespan", params=None, json=body, options=options)
+
+    async def bazi_synastry(
+        self,
+        body: schemas.BaziSynastryRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Calculate Bazi Compatibility (Synastry)
+
+        Compare two charts for compatibility.
+
+        ``POST /api/v1/chinese/bazi/synastry``
+        """
+        return await self._client.request("POST", "/api/v1/chinese/bazi/synastry", params=None, json=body, options=options)
+
+    async def bazi_time_correction(
+        self,
+        body: schemas.BaziTimeCorrectionRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Calculate True Solar Time Corrections
+
+        Get detailed breakdown of True Solar Time corrections.
+        Returns Civil, LMT, and True Solar (Relative & Absolute).
+
+        ``POST /api/v1/chinese/bazi/time-correction``
+        """
+        return await self._client.request("POST", "/api/v1/chinese/bazi/time-correction", params=None, json=body, options=options)
 
     async def calendar(
         self,
@@ -2239,80 +2283,26 @@ class AsyncChineseResource:
         """
         return cast("schemas.ChineseCalendarResponse", await self._client.request("GET", f"/api/v1/chinese/calendar/{_path(date)}", params=_query({"lang": lang}), json=None, options=options))
 
-    async def bazi_time_correction(
+    async def today(
         self,
-        body: schemas.BaziTimeCorrectionRequest,
         *,
+        include_pinyin: bool | None = None,
+        lang: str | None = None,
         options: RequestOptions | None = None,
     ) -> Any:
-        """Calculate True Solar Time Corrections
+        """Get Current BaZi Pillars (Time Now)
 
-        Get detailed breakdown of True Solar Time corrections.
-        Returns Civil, LMT, and True Solar (Relative & Absolute).
+        Get current year, month, day, and hour pillars for the present moment.
+        Useful for "Today's energy" or quick transit checks.
 
-        ``POST /api/v1/chinese/bazi/time-correction``
+        ``GET /api/v1/chinese/today``
         """
-        return await self._client.request("POST", "/api/v1/chinese/bazi/time-correction", params=None, json=body, options=options)
-
-    async def bazi_synastry(
-        self,
-        body: schemas.BaziSynastryRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Calculate Bazi Compatibility (Synastry)
-
-        Compare two charts for compatibility.
-
-        ``POST /api/v1/chinese/bazi/synastry``
-        """
-        return await self._client.request("POST", "/api/v1/chinese/bazi/synastry", params=None, json=body, options=options)
-
-    async def bazi_lifespan(
-        self,
-        body: schemas.BaziLifespanRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Calculate Neijing Life Curve (Jing/Qi/Shen)
-
-        Experimental: Calculate energy trajectory (Jing, Qi, Shen) across 0-120y lifespan.
-        Based on Neijing 7/8 year cycles + DaYun/Annual modifier simulation.
-
-        ``POST /api/v1/chinese/bazi/lifespan``
-        """
-        return await self._client.request("POST", "/api/v1/chinese/bazi/lifespan", params=None, json=body, options=options)
-
-    async def bazi_health(
-        self,
-        body: schemas.BaziHealthRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Analyze BaZi Constitution & Health Tendencies
-
-        Analyze BaZi chart for constitution and health tendency themes.
-
-        ``POST /api/v1/chinese/bazi/health``
-        """
-        return await self._client.request("POST", "/api/v1/chinese/bazi/health", params=None, json=body, options=options)
+        return await self._client.request("GET", "/api/v1/chinese/today", params=_query({"include_pinyin": include_pinyin, "lang": lang}), json=None, options=options)
 
 
 class AsyncEphemerisResource:
     def __init__(self, client: AsyncFreeAstro) -> None:
         self._client = client
-
-    async def calculate(
-        self,
-        body: schemas.EphemerisRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Calculate Ephemeris
-
-        ``POST /api/v1/ephemeris/calculate``
-        """
-        return await self._client.request("POST", "/api/v1/ephemeris/calculate", params=None, json=body, options=options)
 
     async def get(
         self,
@@ -2357,6 +2347,18 @@ class AsyncEphemerisResource:
         """
         return await self._client.request("GET", "/api/v1/ephemeris", params=_query({"start": start, "end": end, "step": step, "zodiac_type": zodiac_type, "sidereal_ayanamsa": sidereal_ayanamsa, "house_system": house_system, "bodies": bodies, "include_angles": include_angles, "include_houses": include_houses, "include_speed": include_speed, "include_retrograde": include_retrograde, "include_dignity": include_dignity, "include_sign_degree": include_sign_degree, "include_aspects": include_aspects, "include_minor_aspects": include_minor_aspects, "include_moon_void_of_course": include_moon_void_of_course, "include_fixed_stars": include_fixed_stars, "fixed_stars": fixed_stars, "fixed_star_packs": fixed_star_packs, "lat": lat, "lng": lng, "tz_str": tz_str, "timezone": timezone, "dst_policy": dst_policy, "format": format, "response_mode": response_mode, "table_style": table_style, "include_sidereal_time": include_sidereal_time, "cell_format": cell_format, "include_chart_links": include_chart_links, "sign_display": sign_display, "show_motion_markers": show_motion_markers}), json=None, options=options)
 
+    async def calculate(
+        self,
+        body: schemas.EphemerisRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Calculate Ephemeris
+
+        ``POST /api/v1/ephemeris/calculate``
+        """
+        return await self._client.request("POST", "/api/v1/ephemeris/calculate", params=None, json=body, options=options)
+
 
 class AsyncGeoResourceBase:
     def __init__(self, client: AsyncFreeAstro) -> None:
@@ -2385,28 +2387,6 @@ class AsyncGeoResourceBase:
 class AsyncHoroscopeDailyResource:
     def __init__(self, client: AsyncFreeAstro) -> None:
         self._client = client
-
-    async def sign_v1(
-        self,
-        *,
-        sign: str,
-        date: str | None = None,
-        timezone: str | None = None,
-        tz_str: str | None = None,
-        lang: str | None = None,
-        locale: str | None = None,
-        type: str | None = None,
-        style: str | None = None,
-        variant: str | None = None,
-        options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
-        """Get Sign Horoscope
-
-        Get generic daily horoscope for a specific sign.
-
-        ``GET /api/v1/horoscope/daily/sign``
-        """
-        return cast("dict[str, Any]", await self._client.request("GET", "/api/v1/horoscope/daily/sign", params=_query({"sign": sign, "date": date, "timezone": timezone, "tz_str": tz_str, "lang": lang, "locale": locale, "type": type, "style": style, "variant": variant}), json=None, options=options))
 
     async def bulk(
         self,
@@ -2439,6 +2419,40 @@ class AsyncHoroscopeDailyResource:
         """
         return cast("dict[str, Any]", await self._client.request("POST", "/api/v1/horoscope/daily/personal", params=None, json=body, options=options))
 
+    async def sign_v1(
+        self,
+        *,
+        sign: str,
+        date: str | None = None,
+        timezone: str | None = None,
+        tz_str: str | None = None,
+        lang: str | None = None,
+        locale: str | None = None,
+        type: str | None = None,
+        style: str | None = None,
+        variant: str | None = None,
+        options: RequestOptions | None = None,
+    ) -> dict[str, Any]:
+        """Get Sign Horoscope
+
+        Get generic daily horoscope for a specific sign.
+
+        ``GET /api/v1/horoscope/daily/sign``
+        """
+        return cast("dict[str, Any]", await self._client.request("GET", "/api/v1/horoscope/daily/sign", params=_query({"sign": sign, "date": date, "timezone": timezone, "tz_str": tz_str, "lang": lang, "locale": locale, "type": type, "style": style, "variant": variant}), json=None, options=options))
+
+    async def personal_v2(
+        self,
+        body: schemas.PersonalHoroscopeRequestV2,
+        *,
+        options: RequestOptions | None = None,
+    ) -> dict[str, Any]:
+        """Get Personal Horoscope
+
+        ``POST /api/v2/horoscope/daily/personal``
+        """
+        return cast("dict[str, Any]", await self._client.request("POST", "/api/v2/horoscope/daily/personal", params=None, json=body, options=options))
+
     async def sign_v2(
         self,
         *,
@@ -2455,17 +2469,17 @@ class AsyncHoroscopeDailyResource:
         """
         return cast("dict[str, Any]", await self._client.request("GET", "/api/v2/horoscope/daily/sign", params=_query({"sign": sign, "date": date, "tz_str": tz_str, "lang": lang, "locale": locale}), json=None, options=options))
 
-    async def personal_v2(
+    async def personal(
         self,
-        body: schemas.PersonalHoroscopeRequestV2,
+        body: schemas.PersonalHoroscopeRequestV3,
         *,
         options: RequestOptions | None = None,
     ) -> dict[str, Any]:
         """Get Personal Horoscope
 
-        ``POST /api/v2/horoscope/daily/personal``
+        ``POST /api/v3/horoscope/daily/personal``
         """
-        return cast("dict[str, Any]", await self._client.request("POST", "/api/v2/horoscope/daily/personal", params=None, json=body, options=options))
+        return cast("dict[str, Any]", await self._client.request("POST", "/api/v3/horoscope/daily/personal", params=None, json=body, options=options))
 
     async def sign(
         self,
@@ -2490,18 +2504,6 @@ class AsyncHoroscopeDailyResource:
         ``GET /api/v3/horoscope/daily/sign``
         """
         return cast("dict[str, Any]", await self._client.request("GET", "/api/v3/horoscope/daily/sign", params=_query({"sign": sign, "date": date, "timezone": timezone, "tz_str": tz_str, "lang": lang, "locale": locale, "type": type, "style": style, "variant": variant}), json=None, options=options))
-
-    async def personal(
-        self,
-        body: schemas.PersonalHoroscopeRequestV3,
-        *,
-        options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
-        """Get Personal Horoscope
-
-        ``POST /api/v3/horoscope/daily/personal``
-        """
-        return cast("dict[str, Any]", await self._client.request("POST", "/api/v3/horoscope/daily/personal", params=None, json=body, options=options))
 
 
 class AsyncHoroscopeWeeklyResource:
@@ -2537,22 +2539,6 @@ class AsyncNatalExperimentalResource:
     def __init__(self, client: AsyncFreeAstro) -> None:
         self._client = client
 
-    async def transits(
-        self,
-        body: schemas.ExperimentalTransitChartRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Experimental Transits Chart
-
-        Generate a bi-wheel chart with natal planets inside and transits outside.
-
-        ``POST /api/v1/natal/experimental/transits``
-
-        .. deprecated:: this operation is deprecated by the API.
-        """
-        return await self._client.request("POST", "/api/v1/natal/experimental/transits", params=None, json=body, options=options)
-
     async def solar_return(
         self,
         body: schemas.ExperimentalSolarReturnChartRequest,
@@ -2569,26 +2555,27 @@ class AsyncNatalExperimentalResource:
         """
         return await self._client.request("POST", "/api/v1/natal/experimental/solar-return", params=None, json=body, options=options)
 
+    async def transits(
+        self,
+        body: schemas.ExperimentalTransitChartRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Experimental Transits Chart
+
+        Generate a bi-wheel chart with natal planets inside and transits outside.
+
+        ``POST /api/v1/natal/experimental/transits``
+
+        .. deprecated:: this operation is deprecated by the API.
+        """
+        return await self._client.request("POST", "/api/v1/natal/experimental/transits", params=None, json=body, options=options)
+
 
 class AsyncNatalResource:
     def __init__(self, client: AsyncFreeAstro) -> None:
         self._client = client
         self.experimental = AsyncNatalExperimentalResource(client)
-
-    async def simple(
-        self,
-        body: schemas.SimpleNatalRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Calculate Simple Natal
-
-        A simplified natal endpoint for developer-facing apps.
-        Returns a compact response with curated planets, houses, and useful summary fields.
-
-        ``POST /natal``
-        """
-        return await self._client.request("POST", "/natal", params=None, json=body, options=options)
 
     async def calculate(
         self,
@@ -2605,6 +2592,106 @@ class AsyncNatalResource:
         ``POST /api/v1/natal/calculate``
         """
         return await self._client.request("POST", "/api/v1/natal/calculate", params=_query({"include_minor": include_minor, "include_stelliums": include_stelliums}), json=body, options=options)
+
+    async def chart(
+        self,
+        body: schemas.ExperimentalNatalChartRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Experimental Natal Chart
+
+        Render a natal chart using the bundled natal library.
+
+        ``POST /api/v1/natal/chart/``
+        """
+        return await self._client.request("POST", "/api/v1/natal/chart/", params=None, json=body, options=options)
+
+    async def chart_composite(
+        self,
+        body: schemas.ExperimentalCompositeChartRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Experimental Composite Chart
+
+        Midpoint composite single-wheel chart endpoint.
+        Renders a standalone composite chart from two people, reusing the natal SVG renderer.
+
+        ``POST /api/v1/natal/chart/composite``
+        """
+        return await self._client.request("POST", "/api/v1/natal/chart/composite", params=None, json=body, options=options)
+
+    async def chart_progressions(
+        self,
+        body: schemas.ExperimentalSecondaryProgressionsChartRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Experimental Secondary Progressions Chart
+
+        Generate a bi-wheel chart with natal planets inside and secondary progressed planets outside.
+
+        ``POST /api/v1/natal/chart/progressions``
+        """
+        return await self._client.request("POST", "/api/v1/natal/chart/progressions", params=None, json=body, options=options)
+
+    async def chart_secondary_progressions(
+        self,
+        body: schemas.ExperimentalSecondaryProgressionsChartRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Experimental Secondary Progressions Chart
+
+        Generate a bi-wheel chart with natal planets inside and secondary progressed planets outside.
+
+        ``POST /api/v1/natal/chart/secondary-progressions``
+        """
+        return await self._client.request("POST", "/api/v1/natal/chart/secondary-progressions", params=None, json=body, options=options)
+
+    async def chart_solar_return(
+        self,
+        body: schemas.ExperimentalSolarReturnChartRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Experimental Solar Return Chart
+
+        Generate a bi-wheel or standalone chart for the exact solar return in a target year.
+
+        ``POST /api/v1/natal/chart/solar-return``
+        """
+        return await self._client.request("POST", "/api/v1/natal/chart/solar-return", params=None, json=body, options=options)
+
+    async def chart_synastry(
+        self,
+        body: schemas.ExperimentalSynastryChartRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Experimental Synastry Chart
+
+        Synastry bi-wheel chart endpoint.
+        Renders person A (outer) and person B (inner) with optional B house ring and inter-aspects.
+
+        ``POST /api/v1/natal/chart/synastry``
+        """
+        return await self._client.request("POST", "/api/v1/natal/chart/synastry", params=None, json=body, options=options)
+
+    async def chart_transits(
+        self,
+        body: schemas.ExperimentalTransitChartRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Experimental Transits Chart
+
+        Generate a bi-wheel chart with natal planets inside and transits outside.
+
+        ``POST /api/v1/natal/chart/transits``
+        """
+        return await self._client.request("POST", "/api/v1/natal/chart/transits", params=None, json=body, options=options)
 
     async def report_credits(
         self,
@@ -2631,121 +2718,25 @@ class AsyncNatalResource:
         """
         return await self._client.request("GET", f"/api/v1/natal/report/{_path(job_id)}", params=_query({"format": format, "include_profile_branding_logo": include_profile_branding_logo}), json=None, options=options)
 
-    async def chart(
+    async def simple(
         self,
-        body: schemas.ExperimentalNatalChartRequest,
+        body: schemas.SimpleNatalRequest,
         *,
         options: RequestOptions | None = None,
     ) -> Any:
-        """Experimental Natal Chart
+        """Calculate Simple Natal
 
-        Render a natal chart using the bundled natal library.
+        A simplified natal endpoint for developer-facing apps.
+        Returns a compact response with curated planets, houses, and useful summary fields.
 
-        ``POST /api/v1/natal/chart/``
+        ``POST /natal``
         """
-        return await self._client.request("POST", "/api/v1/natal/chart/", params=None, json=body, options=options)
-
-    async def chart_transits(
-        self,
-        body: schemas.ExperimentalTransitChartRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Experimental Transits Chart
-
-        Generate a bi-wheel chart with natal planets inside and transits outside.
-
-        ``POST /api/v1/natal/chart/transits``
-        """
-        return await self._client.request("POST", "/api/v1/natal/chart/transits", params=None, json=body, options=options)
-
-    async def chart_solar_return(
-        self,
-        body: schemas.ExperimentalSolarReturnChartRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Experimental Solar Return Chart
-
-        Generate a bi-wheel or standalone chart for the exact solar return in a target year.
-
-        ``POST /api/v1/natal/chart/solar-return``
-        """
-        return await self._client.request("POST", "/api/v1/natal/chart/solar-return", params=None, json=body, options=options)
-
-    async def chart_secondary_progressions(
-        self,
-        body: schemas.ExperimentalSecondaryProgressionsChartRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Experimental Secondary Progressions Chart
-
-        Generate a bi-wheel chart with natal planets inside and secondary progressed planets outside.
-
-        ``POST /api/v1/natal/chart/secondary-progressions``
-        """
-        return await self._client.request("POST", "/api/v1/natal/chart/secondary-progressions", params=None, json=body, options=options)
-
-    async def chart_progressions(
-        self,
-        body: schemas.ExperimentalSecondaryProgressionsChartRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Experimental Secondary Progressions Chart
-
-        Generate a bi-wheel chart with natal planets inside and secondary progressed planets outside.
-
-        ``POST /api/v1/natal/chart/progressions``
-        """
-        return await self._client.request("POST", "/api/v1/natal/chart/progressions", params=None, json=body, options=options)
-
-    async def chart_composite(
-        self,
-        body: schemas.ExperimentalCompositeChartRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Experimental Composite Chart
-
-        Midpoint composite single-wheel chart endpoint.
-        Renders a standalone composite chart from two people, reusing the natal SVG renderer.
-
-        ``POST /api/v1/natal/chart/composite``
-        """
-        return await self._client.request("POST", "/api/v1/natal/chart/composite", params=None, json=body, options=options)
-
-    async def chart_synastry(
-        self,
-        body: schemas.ExperimentalSynastryChartRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Experimental Synastry Chart
-
-        Synastry bi-wheel chart endpoint.
-        Renders person A (outer) and person B (inner) with optional B house ring and inter-aspects.
-
-        ``POST /api/v1/natal/chart/synastry``
-        """
-        return await self._client.request("POST", "/api/v1/natal/chart/synastry", params=None, json=body, options=options)
+        return await self._client.request("POST", "/natal", params=None, json=body, options=options)
 
 
 class AsyncNumerologyResource:
     def __init__(self, client: AsyncFreeAstro) -> None:
         self._client = client
-
-    async def methods(
-        self,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.NumerologyMethodsResponse:
-        """List supported numerology methods and policies
-
-        ``GET /api/v1/numerology/methods``
-        """
-        return cast("schemas.NumerologyMethodsResponse", await self._client.request("GET", "/api/v1/numerology/methods", params=None, json=None, options=options))
 
     async def alphabets(
         self,
@@ -2757,6 +2748,17 @@ class AsyncNumerologyResource:
         ``GET /api/v1/numerology/alphabets``
         """
         return cast("schemas.NumerologyAlphabetsResponse", await self._client.request("GET", "/api/v1/numerology/alphabets", params=None, json=None, options=options))
+
+    async def methods(
+        self,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.NumerologyMethodsResponse:
+        """List supported numerology methods and policies
+
+        ``GET /api/v1/numerology/methods``
+        """
+        return cast("schemas.NumerologyMethodsResponse", await self._client.request("GET", "/api/v1/numerology/methods", params=None, json=None, options=options))
 
     async def profile(
         self,
@@ -2829,25 +2831,6 @@ class AsyncTransitsResource:
         return await self._client.request("POST", "/api/v1/transits/calculate", params=_query({"include_minor": include_minor}), json=body, options=options)
 
 
-class AsyncVedicTransitsResource:
-    def __init__(self, client: AsyncFreeAstro) -> None:
-        self._client = client
-
-    async def insights(
-        self,
-        body: schemas.VedicTransitInsightsRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.VedicTransitInsightsResponse:
-        """Get Transit Insights
-
-        Get Vedic gochar snapshot facts comparing a transit date against the natal chart.
-
-        ``POST /api/v1/vedic/transits/insights``
-        """
-        return cast("schemas.VedicTransitInsightsResponse", await self._client.request("POST", "/api/v1/vedic/transits/insights", params=None, json=body, options=options))
-
-
 class AsyncVedicGocharResource:
     def __init__(self, client: AsyncFreeAstro) -> None:
         self._client = client
@@ -2909,51 +2892,28 @@ class AsyncVedicGocharResource:
         return cast("schemas.VedicGocharTimelineInsightsV2Response", await self._client.request("POST", "/api/v2/vedic/gochar/timeline/insights", params=None, json=body, options=options))
 
 
-class AsyncVedicVisualResource:
+class AsyncVedicTransitsResource:
     def __init__(self, client: AsyncFreeAstro) -> None:
         self._client = client
 
-    async def chart(
+    async def insights(
         self,
-        body: schemas.VedicVisualChartRequest,
+        body: schemas.VedicTransitInsightsRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> str:
-        """Render Vedic Visual Chart (v2)
+    ) -> schemas.VedicTransitInsightsResponse:
+        """Get Transit Insights
 
-        Render requested V2 divisional charts as a raw SVG or PNG image.
+        Get Vedic gochar snapshot facts comparing a transit date against the natal chart.
 
-        ``POST /api/v2/vedic/visual/chart``
-
-        Returns the image body as text; use ``request_raw`` for binary formats such as PNG.
+        ``POST /api/v1/vedic/transits/insights``
         """
-        return cast("str", await self._client.request("POST", "/api/v2/vedic/visual/chart", params=None, json=body, options=options))
+        return cast("schemas.VedicTransitInsightsResponse", await self._client.request("POST", "/api/v1/vedic/transits/insights", params=None, json=body, options=options))
 
 
 class AsyncVedicHoroscopeResource:
     def __init__(self, client: AsyncFreeAstro) -> None:
         self._client = client
-
-    async def daily_sign(
-        self,
-        *,
-        sign: Literal["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"],
-        target_date: str | None = None,
-        tz_str: str | None = None,
-        ayanamsha: Literal["lahiri", "raman", "kp", "yukteshwar", "fagan_bradley", "true_pushya", "pushya"] | None = None,
-        node_type: Literal["mean", "true"] | None = None,
-        include_interpretation: bool | None = None,
-        lang: Literal["en", "hi"] | None = None,
-        language: Literal["en", "hi"] | None = None,
-        options: RequestOptions | None = None,
-    ) -> schemas.DailyRashifalSignResponse:
-        """Get General Daily Vedic Rashifal for One Moon Sign (v2)
-
-        General Moon-sign forecast with calculated transits and optional English or Hindi readings. No birth details required.
-
-        ``GET /api/v2/vedic/horoscope/daily/sign``
-        """
-        return cast("schemas.DailyRashifalSignResponse", await self._client.request("GET", "/api/v2/vedic/horoscope/daily/sign", params=_query({"sign": sign, "target_date": target_date, "tz_str": tz_str, "ayanamsha": ayanamsha, "node_type": node_type, "include_interpretation": include_interpretation, "lang": lang, "language": language}), json=None, options=options))
 
     async def daily_bulk(
         self,
@@ -2990,24 +2950,31 @@ class AsyncVedicHoroscopeResource:
         """
         return cast("schemas.DailyVedicHoroscopeV2Response", await self._client.request("POST", "/api/v2/vedic/horoscope/daily/personal", params=None, json=body, options=options))
 
+    async def daily_sign(
+        self,
+        *,
+        sign: Literal["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"],
+        target_date: str | None = None,
+        tz_str: str | None = None,
+        ayanamsha: Literal["lahiri", "raman", "kp", "yukteshwar", "fagan_bradley", "true_pushya", "pushya"] | None = None,
+        node_type: Literal["mean", "true"] | None = None,
+        include_interpretation: bool | None = None,
+        lang: Literal["en", "hi"] | None = None,
+        language: Literal["en", "hi"] | None = None,
+        options: RequestOptions | None = None,
+    ) -> schemas.DailyRashifalSignResponse:
+        """Get General Daily Vedic Rashifal for One Moon Sign (v2)
+
+        General Moon-sign forecast with calculated transits and optional English or Hindi readings. No birth details required.
+
+        ``GET /api/v2/vedic/horoscope/daily/sign``
+        """
+        return cast("schemas.DailyRashifalSignResponse", await self._client.request("GET", "/api/v2/vedic/horoscope/daily/sign", params=_query({"sign": sign, "target_date": target_date, "tz_str": tz_str, "ayanamsha": ayanamsha, "node_type": node_type, "include_interpretation": include_interpretation, "lang": lang, "language": language}), json=None, options=options))
+
 
 class AsyncVedicMuhuratResource:
     def __init__(self, client: AsyncFreeAstro) -> None:
         self._client = client
-
-    async def search(
-        self,
-        body: schemas.VedicMuhuratSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.VedicMuhuratSearchResponse:
-        """Search auspicious Vedic windows (v2)
-
-        Search a monthly date range for auspicious windows.
-
-        ``POST /api/v2/vedic/muhurat/search``
-        """
-        return cast("schemas.VedicMuhuratSearchResponse", await self._client.request("POST", "/api/v2/vedic/muhurat/search", params=None, json=body, options=options))
 
     async def personalized_search(
         self,
@@ -3023,30 +2990,81 @@ class AsyncVedicMuhuratResource:
         """
         return cast("schemas.VedicMuhuratSearchResponse", await self._client.request("POST", "/api/v2/vedic/muhurat/personalized-search", params=None, json=body, options=options))
 
+    async def search(
+        self,
+        body: schemas.VedicMuhuratSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.VedicMuhuratSearchResponse:
+        """Search auspicious Vedic windows (v2)
+
+        Search a monthly date range for auspicious windows.
+
+        ``POST /api/v2/vedic/muhurat/search``
+        """
+        return cast("schemas.VedicMuhuratSearchResponse", await self._client.request("POST", "/api/v2/vedic/muhurat/search", params=None, json=body, options=options))
+
+
+class AsyncVedicVisualResource:
+    def __init__(self, client: AsyncFreeAstro) -> None:
+        self._client = client
+
+    async def chart(
+        self,
+        body: schemas.VedicVisualChartRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> str:
+        """Render Vedic Visual Chart (v2)
+
+        Render requested V2 divisional charts as a raw SVG or PNG image.
+
+        ``POST /api/v2/vedic/visual/chart``
+
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v2/vedic/visual/chart", ..., response_type="bytes")``.
+        """
+        return cast("str", await self._client.request("POST", "/api/v2/vedic/visual/chart", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
+
 
 class AsyncVedicResource:
     def __init__(self, client: AsyncFreeAstro) -> None:
         self._client = client
-        self.transits = AsyncVedicTransitsResource(client)
         self.gochar = AsyncVedicGocharResource(client)
-        self.visual = AsyncVedicVisualResource(client)
+        self.transits = AsyncVedicTransitsResource(client)
         self.horoscope = AsyncVedicHoroscopeResource(client)
         self.muhurat = AsyncVedicMuhuratResource(client)
+        self.visual = AsyncVedicVisualResource(client)
 
-    async def match_v1(
+    async def batch(
         self,
-        body: schemas.MatchRequest,
+        body: schemas.VedicBatchRequest,
         *,
         options: RequestOptions | None = None,
     ) -> Any:
-        """Match Birth Details
+        """Run Vedic Batch
 
-        Calculate compatibility using birth details directly.
-        Computes Moon Nakshatra/Sign internally to avoid ID lookup errors.
+        Run up to 6 single-person Vedic endpoint calls in one HTTP request.
+        Items execute sequentially to keep compute bounded and preserve per-item order.
 
-        ``POST /api/v1/vedic/match``
+        ``POST /api/v1/vedic/batch``
         """
-        return await self._client.request("POST", "/api/v1/vedic/match", params=None, json=body, options=options)
+        return await self._client.request("POST", "/api/v1/vedic/batch", params=None, json=body, options=options)
+
+    async def calculate_v1(
+        self,
+        body: schemas.VedicChartRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Calculate Full Chart
+
+        Full Vedic chart with all optional features.
+        Use feature toggles to customize response.
+
+        ``POST /api/v1/vedic/calculate``
+        """
+        return await self._client.request("POST", "/api/v1/vedic/calculate", params=None, json=body, options=options)
 
     async def chart_v1(
         self,
@@ -3063,20 +3081,20 @@ class AsyncVedicResource:
         """
         return await self._client.request("POST", "/api/v1/vedic/chart", params=None, json=body, options=options)
 
-    async def calculate_v1(
+    async def compatibility_v1(
         self,
-        body: schemas.VedicChartRequest,
+        body: schemas.CompatibilityRequest,
         *,
         options: RequestOptions | None = None,
     ) -> Any:
-        """Calculate Full Chart
+        """Calculate Compatibility
 
-        Full Vedic chart with all optional features.
-        Use feature toggles to customize response.
+        Calculate Ashtakoota (8-point) compatibility.
+        Returns score out of 36.
 
-        ``POST /api/v1/vedic/calculate``
+        ``POST /api/v1/vedic/compatibility``
         """
-        return await self._client.request("POST", "/api/v1/vedic/calculate", params=None, json=body, options=options)
+        return await self._client.request("POST", "/api/v1/vedic/compatibility", params=None, json=body, options=options)
 
     async def dasha_v1(
         self,
@@ -3106,19 +3124,34 @@ class AsyncVedicResource:
         """
         return cast("schemas.VedicDashaInsightsResponse", await self._client.request("POST", "/api/v1/vedic/dasha/insights", params=None, json=body, options=options))
 
-    async def yogas_v1(
+    async def match_v1(
         self,
-        body: schemas.BaseChartRequestV1,
+        body: schemas.MatchRequest,
         *,
         options: RequestOptions | None = None,
     ) -> Any:
-        """Get Yogas
+        """Match Birth Details
 
-        Get detected Yogas only (Manglik, Kala Sarpa, Raj Yogas, etc).
+        Calculate compatibility using birth details directly.
+        Computes Moon Nakshatra/Sign internally to avoid ID lookup errors.
 
-        ``POST /api/v1/vedic/yogas``
+        ``POST /api/v1/vedic/match``
         """
-        return await self._client.request("POST", "/api/v1/vedic/yogas", params=None, json=body, options=options)
+        return await self._client.request("POST", "/api/v1/vedic/match", params=None, json=body, options=options)
+
+    async def panchang_v1(
+        self,
+        body: schemas.PanchangRequestV1,
+        *,
+        options: RequestOptions | None = None,
+    ) -> Any:
+        """Get Panchang
+
+        Get Panchang (daily almanac): Tithi, Nakshatra, Yoga, Karana, Rahu Kalam.
+
+        ``POST /api/v1/vedic/panchang``
+        """
+        return await self._client.request("POST", "/api/v1/vedic/panchang", params=None, json=body, options=options)
 
     async def strength_v1(
         self,
@@ -3148,63 +3181,19 @@ class AsyncVedicResource:
         """
         return await self._client.request("POST", "/api/v1/vedic/vargas", params=None, json=body, options=options)
 
-    async def compatibility_v1(
+    async def yogas_v1(
         self,
-        body: schemas.CompatibilityRequest,
+        body: schemas.BaseChartRequestV1,
         *,
         options: RequestOptions | None = None,
     ) -> Any:
-        """Calculate Compatibility
+        """Get Yogas
 
-        Calculate Ashtakoota (8-point) compatibility.
-        Returns score out of 36.
+        Get detected Yogas only (Manglik, Kala Sarpa, Raj Yogas, etc).
 
-        ``POST /api/v1/vedic/compatibility``
+        ``POST /api/v1/vedic/yogas``
         """
-        return await self._client.request("POST", "/api/v1/vedic/compatibility", params=None, json=body, options=options)
-
-    async def panchang_v1(
-        self,
-        body: schemas.PanchangRequestV1,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Get Panchang
-
-        Get Panchang (daily almanac): Tithi, Nakshatra, Yoga, Karana, Rahu Kalam.
-
-        ``POST /api/v1/vedic/panchang``
-        """
-        return await self._client.request("POST", "/api/v1/vedic/panchang", params=None, json=body, options=options)
-
-    async def batch(
-        self,
-        body: schemas.VedicBatchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> Any:
-        """Run Vedic Batch
-
-        Run up to 6 single-person Vedic endpoint calls in one HTTP request.
-        Items execute sequentially to keep compute bounded and preserve per-item order.
-
-        ``POST /api/v1/vedic/batch``
-        """
-        return await self._client.request("POST", "/api/v1/vedic/batch", params=None, json=body, options=options)
-
-    async def chat(
-        self,
-        body: schemas.VedicChatRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.VedicChatResponse:
-        """Hosted Vedic Chat (v2)
-
-        Hosted Vedic Chat orchestration.
-
-        ``POST /api/v2/vedic/chat``
-        """
-        return cast("schemas.VedicChatResponse", await self._client.request("POST", "/api/v2/vedic/chat", params=None, json=body, options=options))
+        return await self._client.request("POST", "/api/v1/vedic/yogas", params=None, json=body, options=options)
 
     async def calculate(
         self,
@@ -3220,36 +3209,6 @@ class AsyncVedicResource:
         """
         return cast("schemas.CalculateV2Response", await self._client.request("POST", "/api/v2/vedic/calculate", params=None, json=body, options=options))
 
-    async def kp(
-        self,
-        body: schemas.KPChartRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.KPChartResponse:
-        """Get Complete KP Chart (v2)
-
-        Return a complete Krishnamurti Paddhati calculation contract.
-
-        ``POST /api/v2/vedic/kp``
-        """
-        return cast("schemas.KPChartResponse", await self._client.request("POST", "/api/v2/vedic/kp", params=None, json=body, options=options))
-
-    async def kp_render(
-        self,
-        body: schemas.KPChartRenderRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> str:
-        """Render KP Chart and Tables (v2)
-
-        Render the same complete KP calculation as an accessible SVG or PNG.
-
-        ``POST /api/v2/vedic/kp/render``
-
-        Returns the image body as text; use ``request_raw`` for binary formats such as PNG.
-        """
-        return cast("str", await self._client.request("POST", "/api/v2/vedic/kp/render", params=None, json=body, options=options))
-
     async def chart(
         self,
         body: schemas.ChartRequest,
@@ -3264,19 +3223,33 @@ class AsyncVedicResource:
         """
         return cast("schemas.ChartV2Response", await self._client.request("POST", "/api/v2/vedic/chart", params=None, json=body, options=options))
 
-    async def vargas(
+    async def chat(
         self,
-        body: schemas.VargasRequest,
+        body: schemas.VedicChatRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> schemas.VargasV2Response:
-        """Get Vedic Vargas (v2)
+    ) -> schemas.VedicChatResponse:
+        """Hosted Vedic Chat (v2)
 
-        Return V2 divisional chart rows and whole-sign divisional layouts.
+        Hosted Vedic Chat orchestration.
 
-        ``POST /api/v2/vedic/vargas``
+        ``POST /api/v2/vedic/chat``
         """
-        return cast("schemas.VargasV2Response", await self._client.request("POST", "/api/v2/vedic/vargas", params=None, json=body, options=options))
+        return cast("schemas.VedicChatResponse", await self._client.request("POST", "/api/v2/vedic/chat", params=None, json=body, options=options))
+
+    async def compatibility(
+        self,
+        body: schemas.CompatibilityV2Request,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.CompatibilityV2Response:
+        """Get Vedic Compatibility (v2)
+
+        Return an AstroSage-style V2 Ashtakoota compatibility payload.
+
+        ``POST /api/v2/vedic/compatibility``
+        """
+        return cast("schemas.CompatibilityV2Response", await self._client.request("POST", "/api/v2/vedic/compatibility", params=None, json=body, options=options))
 
     async def dasha(
         self,
@@ -3306,47 +3279,36 @@ class AsyncVedicResource:
         """
         return cast("schemas.VedicDashaInsightsResponse", await self._client.request("POST", "/api/v2/vedic/dasha/insights", params=None, json=body, options=options))
 
-    async def yogas(
+    async def kp(
         self,
-        body: schemas.BaseChartRequestV2,
+        body: schemas.KPChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> schemas.YogasV2Response:
-        """Get Vedic Yogas (v2)
+    ) -> schemas.KPChartResponse:
+        """Get Complete KP Chart (v2)
 
-        Evaluate a classical V2 yoga catalog and return active and inactive results with evidence.
+        Return a complete Krishnamurti Paddhati calculation contract.
 
-        ``POST /api/v2/vedic/yogas``
+        ``POST /api/v2/vedic/kp``
         """
-        return cast("schemas.YogasV2Response", await self._client.request("POST", "/api/v2/vedic/yogas", params=None, json=body, options=options))
+        return cast("schemas.KPChartResponse", await self._client.request("POST", "/api/v2/vedic/kp", params=None, json=body, options=options))
 
-    async def strength(
+    async def kp_render(
         self,
-        body: schemas.BaseChartRequestV2,
+        body: schemas.KPChartRenderRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> schemas.StrengthV2Response:
-        """Get Vedic Strength (v2)
+    ) -> str:
+        """Render KP Chart and Tables (v2)
 
-        Return V2 strength data with classical Shadbala and classical Ashtakavarga.
+        Render the same complete KP calculation as an accessible SVG or PNG.
 
-        ``POST /api/v2/vedic/strength``
+        ``POST /api/v2/vedic/kp/render``
+
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v2/vedic/kp/render", ..., response_type="bytes")``.
         """
-        return cast("schemas.StrengthV2Response", await self._client.request("POST", "/api/v2/vedic/strength", params=None, json=body, options=options))
-
-    async def compatibility(
-        self,
-        body: schemas.CompatibilityV2Request,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.CompatibilityV2Response:
-        """Get Vedic Compatibility (v2)
-
-        Return an AstroSage-style V2 Ashtakoota compatibility payload.
-
-        ``POST /api/v2/vedic/compatibility``
-        """
-        return cast("schemas.CompatibilityV2Response", await self._client.request("POST", "/api/v2/vedic/compatibility", params=None, json=body, options=options))
+        return cast("str", await self._client.request("POST", "/api/v2/vedic/kp/render", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
 
     async def match(
         self,
@@ -3391,51 +3353,66 @@ class AsyncVedicResource:
         """
         return cast("schemas.VedicQAResponse", await self._client.request("POST", "/api/v2/vedic/qa", params=None, json=body, options=options))
 
-
-class AsyncWesternSolarResource:
-    def __init__(self, client: AsyncFreeAstro) -> None:
-        self._client = client
-
-    async def calculate(
+    async def strength(
         self,
-        body: schemas.SolarReturnRequest,
+        body: schemas.BaseChartRequestV2,
         *,
         options: RequestOptions | None = None,
-    ) -> schemas.SolarReturnResponse:
-        """Get Solar Return
+    ) -> schemas.StrengthV2Response:
+        """Get Vedic Strength (v2)
 
-        Computes purely deterministic Solar Return chart against the Natal chart.
-        Returns structurally identical core chart blocks (planets, aspects) as
-        well as exact cross-aspects and angularity, without scoring or archetype models.
+        Return V2 strength data with classical Shadbala and classical Ashtakavarga.
 
-        ``POST /api/v1/western/solar/calculate``
+        ``POST /api/v2/vedic/strength``
         """
-        return cast("schemas.SolarReturnResponse", await self._client.request("POST", "/api/v1/western/solar/calculate", params=None, json=body, options=options))
+        return cast("schemas.StrengthV2Response", await self._client.request("POST", "/api/v2/vedic/strength", params=None, json=body, options=options))
 
-
-class AsyncWesternReturnsResource:
-    def __init__(self, client: AsyncFreeAstro) -> None:
-        self._client = client
-
-    async def calculate(
+    async def vargas(
         self,
-        body: schemas.PlanetReturnRequest,
+        body: schemas.VargasRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> schemas.PlanetReturnResponse:
-        """Get Planet Return
+    ) -> schemas.VargasV2Response:
+        """Get Vedic Vargas (v2)
 
-        Computes a deterministic planetary return chart against the natal chart.
-        The return target is selected by body plus a date anchor and selection mode.
+        Return V2 divisional chart rows and whole-sign divisional layouts.
 
-        ``POST /api/v1/western/returns/calculate``
+        ``POST /api/v2/vedic/vargas``
         """
-        return cast("schemas.PlanetReturnResponse", await self._client.request("POST", "/api/v1/western/returns/calculate", params=None, json=body, options=options))
+        return cast("schemas.VargasV2Response", await self._client.request("POST", "/api/v2/vedic/vargas", params=None, json=body, options=options))
+
+    async def yogas(
+        self,
+        body: schemas.BaseChartRequestV2,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.YogasV2Response:
+        """Get Vedic Yogas (v2)
+
+        Evaluate a classical V2 yoga catalog and return active and inactive results with evidence.
+
+        ``POST /api/v2/vedic/yogas``
+        """
+        return cast("schemas.YogasV2Response", await self._client.request("POST", "/api/v2/vedic/yogas", params=None, json=body, options=options))
 
 
 class AsyncWesternAstrocartographyResource:
     def __init__(self, client: AsyncFreeAstro) -> None:
         self._client = client
+
+    async def city_check(
+        self,
+        body: schemas.AstrocartographyCityCheckRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> dict[str, Any]:
+        """Get Astrocartography City Check
+
+        Score a single city across the five primary relocation-oriented focus areas.
+
+        ``POST /api/v1/western/astrocartography/city-check``
+        """
+        return cast("dict[str, Any]", await self._client.request("POST", "/api/v1/western/astrocartography/city-check", params=None, json=body, options=options))
 
     async def lines(
         self,
@@ -3451,20 +3428,6 @@ class AsyncWesternAstrocartographyResource:
         """
         return cast("dict[str, Any]", await self._client.request("POST", "/api/v1/western/astrocartography/lines", params=None, json=body, options=options))
 
-    async def recommendations(
-        self,
-        body: schemas.AstrocartographyRecommendationsRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
-        """Get Astrocartography Recommendations
-
-        Rank candidate cities for a focus-oriented astrocartography search.
-
-        ``POST /api/v1/western/astrocartography/recommendations``
-        """
-        return cast("dict[str, Any]", await self._client.request("POST", "/api/v1/western/astrocartography/recommendations", params=None, json=body, options=options))
-
     async def parans(
         self,
         body: schemas.AstrocartographyParansRequest,
@@ -3478,6 +3441,20 @@ class AsyncWesternAstrocartographyResource:
         ``POST /api/v1/western/astrocartography/parans``
         """
         return cast("dict[str, Any]", await self._client.request("POST", "/api/v1/western/astrocartography/parans", params=None, json=body, options=options))
+
+    async def recommendations(
+        self,
+        body: schemas.AstrocartographyRecommendationsRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> dict[str, Any]:
+        """Get Astrocartography Recommendations
+
+        Rank candidate cities for a focus-oriented astrocartography search.
+
+        ``POST /api/v1/western/astrocartography/recommendations``
+        """
+        return cast("dict[str, Any]", await self._client.request("POST", "/api/v1/western/astrocartography/recommendations", params=None, json=body, options=options))
 
     async def relocation(
         self,
@@ -3493,19 +3470,60 @@ class AsyncWesternAstrocartographyResource:
         """
         return cast("dict[str, Any]", await self._client.request("POST", "/api/v1/western/astrocartography/relocation", params=None, json=body, options=options))
 
-    async def city_check(
+
+class AsyncWesternDirectionsResource:
+    def __init__(self, client: AsyncFreeAstro) -> None:
+        self._client = client
+
+    async def primary(
         self,
-        body: schemas.AstrocartographyCityCheckRequest,
+        body: schemas.PrimaryDirectionsRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
-        """Get Astrocartography City Check
+    ) -> schemas.PrimaryDirectionsResponse:
+        """Get Primary Directions
 
-        Score a single city across the five primary relocation-oriented focus areas.
+        Compute primary directions for a natal chart over a date range.
 
-        ``POST /api/v1/western/astrocartography/city-check``
+        ``POST /api/v1/western/directions/primary``
         """
-        return cast("dict[str, Any]", await self._client.request("POST", "/api/v1/western/astrocartography/city-check", params=None, json=body, options=options))
+        return cast("schemas.PrimaryDirectionsResponse", await self._client.request("POST", "/api/v1/western/directions/primary", params=None, json=body, options=options))
+
+    async def primary_calendar(
+        self,
+        body: schemas.PrimaryDirectionsRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.PrimaryDirectionsCalendarResponse:
+        """Get Primary Directions Calendar
+
+        ``POST /api/v1/western/directions/primary/calendar``
+        """
+        return cast("schemas.PrimaryDirectionsCalendarResponse", await self._client.request("POST", "/api/v1/western/directions/primary/calendar", params=None, json=body, options=options))
+
+    async def primary_exact_aspects(
+        self,
+        body: schemas.PrimaryDirectionsRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.PrimaryDirectionsResponse:
+        """Get Primary Directions Exact Aspects
+
+        ``POST /api/v1/western/directions/primary/exact-aspects``
+        """
+        return cast("schemas.PrimaryDirectionsResponse", await self._client.request("POST", "/api/v1/western/directions/primary/exact-aspects", params=None, json=body, options=options))
+
+    async def primary_search(
+        self,
+        body: schemas.PrimaryDirectionsRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.PrimaryDirectionsResponse:
+        """Search Primary Directions
+
+        ``POST /api/v1/western/directions/primary/search``
+        """
+        return cast("schemas.PrimaryDirectionsResponse", await self._client.request("POST", "/api/v1/western/directions/primary/search", params=None, json=body, options=options))
 
 
 class AsyncWesternNatalResource:
@@ -3541,6 +3559,321 @@ class AsyncWesternNatalResource:
         return cast("schemas.NatalInsightsIndexDocumentsResponse", await self._client.request("POST", "/api/v1/western/natal/insights/index-documents", params=None, json=body, options=options))
 
 
+class AsyncWesternProfectionsResource:
+    def __init__(self, client: AsyncFreeAstro) -> None:
+        self._client = client
+
+    async def annual(
+        self,
+        body: schemas.AnnualProfectionRequest,
+        *,
+        include: list[str] | None = None,
+        options: RequestOptions | None = None,
+    ) -> schemas.AnnualProfectionResponse:
+        """Get Annual Profections
+
+        Annual profections endpoint with a solar-return-style envelope and a timing-oriented body.
+
+        ``POST /api/v1/western/profections/annual``
+        """
+        return cast("schemas.AnnualProfectionResponse", await self._client.request("POST", "/api/v1/western/profections/annual", params=_query({"include": include}), json=body, options=options))
+
+
+class AsyncWesternProgressionsResource:
+    def __init__(self, client: AsyncFreeAstro) -> None:
+        self._client = client
+
+    async def converse_secondary(
+        self,
+        body: schemas.ConverseSecondaryProgressionsRequest,
+        *,
+        response_mode: Literal["full", "table"] | None = None,
+        options: RequestOptions | None = None,
+    ) -> schemas.ProgressionChartResponse | schemas.ProgressionTableResponse:
+        """Get Converse Secondary Progressions
+
+        ``POST /api/v1/western/progressions/converse-secondary``
+        """
+        return cast("schemas.ProgressionChartResponse | schemas.ProgressionTableResponse", await self._client.request("POST", "/api/v1/western/progressions/converse-secondary", params=_query({"response_mode": response_mode}), json=body, options=options))
+
+    async def converse_secondary_calendar(
+        self,
+        body: schemas.ProgressionCalendarRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ProgressionCalendarResponse:
+        """Get Converse Secondary Progressions Calendar
+
+        ``POST /api/v1/western/progressions/converse-secondary/calendar``
+        """
+        return cast("schemas.ProgressionCalendarResponse", await self._client.request("POST", "/api/v1/western/progressions/converse-secondary/calendar", params=None, json=body, options=options))
+
+    async def converse_secondary_exact_aspects(
+        self,
+        body: schemas.ExactAspectSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ExactAspectSearchResponse:
+        """Search Converse Secondary Exact Aspects
+
+        ``POST /api/v1/western/progressions/converse-secondary/exact-aspects``
+        """
+        return cast("schemas.ExactAspectSearchResponse", await self._client.request("POST", "/api/v1/western/progressions/converse-secondary/exact-aspects", params=None, json=body, options=options))
+
+    async def converse_secondary_exact_ingresses(
+        self,
+        body: schemas.ExactIngressSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ExactIngressSearchResponse:
+        """Search Converse Secondary Exact Ingresses
+
+        ``POST /api/v1/western/progressions/converse-secondary/exact-ingresses``
+        """
+        return cast("schemas.ExactIngressSearchResponse", await self._client.request("POST", "/api/v1/western/progressions/converse-secondary/exact-ingresses", params=None, json=body, options=options))
+
+    async def quaternary(
+        self,
+        body: schemas.QuaternaryProgressionsRequest,
+        *,
+        response_mode: Literal["full", "table"] | None = None,
+        options: RequestOptions | None = None,
+    ) -> schemas.ProgressionChartResponse | schemas.ProgressionTableResponse:
+        """Get Quaternary Progressions
+
+        ``POST /api/v1/western/progressions/quaternary``
+        """
+        return cast("schemas.ProgressionChartResponse | schemas.ProgressionTableResponse", await self._client.request("POST", "/api/v1/western/progressions/quaternary", params=_query({"response_mode": response_mode}), json=body, options=options))
+
+    async def quaternary_calendar(
+        self,
+        body: schemas.ProgressionCalendarRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ProgressionCalendarResponse:
+        """Get Quaternary Progressions Calendar
+
+        ``POST /api/v1/western/progressions/quaternary/calendar``
+        """
+        return cast("schemas.ProgressionCalendarResponse", await self._client.request("POST", "/api/v1/western/progressions/quaternary/calendar", params=None, json=body, options=options))
+
+    async def quaternary_exact_aspects(
+        self,
+        body: schemas.ExactAspectSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ExactAspectSearchResponse:
+        """Search Quaternary Exact Aspects
+
+        ``POST /api/v1/western/progressions/quaternary/exact-aspects``
+        """
+        return cast("schemas.ExactAspectSearchResponse", await self._client.request("POST", "/api/v1/western/progressions/quaternary/exact-aspects", params=None, json=body, options=options))
+
+    async def quaternary_exact_ingresses(
+        self,
+        body: schemas.ExactIngressSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ExactIngressSearchResponse:
+        """Search Quaternary Exact Ingresses
+
+        ``POST /api/v1/western/progressions/quaternary/exact-ingresses``
+        """
+        return cast("schemas.ExactIngressSearchResponse", await self._client.request("POST", "/api/v1/western/progressions/quaternary/exact-ingresses", params=None, json=body, options=options))
+
+    async def quotidian(
+        self,
+        body: schemas.QuotidianProgressionsRequest,
+        *,
+        response_mode: Literal["full", "table"] | None = None,
+        options: RequestOptions | None = None,
+    ) -> schemas.ProgressionChartResponse | schemas.ProgressionTableResponse:
+        """Get Quotidian Progressions
+
+        ``POST /api/v1/western/progressions/quotidian``
+        """
+        return cast("schemas.ProgressionChartResponse | schemas.ProgressionTableResponse", await self._client.request("POST", "/api/v1/western/progressions/quotidian", params=_query({"response_mode": response_mode}), json=body, options=options))
+
+    async def quotidian_calendar(
+        self,
+        body: schemas.ProgressionCalendarRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ProgressionCalendarResponse:
+        """Get Quotidian Progressions Calendar
+
+        ``POST /api/v1/western/progressions/quotidian/calendar``
+        """
+        return cast("schemas.ProgressionCalendarResponse", await self._client.request("POST", "/api/v1/western/progressions/quotidian/calendar", params=None, json=body, options=options))
+
+    async def quotidian_exact_aspects(
+        self,
+        body: schemas.ExactAspectSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ExactAspectSearchResponse:
+        """Search Quotidian Exact Aspects
+
+        ``POST /api/v1/western/progressions/quotidian/exact-aspects``
+        """
+        return cast("schemas.ExactAspectSearchResponse", await self._client.request("POST", "/api/v1/western/progressions/quotidian/exact-aspects", params=None, json=body, options=options))
+
+    async def quotidian_exact_ingresses(
+        self,
+        body: schemas.ExactIngressSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ExactIngressSearchResponse:
+        """Search Quotidian Exact Ingresses
+
+        ``POST /api/v1/western/progressions/quotidian/exact-ingresses``
+        """
+        return cast("schemas.ExactIngressSearchResponse", await self._client.request("POST", "/api/v1/western/progressions/quotidian/exact-ingresses", params=None, json=body, options=options))
+
+    async def secondary(
+        self,
+        body: schemas.SecondaryProgressionsRequest,
+        *,
+        include: list[str] | None = None,
+        response_mode: Literal["full", "table"] | None = None,
+        options: RequestOptions | None = None,
+    ) -> schemas.SecondaryProgressionsResponse | schemas.ProgressionTableResponse:
+        """Get Secondary Progressions
+
+        Compute a secondary progressed chart using the classic symbolic timing rule:
+        1 day after birth = 1 year of life.
+
+        ``POST /api/v1/western/progressions/secondary``
+        """
+        return cast("schemas.SecondaryProgressionsResponse | schemas.ProgressionTableResponse", await self._client.request("POST", "/api/v1/western/progressions/secondary", params=_query({"include": include, "response_mode": response_mode}), json=body, options=options))
+
+    async def secondary_calendar(
+        self,
+        body: schemas.ProgressionCalendarRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ProgressionCalendarResponse:
+        """Get Secondary Progressions Calendar
+
+        ``POST /api/v1/western/progressions/secondary/calendar``
+        """
+        return cast("schemas.ProgressionCalendarResponse", await self._client.request("POST", "/api/v1/western/progressions/secondary/calendar", params=None, json=body, options=options))
+
+    async def secondary_exact_aspects(
+        self,
+        body: schemas.ExactAspectSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ExactAspectSearchResponse:
+        """Search Secondary Exact Aspects
+
+        ``POST /api/v1/western/progressions/secondary/exact-aspects``
+        """
+        return cast("schemas.ExactAspectSearchResponse", await self._client.request("POST", "/api/v1/western/progressions/secondary/exact-aspects", params=None, json=body, options=options))
+
+    async def secondary_exact_ingresses(
+        self,
+        body: schemas.ExactIngressSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ExactIngressSearchResponse:
+        """Search Secondary Exact Ingresses
+
+        ``POST /api/v1/western/progressions/secondary/exact-ingresses``
+        """
+        return cast("schemas.ExactIngressSearchResponse", await self._client.request("POST", "/api/v1/western/progressions/secondary/exact-ingresses", params=None, json=body, options=options))
+
+    async def tertiary(
+        self,
+        body: schemas.TertiaryProgressionsRequest,
+        *,
+        response_mode: Literal["full", "table"] | None = None,
+        options: RequestOptions | None = None,
+    ) -> schemas.ProgressionChartResponse | schemas.ProgressionTableResponse:
+        """Get Tertiary Progressions
+
+        ``POST /api/v1/western/progressions/tertiary``
+        """
+        return cast("schemas.ProgressionChartResponse | schemas.ProgressionTableResponse", await self._client.request("POST", "/api/v1/western/progressions/tertiary", params=_query({"response_mode": response_mode}), json=body, options=options))
+
+    async def tertiary_calendar(
+        self,
+        body: schemas.ProgressionCalendarRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ProgressionCalendarResponse:
+        """Get Tertiary Progressions Calendar
+
+        ``POST /api/v1/western/progressions/tertiary/calendar``
+        """
+        return cast("schemas.ProgressionCalendarResponse", await self._client.request("POST", "/api/v1/western/progressions/tertiary/calendar", params=None, json=body, options=options))
+
+    async def tertiary_exact_aspects(
+        self,
+        body: schemas.ExactAspectSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ExactAspectSearchResponse:
+        """Search Tertiary Exact Aspects
+
+        ``POST /api/v1/western/progressions/tertiary/exact-aspects``
+        """
+        return cast("schemas.ExactAspectSearchResponse", await self._client.request("POST", "/api/v1/western/progressions/tertiary/exact-aspects", params=None, json=body, options=options))
+
+    async def tertiary_exact_ingresses(
+        self,
+        body: schemas.ExactIngressSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.ExactIngressSearchResponse:
+        """Search Tertiary Exact Ingresses
+
+        ``POST /api/v1/western/progressions/tertiary/exact-ingresses``
+        """
+        return cast("schemas.ExactIngressSearchResponse", await self._client.request("POST", "/api/v1/western/progressions/tertiary/exact-ingresses", params=None, json=body, options=options))
+
+
+class AsyncWesternReturnsResource:
+    def __init__(self, client: AsyncFreeAstro) -> None:
+        self._client = client
+
+    async def calculate(
+        self,
+        body: schemas.PlanetReturnRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.PlanetReturnResponse:
+        """Get Planet Return
+
+        Computes a deterministic planetary return chart against the natal chart.
+        The return target is selected by body plus a date anchor and selection mode.
+
+        ``POST /api/v1/western/returns/calculate``
+        """
+        return cast("schemas.PlanetReturnResponse", await self._client.request("POST", "/api/v1/western/returns/calculate", params=None, json=body, options=options))
+
+
+class AsyncWesternSolarResource:
+    def __init__(self, client: AsyncFreeAstro) -> None:
+        self._client = client
+
+    async def calculate(
+        self,
+        body: schemas.SolarReturnRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.SolarReturnResponse:
+        """Get Solar Return
+
+        Computes purely deterministic Solar Return chart against the Natal chart.
+        Returns structurally identical core chart blocks (planets, aspects) as
+        well as exact cross-aspects and angularity, without scoring or archetype models.
+
+        ``POST /api/v1/western/solar/calculate``
+        """
+        return cast("schemas.SolarReturnResponse", await self._client.request("POST", "/api/v1/western/solar/calculate", params=None, json=body, options=options))
+
+
 class AsyncWesternTransitsResource:
     def __init__(self, client: AsyncFreeAstro) -> None:
         self._client = client
@@ -3558,6 +3891,20 @@ class AsyncWesternTransitsResource:
         ``POST /api/v1/western/transits/insights``
         """
         return cast("schemas.TransitInsightsResponse", await self._client.request("POST", "/api/v1/western/transits/insights", params=None, json=body, options=options))
+
+    async def search(
+        self,
+        body: schemas.TransitSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.TransitSearchResponse:
+        """Search Transits
+
+        Search a long-range date or age window for all passes of one transit planet against one natal point.
+
+        ``POST /api/v1/western/transits/search``
+        """
+        return cast("schemas.TransitSearchResponse", await self._client.request("POST", "/api/v1/western/transits/search", params=None, json=body, options=options))
 
     async def timeline(
         self,
@@ -3587,349 +3934,6 @@ class AsyncWesternTransitsResource:
         """
         return cast("schemas.TransitTimelineIndexDocumentsResponse", await self._client.request("POST", "/api/v1/western/transits/timeline/index-documents", params=None, json=body, options=options))
 
-    async def search(
-        self,
-        body: schemas.TransitSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.TransitSearchResponse:
-        """Search Transits
-
-        Search a long-range date or age window for all passes of one transit planet against one natal point.
-
-        ``POST /api/v1/western/transits/search``
-        """
-        return cast("schemas.TransitSearchResponse", await self._client.request("POST", "/api/v1/western/transits/search", params=None, json=body, options=options))
-
-
-class AsyncWesternProfectionsResource:
-    def __init__(self, client: AsyncFreeAstro) -> None:
-        self._client = client
-
-    async def annual(
-        self,
-        body: schemas.AnnualProfectionRequest,
-        *,
-        include: list[str] | None = None,
-        options: RequestOptions | None = None,
-    ) -> schemas.AnnualProfectionResponse:
-        """Get Annual Profections
-
-        Annual profections endpoint with a solar-return-style envelope and a timing-oriented body.
-
-        ``POST /api/v1/western/profections/annual``
-        """
-        return cast("schemas.AnnualProfectionResponse", await self._client.request("POST", "/api/v1/western/profections/annual", params=_query({"include": include}), json=body, options=options))
-
-
-class AsyncWesternProgressionsResource:
-    def __init__(self, client: AsyncFreeAstro) -> None:
-        self._client = client
-
-    async def secondary(
-        self,
-        body: schemas.SecondaryProgressionsRequest,
-        *,
-        include: list[str] | None = None,
-        response_mode: Literal["full", "table"] | None = None,
-        options: RequestOptions | None = None,
-    ) -> schemas.SecondaryProgressionsResponse | schemas.ProgressionTableResponse:
-        """Get Secondary Progressions
-
-        Compute a secondary progressed chart using the classic symbolic timing rule:
-        1 day after birth = 1 year of life.
-
-        ``POST /api/v1/western/progressions/secondary``
-        """
-        return cast("schemas.SecondaryProgressionsResponse | schemas.ProgressionTableResponse", await self._client.request("POST", "/api/v1/western/progressions/secondary", params=_query({"include": include, "response_mode": response_mode}), json=body, options=options))
-
-    async def converse_secondary(
-        self,
-        body: schemas.ConverseSecondaryProgressionsRequest,
-        *,
-        response_mode: Literal["full", "table"] | None = None,
-        options: RequestOptions | None = None,
-    ) -> schemas.ProgressionChartResponse | schemas.ProgressionTableResponse:
-        """Get Converse Secondary Progressions
-
-        ``POST /api/v1/western/progressions/converse-secondary``
-        """
-        return cast("schemas.ProgressionChartResponse | schemas.ProgressionTableResponse", await self._client.request("POST", "/api/v1/western/progressions/converse-secondary", params=_query({"response_mode": response_mode}), json=body, options=options))
-
-    async def tertiary(
-        self,
-        body: schemas.TertiaryProgressionsRequest,
-        *,
-        response_mode: Literal["full", "table"] | None = None,
-        options: RequestOptions | None = None,
-    ) -> schemas.ProgressionChartResponse | schemas.ProgressionTableResponse:
-        """Get Tertiary Progressions
-
-        ``POST /api/v1/western/progressions/tertiary``
-        """
-        return cast("schemas.ProgressionChartResponse | schemas.ProgressionTableResponse", await self._client.request("POST", "/api/v1/western/progressions/tertiary", params=_query({"response_mode": response_mode}), json=body, options=options))
-
-    async def quotidian(
-        self,
-        body: schemas.QuotidianProgressionsRequest,
-        *,
-        response_mode: Literal["full", "table"] | None = None,
-        options: RequestOptions | None = None,
-    ) -> schemas.ProgressionChartResponse | schemas.ProgressionTableResponse:
-        """Get Quotidian Progressions
-
-        ``POST /api/v1/western/progressions/quotidian``
-        """
-        return cast("schemas.ProgressionChartResponse | schemas.ProgressionTableResponse", await self._client.request("POST", "/api/v1/western/progressions/quotidian", params=_query({"response_mode": response_mode}), json=body, options=options))
-
-    async def quaternary(
-        self,
-        body: schemas.QuaternaryProgressionsRequest,
-        *,
-        response_mode: Literal["full", "table"] | None = None,
-        options: RequestOptions | None = None,
-    ) -> schemas.ProgressionChartResponse | schemas.ProgressionTableResponse:
-        """Get Quaternary Progressions
-
-        ``POST /api/v1/western/progressions/quaternary``
-        """
-        return cast("schemas.ProgressionChartResponse | schemas.ProgressionTableResponse", await self._client.request("POST", "/api/v1/western/progressions/quaternary", params=_query({"response_mode": response_mode}), json=body, options=options))
-
-    async def secondary_exact_ingresses(
-        self,
-        body: schemas.ExactIngressSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ExactIngressSearchResponse:
-        """Search Secondary Exact Ingresses
-
-        ``POST /api/v1/western/progressions/secondary/exact-ingresses``
-        """
-        return cast("schemas.ExactIngressSearchResponse", await self._client.request("POST", "/api/v1/western/progressions/secondary/exact-ingresses", params=None, json=body, options=options))
-
-    async def converse_secondary_exact_ingresses(
-        self,
-        body: schemas.ExactIngressSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ExactIngressSearchResponse:
-        """Search Converse Secondary Exact Ingresses
-
-        ``POST /api/v1/western/progressions/converse-secondary/exact-ingresses``
-        """
-        return cast("schemas.ExactIngressSearchResponse", await self._client.request("POST", "/api/v1/western/progressions/converse-secondary/exact-ingresses", params=None, json=body, options=options))
-
-    async def tertiary_exact_ingresses(
-        self,
-        body: schemas.ExactIngressSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ExactIngressSearchResponse:
-        """Search Tertiary Exact Ingresses
-
-        ``POST /api/v1/western/progressions/tertiary/exact-ingresses``
-        """
-        return cast("schemas.ExactIngressSearchResponse", await self._client.request("POST", "/api/v1/western/progressions/tertiary/exact-ingresses", params=None, json=body, options=options))
-
-    async def quotidian_exact_ingresses(
-        self,
-        body: schemas.ExactIngressSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ExactIngressSearchResponse:
-        """Search Quotidian Exact Ingresses
-
-        ``POST /api/v1/western/progressions/quotidian/exact-ingresses``
-        """
-        return cast("schemas.ExactIngressSearchResponse", await self._client.request("POST", "/api/v1/western/progressions/quotidian/exact-ingresses", params=None, json=body, options=options))
-
-    async def quaternary_exact_ingresses(
-        self,
-        body: schemas.ExactIngressSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ExactIngressSearchResponse:
-        """Search Quaternary Exact Ingresses
-
-        ``POST /api/v1/western/progressions/quaternary/exact-ingresses``
-        """
-        return cast("schemas.ExactIngressSearchResponse", await self._client.request("POST", "/api/v1/western/progressions/quaternary/exact-ingresses", params=None, json=body, options=options))
-
-    async def secondary_exact_aspects(
-        self,
-        body: schemas.ExactAspectSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ExactAspectSearchResponse:
-        """Search Secondary Exact Aspects
-
-        ``POST /api/v1/western/progressions/secondary/exact-aspects``
-        """
-        return cast("schemas.ExactAspectSearchResponse", await self._client.request("POST", "/api/v1/western/progressions/secondary/exact-aspects", params=None, json=body, options=options))
-
-    async def converse_secondary_exact_aspects(
-        self,
-        body: schemas.ExactAspectSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ExactAspectSearchResponse:
-        """Search Converse Secondary Exact Aspects
-
-        ``POST /api/v1/western/progressions/converse-secondary/exact-aspects``
-        """
-        return cast("schemas.ExactAspectSearchResponse", await self._client.request("POST", "/api/v1/western/progressions/converse-secondary/exact-aspects", params=None, json=body, options=options))
-
-    async def tertiary_exact_aspects(
-        self,
-        body: schemas.ExactAspectSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ExactAspectSearchResponse:
-        """Search Tertiary Exact Aspects
-
-        ``POST /api/v1/western/progressions/tertiary/exact-aspects``
-        """
-        return cast("schemas.ExactAspectSearchResponse", await self._client.request("POST", "/api/v1/western/progressions/tertiary/exact-aspects", params=None, json=body, options=options))
-
-    async def quotidian_exact_aspects(
-        self,
-        body: schemas.ExactAspectSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ExactAspectSearchResponse:
-        """Search Quotidian Exact Aspects
-
-        ``POST /api/v1/western/progressions/quotidian/exact-aspects``
-        """
-        return cast("schemas.ExactAspectSearchResponse", await self._client.request("POST", "/api/v1/western/progressions/quotidian/exact-aspects", params=None, json=body, options=options))
-
-    async def quaternary_exact_aspects(
-        self,
-        body: schemas.ExactAspectSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ExactAspectSearchResponse:
-        """Search Quaternary Exact Aspects
-
-        ``POST /api/v1/western/progressions/quaternary/exact-aspects``
-        """
-        return cast("schemas.ExactAspectSearchResponse", await self._client.request("POST", "/api/v1/western/progressions/quaternary/exact-aspects", params=None, json=body, options=options))
-
-    async def secondary_calendar(
-        self,
-        body: schemas.ProgressionCalendarRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ProgressionCalendarResponse:
-        """Get Secondary Progressions Calendar
-
-        ``POST /api/v1/western/progressions/secondary/calendar``
-        """
-        return cast("schemas.ProgressionCalendarResponse", await self._client.request("POST", "/api/v1/western/progressions/secondary/calendar", params=None, json=body, options=options))
-
-    async def converse_secondary_calendar(
-        self,
-        body: schemas.ProgressionCalendarRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ProgressionCalendarResponse:
-        """Get Converse Secondary Progressions Calendar
-
-        ``POST /api/v1/western/progressions/converse-secondary/calendar``
-        """
-        return cast("schemas.ProgressionCalendarResponse", await self._client.request("POST", "/api/v1/western/progressions/converse-secondary/calendar", params=None, json=body, options=options))
-
-    async def tertiary_calendar(
-        self,
-        body: schemas.ProgressionCalendarRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ProgressionCalendarResponse:
-        """Get Tertiary Progressions Calendar
-
-        ``POST /api/v1/western/progressions/tertiary/calendar``
-        """
-        return cast("schemas.ProgressionCalendarResponse", await self._client.request("POST", "/api/v1/western/progressions/tertiary/calendar", params=None, json=body, options=options))
-
-    async def quotidian_calendar(
-        self,
-        body: schemas.ProgressionCalendarRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ProgressionCalendarResponse:
-        """Get Quotidian Progressions Calendar
-
-        ``POST /api/v1/western/progressions/quotidian/calendar``
-        """
-        return cast("schemas.ProgressionCalendarResponse", await self._client.request("POST", "/api/v1/western/progressions/quotidian/calendar", params=None, json=body, options=options))
-
-    async def quaternary_calendar(
-        self,
-        body: schemas.ProgressionCalendarRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.ProgressionCalendarResponse:
-        """Get Quaternary Progressions Calendar
-
-        ``POST /api/v1/western/progressions/quaternary/calendar``
-        """
-        return cast("schemas.ProgressionCalendarResponse", await self._client.request("POST", "/api/v1/western/progressions/quaternary/calendar", params=None, json=body, options=options))
-
-
-class AsyncWesternDirectionsResource:
-    def __init__(self, client: AsyncFreeAstro) -> None:
-        self._client = client
-
-    async def primary(
-        self,
-        body: schemas.PrimaryDirectionsRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.PrimaryDirectionsResponse:
-        """Get Primary Directions
-
-        Compute primary directions for a natal chart over a date range.
-
-        ``POST /api/v1/western/directions/primary``
-        """
-        return cast("schemas.PrimaryDirectionsResponse", await self._client.request("POST", "/api/v1/western/directions/primary", params=None, json=body, options=options))
-
-    async def primary_exact_aspects(
-        self,
-        body: schemas.PrimaryDirectionsRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.PrimaryDirectionsResponse:
-        """Get Primary Directions Exact Aspects
-
-        ``POST /api/v1/western/directions/primary/exact-aspects``
-        """
-        return cast("schemas.PrimaryDirectionsResponse", await self._client.request("POST", "/api/v1/western/directions/primary/exact-aspects", params=None, json=body, options=options))
-
-    async def primary_search(
-        self,
-        body: schemas.PrimaryDirectionsRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.PrimaryDirectionsResponse:
-        """Search Primary Directions
-
-        ``POST /api/v1/western/directions/primary/search``
-        """
-        return cast("schemas.PrimaryDirectionsResponse", await self._client.request("POST", "/api/v1/western/directions/primary/search", params=None, json=body, options=options))
-
-    async def primary_calendar(
-        self,
-        body: schemas.PrimaryDirectionsRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.PrimaryDirectionsCalendarResponse:
-        """Get Primary Directions Calendar
-
-        ``POST /api/v1/western/directions/primary/calendar``
-        """
-        return cast("schemas.PrimaryDirectionsCalendarResponse", await self._client.request("POST", "/api/v1/western/directions/primary/calendar", params=None, json=body, options=options))
-
 
 class AsyncWesternChartSimilarityResource:
     def __init__(self, client: AsyncFreeAstro) -> None:
@@ -3952,29 +3956,17 @@ class AsyncWesternElectionalResource:
     def __init__(self, client: AsyncFreeAstro) -> None:
         self._client = client
 
-    async def wedding_search(
+    async def invest_money_search(
         self,
-        body: schemas.WeddingElectionSearchRequest,
+        body: schemas.InvestMoneyElectionSearchRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> schemas.WeddingElectionSearchResponse:
-        """Search Wedding Elections
+    ) -> schemas.InvestMoneyElectionSearchResponse:
+        """Search Invest Money Elections
 
-        ``POST /api/v2/western/electional/wedding/search``
+        ``POST /api/v2/western/electional/invest-money/search``
         """
-        return cast("schemas.WeddingElectionSearchResponse", await self._client.request("POST", "/api/v2/western/electional/wedding/search", params=None, json=body, options=options))
-
-    async def making_contracts_search(
-        self,
-        body: schemas.MakingContractsElectionSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.MakingContractsElectionSearchResponse:
-        """Search Making Contracts Elections
-
-        ``POST /api/v2/western/electional/making-contracts/search``
-        """
-        return cast("schemas.MakingContractsElectionSearchResponse", await self._client.request("POST", "/api/v2/western/electional/making-contracts/search", params=None, json=body, options=options))
+        return cast("schemas.InvestMoneyElectionSearchResponse", await self._client.request("POST", "/api/v2/western/electional/invest-money/search", params=None, json=body, options=options))
 
     async def job_audition_search(
         self,
@@ -3988,29 +3980,29 @@ class AsyncWesternElectionalResource:
         """
         return cast("schemas.JobAuditionElectionSearchResponse", await self._client.request("POST", "/api/v2/western/electional/job-audition/search", params=None, json=body, options=options))
 
-    async def purchase_property_search(
+    async def legal_proceedings_search(
         self,
-        body: schemas.PurchasePropertyElectionSearchRequest,
+        body: schemas.LegalProceedingsElectionSearchRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> schemas.PurchasePropertyElectionSearchResponse:
-        """Search Purchase Property Elections
+    ) -> schemas.LegalProceedingsElectionSearchResponse:
+        """Search Legal Proceedings Elections
 
-        ``POST /api/v2/western/electional/purchase-property/search``
+        ``POST /api/v2/western/electional/legal-proceedings/search``
         """
-        return cast("schemas.PurchasePropertyElectionSearchResponse", await self._client.request("POST", "/api/v2/western/electional/purchase-property/search", params=None, json=body, options=options))
+        return cast("schemas.LegalProceedingsElectionSearchResponse", await self._client.request("POST", "/api/v2/western/electional/legal-proceedings/search", params=None, json=body, options=options))
 
-    async def purchase_car_search(
+    async def making_contracts_search(
         self,
-        body: schemas.PurchaseCarElectionSearchRequest,
+        body: schemas.MakingContractsElectionSearchRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> schemas.PurchaseCarElectionSearchResponse:
-        """Search Purchase Car Elections
+    ) -> schemas.MakingContractsElectionSearchResponse:
+        """Search Making Contracts Elections
 
-        ``POST /api/v2/western/electional/purchase-car/search``
+        ``POST /api/v2/western/electional/making-contracts/search``
         """
-        return cast("schemas.PurchaseCarElectionSearchResponse", await self._client.request("POST", "/api/v2/western/electional/purchase-car/search", params=None, json=body, options=options))
+        return cast("schemas.MakingContractsElectionSearchResponse", await self._client.request("POST", "/api/v2/western/electional/making-contracts/search", params=None, json=body, options=options))
 
     async def move_into_new_home_search(
         self,
@@ -4024,30 +4016,6 @@ class AsyncWesternElectionalResource:
         """
         return cast("schemas.MoveIntoNewHomeElectionSearchResponse", await self._client.request("POST", "/api/v2/western/electional/move-into-new-home/search", params=None, json=body, options=options))
 
-    async def starting_journey_search(
-        self,
-        body: schemas.StartingJourneyElectionSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.StartingJourneyElectionSearchResponse:
-        """Search Starting Journey Elections
-
-        ``POST /api/v2/western/electional/starting-journey/search``
-        """
-        return cast("schemas.StartingJourneyElectionSearchResponse", await self._client.request("POST", "/api/v2/western/electional/starting-journey/search", params=None, json=body, options=options))
-
-    async def legal_proceedings_search(
-        self,
-        body: schemas.LegalProceedingsElectionSearchRequest,
-        *,
-        options: RequestOptions | None = None,
-    ) -> schemas.LegalProceedingsElectionSearchResponse:
-        """Search Legal Proceedings Elections
-
-        ``POST /api/v2/western/electional/legal-proceedings/search``
-        """
-        return cast("schemas.LegalProceedingsElectionSearchResponse", await self._client.request("POST", "/api/v2/western/electional/legal-proceedings/search", params=None, json=body, options=options))
-
     async def physical_examination_search(
         self,
         body: schemas.PhysicalExaminationElectionSearchRequest,
@@ -4060,30 +4028,66 @@ class AsyncWesternElectionalResource:
         """
         return cast("schemas.PhysicalExaminationElectionSearchResponse", await self._client.request("POST", "/api/v2/western/electional/physical-examination/search", params=None, json=body, options=options))
 
-    async def invest_money_search(
+    async def purchase_car_search(
         self,
-        body: schemas.InvestMoneyElectionSearchRequest,
+        body: schemas.PurchaseCarElectionSearchRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> schemas.InvestMoneyElectionSearchResponse:
-        """Search Invest Money Elections
+    ) -> schemas.PurchaseCarElectionSearchResponse:
+        """Search Purchase Car Elections
 
-        ``POST /api/v2/western/electional/invest-money/search``
+        ``POST /api/v2/western/electional/purchase-car/search``
         """
-        return cast("schemas.InvestMoneyElectionSearchResponse", await self._client.request("POST", "/api/v2/western/electional/invest-money/search", params=None, json=body, options=options))
+        return cast("schemas.PurchaseCarElectionSearchResponse", await self._client.request("POST", "/api/v2/western/electional/purchase-car/search", params=None, json=body, options=options))
+
+    async def purchase_property_search(
+        self,
+        body: schemas.PurchasePropertyElectionSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.PurchasePropertyElectionSearchResponse:
+        """Search Purchase Property Elections
+
+        ``POST /api/v2/western/electional/purchase-property/search``
+        """
+        return cast("schemas.PurchasePropertyElectionSearchResponse", await self._client.request("POST", "/api/v2/western/electional/purchase-property/search", params=None, json=body, options=options))
+
+    async def starting_journey_search(
+        self,
+        body: schemas.StartingJourneyElectionSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.StartingJourneyElectionSearchResponse:
+        """Search Starting Journey Elections
+
+        ``POST /api/v2/western/electional/starting-journey/search``
+        """
+        return cast("schemas.StartingJourneyElectionSearchResponse", await self._client.request("POST", "/api/v2/western/electional/starting-journey/search", params=None, json=body, options=options))
+
+    async def wedding_search(
+        self,
+        body: schemas.WeddingElectionSearchRequest,
+        *,
+        options: RequestOptions | None = None,
+    ) -> schemas.WeddingElectionSearchResponse:
+        """Search Wedding Elections
+
+        ``POST /api/v2/western/electional/wedding/search``
+        """
+        return cast("schemas.WeddingElectionSearchResponse", await self._client.request("POST", "/api/v2/western/electional/wedding/search", params=None, json=body, options=options))
 
 
 class AsyncWesternResourceBase:
     def __init__(self, client: AsyncFreeAstro) -> None:
         self._client = client
-        self.solar = AsyncWesternSolarResource(client)
-        self.returns = AsyncWesternReturnsResource(client)
         self.astrocartography = AsyncWesternAstrocartographyResource(client)
+        self.directions = AsyncWesternDirectionsResource(client)
         self.natal = AsyncWesternNatalResource(client)
-        self.transits = AsyncWesternTransitsResource(client)
         self.profections = AsyncWesternProfectionsResource(client)
         self.progressions = AsyncWesternProgressionsResource(client)
-        self.directions = AsyncWesternDirectionsResource(client)
+        self.returns = AsyncWesternReturnsResource(client)
+        self.solar = AsyncWesternSolarResource(client)
+        self.transits = AsyncWesternTransitsResource(client)
         self.chart_similarity = AsyncWesternChartSimilarityResource(client)
         self.electional = AsyncWesternElectionalResource(client)
 
@@ -4112,6 +4116,26 @@ class AsyncWesternResourceBase:
         ``POST /api/v1/western/synastry``
         """
         return cast("schemas.SynastryResponse", await self._client.request("POST", "/api/v1/western/synastry", params=_query({"aspects": aspects, "overlays": overlays, "scores": scores, "archetypes": archetypes, "text": text, "display_point_labels": display_point_labels, "display_aspect_labels": display_aspect_labels, "strength_labels": strength_labels, "ranges": ranges, "scoring_bucket_definitions": scoring_bucket_definitions}), json=body, options=options))
+
+    async def synastry_horoscope_v1(
+        self,
+        body: schemas.CouplesHoroscopeRequest,
+        *,
+        relationship_context: Literal["romantic", "friendship"] | None = None,
+        include_timing: bool | None = None,
+        options: RequestOptions | None = None,
+    ) -> schemas.CouplesHoroscopeResponse:
+        """Get Couples Horoscope
+
+        Daily Couples Horoscope V2.
+        - Multi-dimensional scoring (Romance, Stability, Tension, etc.)
+        - Dual-perspective transits (Composite & Synastry)
+        - Deterministic narrative bands (Theme, Core, Shadow)
+        - Integrated relational rituals
+
+        ``POST /api/v1/western/synastry/horoscope``
+        """
+        return cast("schemas.CouplesHoroscopeResponse", await self._client.request("POST", "/api/v1/western/synastry/horoscope", params=_query({"relationship_context": relationship_context, "include_timing": include_timing}), json=body, options=options))
 
     async def synastry_simplified(
         self,
@@ -4163,26 +4187,6 @@ class AsyncWesternResourceBase:
         """
         return cast("schemas.SynastryCardsResponse", await self._client.request("POST", "/api/v1/western/synastrycards", params=_query({"relationship_context": relationship_context, "include_minor_cards": include_minor_cards}), json=body, options=options))
 
-    async def synastry_horoscope_v1(
-        self,
-        body: schemas.CouplesHoroscopeRequest,
-        *,
-        relationship_context: Literal["romantic", "friendship"] | None = None,
-        include_timing: bool | None = None,
-        options: RequestOptions | None = None,
-    ) -> schemas.CouplesHoroscopeResponse:
-        """Get Couples Horoscope
-
-        Daily Couples Horoscope V2.
-        - Multi-dimensional scoring (Romance, Stability, Tension, etc.)
-        - Dual-perspective transits (Composite & Synastry)
-        - Deterministic narrative bands (Theme, Core, Shadow)
-        - Integrated relational rituals
-
-        ``POST /api/v1/western/synastry/horoscope``
-        """
-        return cast("schemas.CouplesHoroscopeResponse", await self._client.request("POST", "/api/v1/western/synastry/horoscope", params=_query({"relationship_context": relationship_context, "include_timing": include_timing}), json=body, options=options))
-
     async def chat(
         self,
         body: schemas.WesternChatRequest,
@@ -4219,6 +4223,19 @@ class AsyncWesternResourceBase:
         """
         return cast("schemas.SynastryResponse", await self._client.request("POST", "/api/v2/western/synastry", params=_query({"aspects": aspects, "overlays": overlays, "scores": scores, "archetypes": archetypes, "text": text, "display_point_labels": display_point_labels, "display_aspect_labels": display_aspect_labels, "strength_labels": strength_labels, "ranges": ranges, "scoring_bucket_definitions": scoring_bucket_definitions}), json=body, options=options))
 
+    async def synastry_horoscope(
+        self,
+        body: schemas.CouplesHoroscopeV2Request,
+        *,
+        include_timing: bool | None = None,
+        options: RequestOptions | None = None,
+    ) -> schemas.CouplesHoroscopeV2Response:
+        """Get Couples Horoscope V2
+
+        ``POST /api/v2/western/synastry/horoscope``
+        """
+        return cast("schemas.CouplesHoroscopeV2Response", await self._client.request("POST", "/api/v2/western/synastry/horoscope", params=_query({"include_timing": include_timing}), json=body, options=options))
+
     async def synastrycards(
         self,
         body: schemas.SynastryRequest,
@@ -4232,19 +4249,6 @@ class AsyncWesternResourceBase:
         ``POST /api/v2/western/synastrycards``
         """
         return cast("schemas.SynastryCardsResponse", await self._client.request("POST", "/api/v2/western/synastrycards", params=_query({"relationship_context": relationship_context, "include_minor_cards": include_minor_cards}), json=body, options=options))
-
-    async def synastry_horoscope(
-        self,
-        body: schemas.CouplesHoroscopeV2Request,
-        *,
-        include_timing: bool | None = None,
-        options: RequestOptions | None = None,
-    ) -> schemas.CouplesHoroscopeV2Response:
-        """Get Couples Horoscope V2
-
-        ``POST /api/v2/western/synastry/horoscope``
-        """
-        return cast("schemas.CouplesHoroscopeV2Response", await self._client.request("POST", "/api/v2/western/synastry/horoscope", params=_query({"include_timing": include_timing}), json=body, options=options))
 
 
 class GeneratedResources:
@@ -4310,146 +4314,146 @@ class OperationInfo:
 
 #: Every public operation and the client method that calls it.
 OPERATIONS: tuple[OperationInfo, ...] = (
-    OperationInfo("simple_natal", "POST", "/natal", ('natal', 'simple'), True, (), (), False),
+    OperationInfo("v1_ai_generate", "POST", "/api/v1/ai/generate", ('ai', 'generate'), True, (), (), False),
+    OperationInfo("v1_chinese_bazi", "POST", "/api/v1/chinese/bazi", ('chinese', 'bazi'), True, (), (), False),
+    OperationInfo("v1_chinese_bazi_dictionary", "GET", "/api/v1/chinese/bazi/dictionary", ('chinese', 'bazi_dictionary'), False, (), (), False),
+    OperationInfo("v1_chinese_bazi_flow", "POST", "/api/v1/chinese/bazi/flow", ('chinese', 'bazi_flow'), True, (), (), False),
+    OperationInfo("v1_chinese_bazi_health", "POST", "/api/v1/chinese/bazi/health", ('chinese', 'bazi_health'), True, (), (), False),
+    OperationInfo("v1_chinese_bazi_lifespan", "POST", "/api/v1/chinese/bazi/lifespan", ('chinese', 'bazi_lifespan'), True, (), (), False),
+    OperationInfo("v1_chinese_bazi_synastry", "POST", "/api/v1/chinese/bazi/synastry", ('chinese', 'bazi_synastry'), True, (), (), False),
+    OperationInfo("v1_chinese_bazi_time_correction", "POST", "/api/v1/chinese/bazi/time-correction", ('chinese', 'bazi_time_correction'), True, (), (), False),
+    OperationInfo("v1_chinese_calendar_date", "GET", "/api/v1/chinese/calendar/{date}", ('chinese', 'calendar'), False, ('date',), (), False),
+    OperationInfo("v1_chinese_today", "GET", "/api/v1/chinese/today", ('chinese', 'today'), False, (), (), False),
+    OperationInfo("v1_ephemeris", "GET", "/api/v1/ephemeris", ('ephemeris', 'get'), False, (), ('start',), False),
+    OperationInfo("v1_ephemeris_calculate", "POST", "/api/v1/ephemeris/calculate", ('ephemeris', 'calculate'), True, (), (), False),
+    OperationInfo("v1_geo_search", "GET", "/api/v1/geo/search", ('geo', 'search_v1'), False, (), (), True),
+    OperationInfo("v1_horoscope_daily_bulk", "GET", "/api/v1/horoscope/daily/bulk", ('horoscope', 'daily', 'bulk'), False, (), (), False),
+    OperationInfo("v1_horoscope_daily_personal", "POST", "/api/v1/horoscope/daily/personal", ('horoscope', 'daily', 'personal_v1'), True, (), (), False),
+    OperationInfo("v1_horoscope_daily_sign", "GET", "/api/v1/horoscope/daily/sign", ('horoscope', 'daily', 'sign_v1'), False, (), ('sign',), False),
+    OperationInfo("v1_moon_month", "GET", "/api/v1/moon/month", ('moon', 'month'), False, (), ('year', 'month'), False),
+    OperationInfo("v1_moon_phase", "GET", "/api/v1/moon/phase", ('moon', 'phase'), False, (), (), False),
     OperationInfo("v1_natal_calculate", "POST", "/api/v1/natal/calculate", ('natal', 'calculate'), True, (), (), False),
+    OperationInfo("v1_natal_chart", "POST", "/api/v1/natal/chart/", ('natal', 'chart'), True, (), (), False),
+    OperationInfo("v1_natal_chart_composite", "POST", "/api/v1/natal/chart/composite", ('natal', 'chart_composite'), True, (), (), False),
+    OperationInfo("v1_natal_chart_progressions", "POST", "/api/v1/natal/chart/progressions", ('natal', 'chart_progressions'), True, (), (), False),
+    OperationInfo("v1_natal_chart_secondary_progressions", "POST", "/api/v1/natal/chart/secondary-progressions", ('natal', 'chart_secondary_progressions'), True, (), (), False),
+    OperationInfo("v1_natal_chart_solar_return", "POST", "/api/v1/natal/chart/solar-return", ('natal', 'chart_solar_return'), True, (), (), False),
+    OperationInfo("v1_natal_chart_synastry", "POST", "/api/v1/natal/chart/synastry", ('natal', 'chart_synastry'), True, (), (), False),
+    OperationInfo("v1_natal_chart_transits", "POST", "/api/v1/natal/chart/transits", ('natal', 'chart_transits'), True, (), (), False),
+    OperationInfo("v1_natal_experimental_solar_return", "POST", "/api/v1/natal/experimental/solar-return", ('natal', 'experimental', 'solar_return'), True, (), (), True),
+    OperationInfo("v1_natal_experimental_transits", "POST", "/api/v1/natal/experimental/transits", ('natal', 'experimental', 'transits'), True, (), (), True),
     OperationInfo("v1_natal_report_credits", "GET", "/api/v1/natal/report-credits", ('natal', 'report_credits'), False, (), (), False),
     OperationInfo("v1_natal_report_job_id", "GET", "/api/v1/natal/report/{job_id}", ('natal', 'report'), False, ('job_id',), (), False),
-    OperationInfo("v1_natal_chart", "POST", "/api/v1/natal/chart/", ('natal', 'chart'), True, (), (), False),
-    OperationInfo("v1_natal_chart_transits", "POST", "/api/v1/natal/chart/transits", ('natal', 'chart_transits'), True, (), (), False),
-    OperationInfo("v1_natal_experimental_transits", "POST", "/api/v1/natal/experimental/transits", ('natal', 'experimental', 'transits'), True, (), (), True),
-    OperationInfo("v1_natal_chart_solar_return", "POST", "/api/v1/natal/chart/solar-return", ('natal', 'chart_solar_return'), True, (), (), False),
-    OperationInfo("v1_natal_experimental_solar_return", "POST", "/api/v1/natal/experimental/solar-return", ('natal', 'experimental', 'solar_return'), True, (), (), True),
-    OperationInfo("v1_natal_chart_secondary_progressions", "POST", "/api/v1/natal/chart/secondary-progressions", ('natal', 'chart_secondary_progressions'), True, (), (), False),
-    OperationInfo("v1_natal_chart_progressions", "POST", "/api/v1/natal/chart/progressions", ('natal', 'chart_progressions'), True, (), (), False),
-    OperationInfo("v1_natal_chart_composite", "POST", "/api/v1/natal/chart/composite", ('natal', 'chart_composite'), True, (), (), False),
-    OperationInfo("v1_natal_chart_synastry", "POST", "/api/v1/natal/chart/synastry", ('natal', 'chart_synastry'), True, (), (), False),
-    OperationInfo("v1_transits_calculate", "POST", "/api/v1/transits/calculate", ('transits', 'calculate'), True, (), (), False),
-    OperationInfo("v1_ephemeris_calculate", "POST", "/api/v1/ephemeris/calculate", ('ephemeris', 'calculate'), True, (), (), False),
-    OperationInfo("v1_ephemeris", "GET", "/api/v1/ephemeris", ('ephemeris', 'get'), False, (), ('start',), False),
-    OperationInfo("v1_sky_events", "GET", "/api/v1/sky-events", ('sky_events', 'list'), False, (), ('date',), False),
-    OperationInfo("v1_numerology_methods", "GET", "/api/v1/numerology/methods", ('numerology', 'methods'), False, (), (), False),
     OperationInfo("v1_numerology_alphabets", "GET", "/api/v1/numerology/alphabets", ('numerology', 'alphabets'), False, (), (), False),
+    OperationInfo("v1_numerology_methods", "GET", "/api/v1/numerology/methods", ('numerology', 'methods'), False, (), (), False),
     OperationInfo("v1_numerology_profile", "POST", "/api/v1/numerology/profile", ('numerology', 'profile'), True, (), (), False),
-    OperationInfo("v1_vedic_match", "POST", "/api/v1/vedic/match", ('vedic', 'match_v1'), True, (), (), False),
-    OperationInfo("v1_vedic_chart", "POST", "/api/v1/vedic/chart", ('vedic', 'chart_v1'), True, (), (), False),
+    OperationInfo("v1_sky_events", "GET", "/api/v1/sky-events", ('sky_events', 'list'), False, (), ('date',), False),
+    OperationInfo("v1_space_chart", "POST", "/api/v1/space/chart", ('space', 'chart'), True, (), (), False),
+    OperationInfo("v1_space_chart_svg", "POST", "/api/v1/space/chart/svg", ('space', 'chart_svg'), True, (), (), False),
+    OperationInfo("v1_transits_calculate", "POST", "/api/v1/transits/calculate", ('transits', 'calculate'), True, (), (), False),
+    OperationInfo("v1_vedic_batch", "POST", "/api/v1/vedic/batch", ('vedic', 'batch'), True, (), (), False),
     OperationInfo("v1_vedic_calculate", "POST", "/api/v1/vedic/calculate", ('vedic', 'calculate_v1'), True, (), (), False),
+    OperationInfo("v1_vedic_chart", "POST", "/api/v1/vedic/chart", ('vedic', 'chart_v1'), True, (), (), False),
+    OperationInfo("v1_vedic_compatibility", "POST", "/api/v1/vedic/compatibility", ('vedic', 'compatibility_v1'), True, (), (), False),
     OperationInfo("v1_vedic_dasha", "POST", "/api/v1/vedic/dasha", ('vedic', 'dasha_v1'), True, (), (), False),
     OperationInfo("v1_vedic_dasha_insights", "POST", "/api/v1/vedic/dasha/insights", ('vedic', 'dasha_insights_v1'), True, (), (), False),
-    OperationInfo("v1_vedic_transits_insights", "POST", "/api/v1/vedic/transits/insights", ('vedic', 'transits', 'insights'), True, (), (), False),
     OperationInfo("v1_vedic_gochar_timeline", "POST", "/api/v1/vedic/gochar/timeline", ('vedic', 'gochar', 'timeline_v1'), True, (), (), False),
     OperationInfo("v1_vedic_gochar_timeline_insights", "POST", "/api/v1/vedic/gochar/timeline/insights", ('vedic', 'gochar', 'timeline_insights_v1'), True, (), (), False),
-    OperationInfo("v1_vedic_yogas", "POST", "/api/v1/vedic/yogas", ('vedic', 'yogas_v1'), True, (), (), False),
-    OperationInfo("v1_vedic_strength", "POST", "/api/v1/vedic/strength", ('vedic', 'strength_v1'), True, (), (), False),
-    OperationInfo("v1_vedic_vargas", "POST", "/api/v1/vedic/vargas", ('vedic', 'vargas_v1'), True, (), (), False),
-    OperationInfo("v1_vedic_compatibility", "POST", "/api/v1/vedic/compatibility", ('vedic', 'compatibility_v1'), True, (), (), False),
+    OperationInfo("v1_vedic_match", "POST", "/api/v1/vedic/match", ('vedic', 'match_v1'), True, (), (), False),
     OperationInfo("v1_vedic_panchang", "POST", "/api/v1/vedic/panchang", ('vedic', 'panchang_v1'), True, (), (), False),
-    OperationInfo("v1_vedic_batch", "POST", "/api/v1/vedic/batch", ('vedic', 'batch'), True, (), (), False),
-    OperationInfo("v1_chinese_bazi", "POST", "/api/v1/chinese/bazi", ('chinese', 'bazi'), True, (), (), False),
-    OperationInfo("v1_chinese_bazi_flow", "POST", "/api/v1/chinese/bazi/flow", ('chinese', 'bazi_flow'), True, (), (), False),
-    OperationInfo("v1_chinese_bazi_dictionary", "GET", "/api/v1/chinese/bazi/dictionary", ('chinese', 'bazi_dictionary'), False, (), (), False),
-    OperationInfo("v1_chinese_today", "GET", "/api/v1/chinese/today", ('chinese', 'today'), False, (), (), False),
-    OperationInfo("v1_chinese_calendar_date", "GET", "/api/v1/chinese/calendar/{date}", ('chinese', 'calendar'), False, ('date',), (), False),
-    OperationInfo("v1_chinese_bazi_time_correction", "POST", "/api/v1/chinese/bazi/time-correction", ('chinese', 'bazi_time_correction'), True, (), (), False),
-    OperationInfo("v1_chinese_bazi_synastry", "POST", "/api/v1/chinese/bazi/synastry", ('chinese', 'bazi_synastry'), True, (), (), False),
-    OperationInfo("v1_chinese_bazi_lifespan", "POST", "/api/v1/chinese/bazi/lifespan", ('chinese', 'bazi_lifespan'), True, (), (), False),
-    OperationInfo("v1_chinese_bazi_health", "POST", "/api/v1/chinese/bazi/health", ('chinese', 'bazi_health'), True, (), (), False),
-    OperationInfo("v1_geo_search", "GET", "/api/v1/geo/search", ('geo', 'search_v1'), False, (), (), True),
+    OperationInfo("v1_vedic_strength", "POST", "/api/v1/vedic/strength", ('vedic', 'strength_v1'), True, (), (), False),
+    OperationInfo("v1_vedic_transits_insights", "POST", "/api/v1/vedic/transits/insights", ('vedic', 'transits', 'insights'), True, (), (), False),
+    OperationInfo("v1_vedic_vargas", "POST", "/api/v1/vedic/vargas", ('vedic', 'vargas_v1'), True, (), (), False),
+    OperationInfo("v1_vedic_yogas", "POST", "/api/v1/vedic/yogas", ('vedic', 'yogas_v1'), True, (), (), False),
+    OperationInfo("v1_western_astrocartography_city_check", "POST", "/api/v1/western/astrocartography/city-check", ('western', 'astrocartography', 'city_check'), True, (), (), False),
+    OperationInfo("v1_western_astrocartography_lines", "POST", "/api/v1/western/astrocartography/lines", ('western', 'astrocartography', 'lines'), True, (), (), False),
+    OperationInfo("v1_western_astrocartography_parans", "POST", "/api/v1/western/astrocartography/parans", ('western', 'astrocartography', 'parans'), True, (), (), False),
+    OperationInfo("v1_western_astrocartography_recommendations", "POST", "/api/v1/western/astrocartography/recommendations", ('western', 'astrocartography', 'recommendations'), True, (), (), False),
+    OperationInfo("v1_western_astrocartography_relocation", "POST", "/api/v1/western/astrocartography/relocation", ('western', 'astrocartography', 'relocation'), True, (), (), False),
+    OperationInfo("v1_western_directions_primary", "POST", "/api/v1/western/directions/primary", ('western', 'directions', 'primary'), True, (), (), False),
+    OperationInfo("v1_western_directions_primary_calendar", "POST", "/api/v1/western/directions/primary/calendar", ('western', 'directions', 'primary_calendar'), True, (), (), False),
+    OperationInfo("v1_western_directions_primary_exact_aspects", "POST", "/api/v1/western/directions/primary/exact-aspects", ('western', 'directions', 'primary_exact_aspects'), True, (), (), False),
+    OperationInfo("v1_western_directions_primary_search", "POST", "/api/v1/western/directions/primary/search", ('western', 'directions', 'primary_search'), True, (), (), False),
+    OperationInfo("v1_western_natal_insights", "POST", "/api/v1/western/natal/insights", ('western', 'natal', 'insights'), True, (), (), False),
+    OperationInfo("v1_western_natal_insights_index_documents", "POST", "/api/v1/western/natal/insights/index-documents", ('western', 'natal', 'insights_index_documents'), True, (), (), False),
+    OperationInfo("v1_western_profections_annual", "POST", "/api/v1/western/profections/annual", ('western', 'profections', 'annual'), True, (), (), False),
+    OperationInfo("v1_western_progressions_converse_secondary", "POST", "/api/v1/western/progressions/converse-secondary", ('western', 'progressions', 'converse_secondary'), True, (), (), False),
+    OperationInfo("v1_western_progressions_converse_secondary_calendar", "POST", "/api/v1/western/progressions/converse-secondary/calendar", ('western', 'progressions', 'converse_secondary_calendar'), True, (), (), False),
+    OperationInfo("v1_western_progressions_converse_secondary_exact_aspects", "POST", "/api/v1/western/progressions/converse-secondary/exact-aspects", ('western', 'progressions', 'converse_secondary_exact_aspects'), True, (), (), False),
+    OperationInfo("v1_western_progressions_converse_secondary_exact_ingresses", "POST", "/api/v1/western/progressions/converse-secondary/exact-ingresses", ('western', 'progressions', 'converse_secondary_exact_ingresses'), True, (), (), False),
+    OperationInfo("v1_western_progressions_quaternary", "POST", "/api/v1/western/progressions/quaternary", ('western', 'progressions', 'quaternary'), True, (), (), False),
+    OperationInfo("v1_western_progressions_quaternary_calendar", "POST", "/api/v1/western/progressions/quaternary/calendar", ('western', 'progressions', 'quaternary_calendar'), True, (), (), False),
+    OperationInfo("v1_western_progressions_quaternary_exact_aspects", "POST", "/api/v1/western/progressions/quaternary/exact-aspects", ('western', 'progressions', 'quaternary_exact_aspects'), True, (), (), False),
+    OperationInfo("v1_western_progressions_quaternary_exact_ingresses", "POST", "/api/v1/western/progressions/quaternary/exact-ingresses", ('western', 'progressions', 'quaternary_exact_ingresses'), True, (), (), False),
+    OperationInfo("v1_western_progressions_quotidian", "POST", "/api/v1/western/progressions/quotidian", ('western', 'progressions', 'quotidian'), True, (), (), False),
+    OperationInfo("v1_western_progressions_quotidian_calendar", "POST", "/api/v1/western/progressions/quotidian/calendar", ('western', 'progressions', 'quotidian_calendar'), True, (), (), False),
+    OperationInfo("v1_western_progressions_quotidian_exact_aspects", "POST", "/api/v1/western/progressions/quotidian/exact-aspects", ('western', 'progressions', 'quotidian_exact_aspects'), True, (), (), False),
+    OperationInfo("v1_western_progressions_quotidian_exact_ingresses", "POST", "/api/v1/western/progressions/quotidian/exact-ingresses", ('western', 'progressions', 'quotidian_exact_ingresses'), True, (), (), False),
+    OperationInfo("v1_western_progressions_secondary", "POST", "/api/v1/western/progressions/secondary", ('western', 'progressions', 'secondary'), True, (), (), False),
+    OperationInfo("v1_western_progressions_secondary_calendar", "POST", "/api/v1/western/progressions/secondary/calendar", ('western', 'progressions', 'secondary_calendar'), True, (), (), False),
+    OperationInfo("v1_western_progressions_secondary_exact_aspects", "POST", "/api/v1/western/progressions/secondary/exact-aspects", ('western', 'progressions', 'secondary_exact_aspects'), True, (), (), False),
+    OperationInfo("v1_western_progressions_secondary_exact_ingresses", "POST", "/api/v1/western/progressions/secondary/exact-ingresses", ('western', 'progressions', 'secondary_exact_ingresses'), True, (), (), False),
+    OperationInfo("v1_western_progressions_tertiary", "POST", "/api/v1/western/progressions/tertiary", ('western', 'progressions', 'tertiary'), True, (), (), False),
+    OperationInfo("v1_western_progressions_tertiary_calendar", "POST", "/api/v1/western/progressions/tertiary/calendar", ('western', 'progressions', 'tertiary_calendar'), True, (), (), False),
+    OperationInfo("v1_western_progressions_tertiary_exact_aspects", "POST", "/api/v1/western/progressions/tertiary/exact-aspects", ('western', 'progressions', 'tertiary_exact_aspects'), True, (), (), False),
+    OperationInfo("v1_western_progressions_tertiary_exact_ingresses", "POST", "/api/v1/western/progressions/tertiary/exact-ingresses", ('western', 'progressions', 'tertiary_exact_ingresses'), True, (), (), False),
+    OperationInfo("v1_western_returns_calculate", "POST", "/api/v1/western/returns/calculate", ('western', 'returns', 'calculate'), True, (), (), False),
+    OperationInfo("v1_western_signs_midheaven", "POST", "/api/v1/western/signs/midheaven", ('western', 'signs', 'midheaven'), True, (), (), False),
+    OperationInfo("v1_western_signs_moon", "POST", "/api/v1/western/signs/moon", ('western', 'signs', 'moon'), True, (), (), False),
+    OperationInfo("v1_western_signs_rising", "POST", "/api/v1/western/signs/rising", ('western', 'signs', 'rising'), True, (), (), False),
+    OperationInfo("v1_western_signs_sun", "POST", "/api/v1/western/signs/sun", ('western', 'signs', 'sun'), True, (), (), False),
+    OperationInfo("v1_western_solar_calculate", "POST", "/api/v1/western/solar/calculate", ('western', 'solar', 'calculate'), True, (), (), False),
     OperationInfo("v1_western_synastry", "POST", "/api/v1/western/synastry", ('western', 'synastry_v1'), True, (), (), False),
+    OperationInfo("v1_western_synastry_horoscope", "POST", "/api/v1/western/synastry/horoscope", ('western', 'synastry_horoscope_v1'), True, (), (), False),
     OperationInfo("v1_western_synastry_simplified", "POST", "/api/v1/western/synastry/simplified", ('western', 'synastry_simplified'), True, (), (), False),
     OperationInfo("v1_western_synastry_summary", "POST", "/api/v1/western/synastry/summary", ('western', 'synastry_summary'), True, (), (), False),
     OperationInfo("v1_western_synastrycards", "POST", "/api/v1/western/synastrycards", ('western', 'synastrycards_v1'), True, (), (), False),
-    OperationInfo("v1_western_synastry_horoscope", "POST", "/api/v1/western/synastry/horoscope", ('western', 'synastry_horoscope_v1'), True, (), (), False),
-    OperationInfo("v1_western_solar_calculate", "POST", "/api/v1/western/solar/calculate", ('western', 'solar', 'calculate'), True, (), (), False),
-    OperationInfo("v1_western_returns_calculate", "POST", "/api/v1/western/returns/calculate", ('western', 'returns', 'calculate'), True, (), (), False),
-    OperationInfo("v1_western_astrocartography_lines", "POST", "/api/v1/western/astrocartography/lines", ('western', 'astrocartography', 'lines'), True, (), (), False),
-    OperationInfo("v1_western_astrocartography_recommendations", "POST", "/api/v1/western/astrocartography/recommendations", ('western', 'astrocartography', 'recommendations'), True, (), (), False),
-    OperationInfo("v1_western_astrocartography_parans", "POST", "/api/v1/western/astrocartography/parans", ('western', 'astrocartography', 'parans'), True, (), (), False),
-    OperationInfo("v1_western_astrocartography_relocation", "POST", "/api/v1/western/astrocartography/relocation", ('western', 'astrocartography', 'relocation'), True, (), (), False),
-    OperationInfo("v1_western_astrocartography_city_check", "POST", "/api/v1/western/astrocartography/city-check", ('western', 'astrocartography', 'city_check'), True, (), (), False),
-    OperationInfo("v1_western_natal_insights", "POST", "/api/v1/western/natal/insights", ('western', 'natal', 'insights'), True, (), (), False),
-    OperationInfo("v1_western_natal_insights_index_documents", "POST", "/api/v1/western/natal/insights/index-documents", ('western', 'natal', 'insights_index_documents'), True, (), (), False),
     OperationInfo("v1_western_transits_insights", "POST", "/api/v1/western/transits/insights", ('western', 'transits', 'insights'), True, (), (), False),
+    OperationInfo("v1_western_transits_search", "POST", "/api/v1/western/transits/search", ('western', 'transits', 'search'), True, (), (), False),
     OperationInfo("v1_western_transits_timeline", "POST", "/api/v1/western/transits/timeline", ('western', 'transits', 'timeline'), True, (), (), False),
     OperationInfo("v1_western_transits_timeline_index_documents", "POST", "/api/v1/western/transits/timeline/index-documents", ('western', 'transits', 'timeline_index_documents'), True, (), (), False),
-    OperationInfo("v1_western_transits_search", "POST", "/api/v1/western/transits/search", ('western', 'transits', 'search'), True, (), (), False),
-    OperationInfo("v1_western_profections_annual", "POST", "/api/v1/western/profections/annual", ('western', 'profections', 'annual'), True, (), (), False),
-    OperationInfo("v1_western_progressions_secondary", "POST", "/api/v1/western/progressions/secondary", ('western', 'progressions', 'secondary'), True, (), (), False),
-    OperationInfo("v1_western_directions_primary", "POST", "/api/v1/western/directions/primary", ('western', 'directions', 'primary'), True, (), (), False),
-    OperationInfo("v1_western_directions_primary_exact_aspects", "POST", "/api/v1/western/directions/primary/exact-aspects", ('western', 'directions', 'primary_exact_aspects'), True, (), (), False),
-    OperationInfo("v1_western_directions_primary_search", "POST", "/api/v1/western/directions/primary/search", ('western', 'directions', 'primary_search'), True, (), (), False),
-    OperationInfo("v1_western_directions_primary_calendar", "POST", "/api/v1/western/directions/primary/calendar", ('western', 'directions', 'primary_calendar'), True, (), (), False),
-    OperationInfo("v1_western_progressions_converse_secondary", "POST", "/api/v1/western/progressions/converse-secondary", ('western', 'progressions', 'converse_secondary'), True, (), (), False),
-    OperationInfo("v1_western_progressions_tertiary", "POST", "/api/v1/western/progressions/tertiary", ('western', 'progressions', 'tertiary'), True, (), (), False),
-    OperationInfo("v1_western_progressions_quotidian", "POST", "/api/v1/western/progressions/quotidian", ('western', 'progressions', 'quotidian'), True, (), (), False),
-    OperationInfo("v1_western_progressions_quaternary", "POST", "/api/v1/western/progressions/quaternary", ('western', 'progressions', 'quaternary'), True, (), (), False),
-    OperationInfo("v1_western_progressions_secondary_exact_ingresses", "POST", "/api/v1/western/progressions/secondary/exact-ingresses", ('western', 'progressions', 'secondary_exact_ingresses'), True, (), (), False),
-    OperationInfo("v1_western_progressions_converse_secondary_exact_ingresses", "POST", "/api/v1/western/progressions/converse-secondary/exact-ingresses", ('western', 'progressions', 'converse_secondary_exact_ingresses'), True, (), (), False),
-    OperationInfo("v1_western_progressions_tertiary_exact_ingresses", "POST", "/api/v1/western/progressions/tertiary/exact-ingresses", ('western', 'progressions', 'tertiary_exact_ingresses'), True, (), (), False),
-    OperationInfo("v1_western_progressions_quotidian_exact_ingresses", "POST", "/api/v1/western/progressions/quotidian/exact-ingresses", ('western', 'progressions', 'quotidian_exact_ingresses'), True, (), (), False),
-    OperationInfo("v1_western_progressions_quaternary_exact_ingresses", "POST", "/api/v1/western/progressions/quaternary/exact-ingresses", ('western', 'progressions', 'quaternary_exact_ingresses'), True, (), (), False),
-    OperationInfo("v1_western_progressions_secondary_exact_aspects", "POST", "/api/v1/western/progressions/secondary/exact-aspects", ('western', 'progressions', 'secondary_exact_aspects'), True, (), (), False),
-    OperationInfo("v1_western_progressions_converse_secondary_exact_aspects", "POST", "/api/v1/western/progressions/converse-secondary/exact-aspects", ('western', 'progressions', 'converse_secondary_exact_aspects'), True, (), (), False),
-    OperationInfo("v1_western_progressions_tertiary_exact_aspects", "POST", "/api/v1/western/progressions/tertiary/exact-aspects", ('western', 'progressions', 'tertiary_exact_aspects'), True, (), (), False),
-    OperationInfo("v1_western_progressions_quotidian_exact_aspects", "POST", "/api/v1/western/progressions/quotidian/exact-aspects", ('western', 'progressions', 'quotidian_exact_aspects'), True, (), (), False),
-    OperationInfo("v1_western_progressions_quaternary_exact_aspects", "POST", "/api/v1/western/progressions/quaternary/exact-aspects", ('western', 'progressions', 'quaternary_exact_aspects'), True, (), (), False),
-    OperationInfo("v1_western_progressions_secondary_calendar", "POST", "/api/v1/western/progressions/secondary/calendar", ('western', 'progressions', 'secondary_calendar'), True, (), (), False),
-    OperationInfo("v1_western_progressions_converse_secondary_calendar", "POST", "/api/v1/western/progressions/converse-secondary/calendar", ('western', 'progressions', 'converse_secondary_calendar'), True, (), (), False),
-    OperationInfo("v1_western_progressions_tertiary_calendar", "POST", "/api/v1/western/progressions/tertiary/calendar", ('western', 'progressions', 'tertiary_calendar'), True, (), (), False),
-    OperationInfo("v1_western_progressions_quotidian_calendar", "POST", "/api/v1/western/progressions/quotidian/calendar", ('western', 'progressions', 'quotidian_calendar'), True, (), (), False),
-    OperationInfo("v1_western_progressions_quaternary_calendar", "POST", "/api/v1/western/progressions/quaternary/calendar", ('western', 'progressions', 'quaternary_calendar'), True, (), (), False),
-    OperationInfo("v1_western_signs_sun", "POST", "/api/v1/western/signs/sun", ('western', 'signs', 'sun'), True, (), (), False),
-    OperationInfo("v1_western_signs_moon", "POST", "/api/v1/western/signs/moon", ('western', 'signs', 'moon'), True, (), (), False),
-    OperationInfo("v1_western_signs_rising", "POST", "/api/v1/western/signs/rising", ('western', 'signs', 'rising'), True, (), (), False),
-    OperationInfo("v1_western_signs_midheaven", "POST", "/api/v1/western/signs/midheaven", ('western', 'signs', 'midheaven'), True, (), (), False),
-    OperationInfo("v1_horoscope_daily_sign", "GET", "/api/v1/horoscope/daily/sign", ('horoscope', 'daily', 'sign_v1'), False, (), ('sign',), False),
-    OperationInfo("v1_horoscope_daily_bulk", "GET", "/api/v1/horoscope/daily/bulk", ('horoscope', 'daily', 'bulk'), False, (), (), False),
-    OperationInfo("v1_horoscope_daily_personal", "POST", "/api/v1/horoscope/daily/personal", ('horoscope', 'daily', 'personal_v1'), True, (), (), False),
-    OperationInfo("v1_ai_generate", "POST", "/api/v1/ai/generate", ('ai', 'generate'), True, (), (), False),
-    OperationInfo("v1_moon_phase", "GET", "/api/v1/moon/phase", ('moon', 'phase'), False, (), (), False),
-    OperationInfo("v1_moon_month", "GET", "/api/v1/moon/month", ('moon', 'month'), False, (), ('year', 'month'), False),
-    OperationInfo("v1_space_chart", "POST", "/api/v1/space/chart", ('space', 'chart'), True, (), (), False),
-    OperationInfo("v1_space_chart_svg", "POST", "/api/v1/space/chart/svg", ('space', 'chart_svg'), True, (), (), False),
     OperationInfo("v2_geo_search", "GET", "/api/v2/geo/search", ('geo', 'search'), False, (), ('q',), False),
-    OperationInfo("v2_horoscope_daily_sign", "GET", "/api/v2/horoscope/daily/sign", ('horoscope', 'daily', 'sign_v2'), False, (), ('sign',), False),
     OperationInfo("v2_horoscope_daily_personal", "POST", "/api/v2/horoscope/daily/personal", ('horoscope', 'daily', 'personal_v2'), True, (), (), False),
-    OperationInfo("v2_vedic_chat", "POST", "/api/v2/vedic/chat", ('vedic', 'chat'), True, (), (), False),
+    OperationInfo("v2_horoscope_daily_sign", "GET", "/api/v2/horoscope/daily/sign", ('horoscope', 'daily', 'sign_v2'), False, (), ('sign',), False),
     OperationInfo("v2_vedic_calculate", "POST", "/api/v2/vedic/calculate", ('vedic', 'calculate'), True, (), (), False),
-    OperationInfo("v2_vedic_kp", "POST", "/api/v2/vedic/kp", ('vedic', 'kp'), True, (), (), False),
-    OperationInfo("v2_vedic_kp_render", "POST", "/api/v2/vedic/kp/render", ('vedic', 'kp_render'), True, (), (), False),
     OperationInfo("v2_vedic_chart", "POST", "/api/v2/vedic/chart", ('vedic', 'chart'), True, (), (), False),
-    OperationInfo("v2_vedic_visual_chart", "POST", "/api/v2/vedic/visual/chart", ('vedic', 'visual', 'chart'), True, (), (), False),
-    OperationInfo("v2_vedic_vargas", "POST", "/api/v2/vedic/vargas", ('vedic', 'vargas'), True, (), (), False),
+    OperationInfo("v2_vedic_chat", "POST", "/api/v2/vedic/chat", ('vedic', 'chat'), True, (), (), False),
+    OperationInfo("v2_vedic_compatibility", "POST", "/api/v2/vedic/compatibility", ('vedic', 'compatibility'), True, (), (), False),
     OperationInfo("v2_vedic_dasha", "POST", "/api/v2/vedic/dasha", ('vedic', 'dasha'), True, (), (), False),
     OperationInfo("v2_vedic_dasha_insights", "POST", "/api/v2/vedic/dasha/insights", ('vedic', 'dasha_insights'), True, (), (), False),
     OperationInfo("v2_vedic_gochar_timeline", "POST", "/api/v2/vedic/gochar/timeline", ('vedic', 'gochar', 'timeline'), True, (), (), False),
     OperationInfo("v2_vedic_gochar_timeline_insights", "POST", "/api/v2/vedic/gochar/timeline/insights", ('vedic', 'gochar', 'timeline_insights'), True, (), (), False),
-    OperationInfo("v2_vedic_horoscope_daily_sign", "GET", "/api/v2/vedic/horoscope/daily/sign", ('vedic', 'horoscope', 'daily_sign'), False, (), ('sign',), False),
     OperationInfo("v2_vedic_horoscope_daily_bulk", "GET", "/api/v2/vedic/horoscope/daily/bulk", ('vedic', 'horoscope', 'daily_bulk'), False, (), (), False),
     OperationInfo("v2_vedic_horoscope_daily_personal", "POST", "/api/v2/vedic/horoscope/daily/personal", ('vedic', 'horoscope', 'daily_personal'), True, (), (), False),
-    OperationInfo("v2_vedic_yogas", "POST", "/api/v2/vedic/yogas", ('vedic', 'yogas'), True, (), (), False),
-    OperationInfo("v2_vedic_strength", "POST", "/api/v2/vedic/strength", ('vedic', 'strength'), True, (), (), False),
-    OperationInfo("v2_vedic_compatibility", "POST", "/api/v2/vedic/compatibility", ('vedic', 'compatibility'), True, (), (), False),
+    OperationInfo("v2_vedic_horoscope_daily_sign", "GET", "/api/v2/vedic/horoscope/daily/sign", ('vedic', 'horoscope', 'daily_sign'), False, (), ('sign',), False),
+    OperationInfo("v2_vedic_kp", "POST", "/api/v2/vedic/kp", ('vedic', 'kp'), True, (), (), False),
+    OperationInfo("v2_vedic_kp_render", "POST", "/api/v2/vedic/kp/render", ('vedic', 'kp_render'), True, (), (), False),
     OperationInfo("v2_vedic_match", "POST", "/api/v2/vedic/match", ('vedic', 'match'), True, (), (), False),
+    OperationInfo("v2_vedic_muhurat_personalized_search", "POST", "/api/v2/vedic/muhurat/personalized-search", ('vedic', 'muhurat', 'personalized_search'), True, (), (), False),
+    OperationInfo("v2_vedic_muhurat_search", "POST", "/api/v2/vedic/muhurat/search", ('vedic', 'muhurat', 'search'), True, (), (), False),
     OperationInfo("v2_vedic_panchang", "POST", "/api/v2/vedic/panchang", ('vedic', 'panchang'), True, (), (), False),
     OperationInfo("v2_vedic_qa", "POST", "/api/v2/vedic/qa", ('vedic', 'qa'), True, (), (), False),
-    OperationInfo("v2_vedic_muhurat_search", "POST", "/api/v2/vedic/muhurat/search", ('vedic', 'muhurat', 'search'), True, (), (), False),
-    OperationInfo("v2_vedic_muhurat_personalized_search", "POST", "/api/v2/vedic/muhurat/personalized-search", ('vedic', 'muhurat', 'personalized_search'), True, (), (), False),
-    OperationInfo("v2_western_chat", "POST", "/api/v2/western/chat", ('western', 'chat'), True, (), (), False),
-    OperationInfo("v2_western_synastry", "POST", "/api/v2/western/synastry", ('western', 'synastry'), True, (), (), False),
-    OperationInfo("v2_western_synastrycards", "POST", "/api/v2/western/synastrycards", ('western', 'synastrycards'), True, (), (), False),
+    OperationInfo("v2_vedic_strength", "POST", "/api/v2/vedic/strength", ('vedic', 'strength'), True, (), (), False),
+    OperationInfo("v2_vedic_vargas", "POST", "/api/v2/vedic/vargas", ('vedic', 'vargas'), True, (), (), False),
+    OperationInfo("v2_vedic_visual_chart", "POST", "/api/v2/vedic/visual/chart", ('vedic', 'visual', 'chart'), True, (), (), False),
+    OperationInfo("v2_vedic_yogas", "POST", "/api/v2/vedic/yogas", ('vedic', 'yogas'), True, (), (), False),
     OperationInfo("v2_western_chart_similarity_famous_people", "POST", "/api/v2/western/chart-similarity/famous-people", ('western', 'chart_similarity', 'famous_people'), True, (), (), False),
-    OperationInfo("v2_western_synastry_horoscope", "POST", "/api/v2/western/synastry/horoscope", ('western', 'synastry_horoscope'), True, (), (), False),
-    OperationInfo("v2_western_electional_wedding_search", "POST", "/api/v2/western/electional/wedding/search", ('western', 'electional', 'wedding_search'), True, (), (), False),
-    OperationInfo("v2_western_electional_making_contracts_search", "POST", "/api/v2/western/electional/making-contracts/search", ('western', 'electional', 'making_contracts_search'), True, (), (), False),
-    OperationInfo("v2_western_electional_job_audition_search", "POST", "/api/v2/western/electional/job-audition/search", ('western', 'electional', 'job_audition_search'), True, (), (), False),
-    OperationInfo("v2_western_electional_purchase_property_search", "POST", "/api/v2/western/electional/purchase-property/search", ('western', 'electional', 'purchase_property_search'), True, (), (), False),
-    OperationInfo("v2_western_electional_purchase_car_search", "POST", "/api/v2/western/electional/purchase-car/search", ('western', 'electional', 'purchase_car_search'), True, (), (), False),
-    OperationInfo("v2_western_electional_move_into_new_home_search", "POST", "/api/v2/western/electional/move-into-new-home/search", ('western', 'electional', 'move_into_new_home_search'), True, (), (), False),
-    OperationInfo("v2_western_electional_starting_journey_search", "POST", "/api/v2/western/electional/starting-journey/search", ('western', 'electional', 'starting_journey_search'), True, (), (), False),
-    OperationInfo("v2_western_electional_legal_proceedings_search", "POST", "/api/v2/western/electional/legal-proceedings/search", ('western', 'electional', 'legal_proceedings_search'), True, (), (), False),
-    OperationInfo("v2_western_electional_physical_examination_search", "POST", "/api/v2/western/electional/physical-examination/search", ('western', 'electional', 'physical_examination_search'), True, (), (), False),
+    OperationInfo("v2_western_chat", "POST", "/api/v2/western/chat", ('western', 'chat'), True, (), (), False),
     OperationInfo("v2_western_electional_invest_money_search", "POST", "/api/v2/western/electional/invest-money/search", ('western', 'electional', 'invest_money_search'), True, (), (), False),
-    OperationInfo("v3_horoscope_daily_sign", "GET", "/api/v3/horoscope/daily/sign", ('horoscope', 'daily', 'sign'), False, (), ('sign',), False),
+    OperationInfo("v2_western_electional_job_audition_search", "POST", "/api/v2/western/electional/job-audition/search", ('western', 'electional', 'job_audition_search'), True, (), (), False),
+    OperationInfo("v2_western_electional_legal_proceedings_search", "POST", "/api/v2/western/electional/legal-proceedings/search", ('western', 'electional', 'legal_proceedings_search'), True, (), (), False),
+    OperationInfo("v2_western_electional_making_contracts_search", "POST", "/api/v2/western/electional/making-contracts/search", ('western', 'electional', 'making_contracts_search'), True, (), (), False),
+    OperationInfo("v2_western_electional_move_into_new_home_search", "POST", "/api/v2/western/electional/move-into-new-home/search", ('western', 'electional', 'move_into_new_home_search'), True, (), (), False),
+    OperationInfo("v2_western_electional_physical_examination_search", "POST", "/api/v2/western/electional/physical-examination/search", ('western', 'electional', 'physical_examination_search'), True, (), (), False),
+    OperationInfo("v2_western_electional_purchase_car_search", "POST", "/api/v2/western/electional/purchase-car/search", ('western', 'electional', 'purchase_car_search'), True, (), (), False),
+    OperationInfo("v2_western_electional_purchase_property_search", "POST", "/api/v2/western/electional/purchase-property/search", ('western', 'electional', 'purchase_property_search'), True, (), (), False),
+    OperationInfo("v2_western_electional_starting_journey_search", "POST", "/api/v2/western/electional/starting-journey/search", ('western', 'electional', 'starting_journey_search'), True, (), (), False),
+    OperationInfo("v2_western_electional_wedding_search", "POST", "/api/v2/western/electional/wedding/search", ('western', 'electional', 'wedding_search'), True, (), (), False),
+    OperationInfo("v2_western_synastry", "POST", "/api/v2/western/synastry", ('western', 'synastry'), True, (), (), False),
+    OperationInfo("v2_western_synastry_horoscope", "POST", "/api/v2/western/synastry/horoscope", ('western', 'synastry_horoscope'), True, (), (), False),
+    OperationInfo("v2_western_synastrycards", "POST", "/api/v2/western/synastrycards", ('western', 'synastrycards'), True, (), (), False),
     OperationInfo("v3_horoscope_daily_personal", "POST", "/api/v3/horoscope/daily/personal", ('horoscope', 'daily', 'personal'), True, (), (), False),
+    OperationInfo("v3_horoscope_daily_sign", "GET", "/api/v3/horoscope/daily/sign", ('horoscope', 'daily', 'sign'), False, (), ('sign',), False),
     OperationInfo("v3_horoscope_weekly_personal", "POST", "/api/v3/horoscope/weekly/personal", ('horoscope', 'weekly', 'personal'), True, (), (), False),
+    OperationInfo("simple_natal", "POST", "/natal", ('natal', 'simple'), True, (), (), False),
 )

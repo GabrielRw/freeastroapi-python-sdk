@@ -6,7 +6,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from email.utils import parsedate_to_datetime
-from typing import Any, Generic, TypeVar
+from typing import Any, Generic, Literal, TypeAlias, TypeVar
 
 import httpx
 
@@ -24,6 +24,10 @@ from .resources import (
 )
 
 T = TypeVar("T")
+
+#: How to read a successful body: ``auto`` parses JSON content types and returns other bodies
+#: as text, ``text`` always returns ``str`` and ``bytes`` returns ``bytes``.
+ResponseType: TypeAlias = Literal["auto", "text", "bytes"]
 
 DEFAULT_BASE_URL = "https://api.freeastroapi.com"
 DEFAULT_RETRY_STATUSES = frozenset({408, 429, 500, 502, 503, 504})
@@ -71,9 +75,13 @@ def _retry_after_seconds(response: httpx.Response) -> float | None:
             return None
 
 
-def _response_data(response: httpx.Response) -> Any:
+def _response_data(response: httpx.Response, response_type: ResponseType = "auto") -> Any:
     if response.status_code == 204:
         return None
+    if response_type == "bytes":
+        return response.content
+    if response_type == "text":
+        return response.text
     content_type = response.headers.get("content-type", "")
     if "application/json" in content_type or "+json" in content_type:
         return response.json()
@@ -98,9 +106,9 @@ class _ClientSettings:
         self.retry = retry
         self.headers = dict(headers or {})
 
-    def request_headers(self, options: RequestOptions) -> dict[str, str]:
+    def request_headers(self, options: RequestOptions, accept: str | None = None) -> dict[str, str]:
         headers = {key.lower(): value for key, value in {**self.headers, **options.headers}.items()}
-        headers.update({"accept": "application/json", "x-api-key": self.api_key})
+        headers.update({"accept": accept or "application/json", "x-api-key": self.api_key})
         if options.idempotency_key:
             headers["idempotency-key"] = options.idempotency_key
         return headers
@@ -165,8 +173,14 @@ class FreeAstro(GeneratedResources):
         params: Mapping[str, Any] | None = None,
         json: Any = None,
         options: RequestOptions | None = None,
+        accept: str | None = None,
+        response_type: ResponseType = "auto",
     ) -> Any:
-        return self.request_raw(method, path, params=params, json=json, options=options).data
+        """Send a request. ``accept`` sets the ``Accept`` header (default ``application/json``);
+        ``response_type`` picks how the body is read (see :data:`ResponseType`)."""
+        return self.request_raw(
+            method, path, params=params, json=json, options=options, accept=accept, response_type=response_type
+        ).data
 
     def request_raw(
         self,
@@ -176,6 +190,8 @@ class FreeAstro(GeneratedResources):
         params: Mapping[str, Any] | None = None,
         json: Any = None,
         options: RequestOptions | None = None,
+        accept: str | None = None,
+        response_type: ResponseType = "auto",
     ) -> SDKResponse[Any]:
         options = options or RequestOptions()
         method = method.upper()
@@ -189,7 +205,7 @@ class FreeAstro(GeneratedResources):
                     path,
                     params=params,
                     json=json,
-                    headers=self._settings.request_headers(options),
+                    headers=self._settings.request_headers(options, accept),
                     timeout=options.timeout if options.timeout is not None else self._settings.timeout,
                 )
             except httpx.TimeoutException as exc:
@@ -206,7 +222,7 @@ class FreeAstro(GeneratedResources):
                 raise NetworkError("Unable to reach FreeAstroAPI") from exc
 
             if response.is_success:
-                return SDKResponse(data=_response_data(response), response=response)
+                return SDKResponse(data=_response_data(response, response_type), response=response)
             if retry and response.status_code in retry.statuses and attempt < retry.retries:
                 delay = _retry_after_seconds(response)
                 time.sleep(min(delay if delay is not None else retry.base_delay * 2**attempt, retry.max_delay))
@@ -259,8 +275,15 @@ class AsyncFreeAstro(AsyncGeneratedResources):
         params: Mapping[str, Any] | None = None,
         json: Any = None,
         options: RequestOptions | None = None,
+        accept: str | None = None,
+        response_type: ResponseType = "auto",
     ) -> Any:
-        return (await self.request_raw(method, path, params=params, json=json, options=options)).data
+        """Send a request. ``accept`` sets the ``Accept`` header (default ``application/json``);
+        ``response_type`` picks how the body is read (see :data:`ResponseType`)."""
+        raw = await self.request_raw(
+            method, path, params=params, json=json, options=options, accept=accept, response_type=response_type
+        )
+        return raw.data
 
     async def request_raw(
         self,
@@ -270,6 +293,8 @@ class AsyncFreeAstro(AsyncGeneratedResources):
         params: Mapping[str, Any] | None = None,
         json: Any = None,
         options: RequestOptions | None = None,
+        accept: str | None = None,
+        response_type: ResponseType = "auto",
     ) -> SDKResponse[Any]:
         options = options or RequestOptions()
         method = method.upper()
@@ -283,7 +308,7 @@ class AsyncFreeAstro(AsyncGeneratedResources):
                     path,
                     params=params,
                     json=json,
-                    headers=self._settings.request_headers(options),
+                    headers=self._settings.request_headers(options, accept),
                     timeout=options.timeout if options.timeout is not None else self._settings.timeout,
                 )
             except httpx.TimeoutException as exc:
@@ -300,7 +325,7 @@ class AsyncFreeAstro(AsyncGeneratedResources):
                 raise NetworkError("Unable to reach FreeAstroAPI") from exc
 
             if response.is_success:
-                return SDKResponse(data=_response_data(response), response=response)
+                return SDKResponse(data=_response_data(response, response_type), response=response)
             if retry and response.status_code in retry.statuses and attempt < retry.retries:
                 delay = _retry_after_seconds(response)
                 await asyncio.sleep(min(delay if delay is not None else retry.base_delay * 2**attempt, retry.max_delay))

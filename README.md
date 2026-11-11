@@ -75,7 +75,11 @@ Resource groups: `ai`, `chinese`, `ephemeris`, `geo`, `horoscope`, `moon`, `nata
 
 Request bodies and responses are typed with `TypedDict`s generated from the spec's component schemas, in `freeastroapi.schemas`. They are plain dictionaries at runtime: responses are returned as parsed JSON without validation, so additive API fields never break your code. Where the spec does not describe a response, the method returns `Any`.
 
-Chart render endpoints (`client.vedic.kp_render`, `client.vedic.visual.chart`) return SVG as text; use `client.request_raw(...)` for PNG output.
+Operations with non-JSON responses send the matching `Accept` header and return `str` (SVG, Markdown) or `bytes` (PNG, PDF). The chart render endpoints (`client.vedic.kp_render`, `client.vedic.visual.chart`) return SVG as text; for PNG output read the body as bytes:
+
+```python
+png = client.request("POST", "/api/v2/vedic/kp/render", json={**birth, "format": "png"}, accept="image/png", response_type="bytes")
+```
 
 ### v0.1 methods
 
@@ -110,17 +114,62 @@ All API failures derive from `FreeAstroError`. Specific subclasses cover authent
 
 ```sh
 uv sync
+uv run python scripts/generate.py --check
 uv run ruff check .
 uv run mypy
-uv run pytest
+uv run pytest                                              # unit tests, generator tests
+uv run python scripts/with_prism.py -- uv run pytest -m contract   # needs Node.js for Prism
 uv run python -m build
 ```
 
-`src/freeastroapi/_generated.py` and `src/freeastroapi/schemas.py` are generated from `spec/freeastro.json`. To update them, copy the API's `public-spec/openapi/freeastro.json` into `spec/` and run `uv run python scripts/generate.py`. CI runs `python scripts/generate.py --check`.
+`src/freeastroapi/_generated.py` and `src/freeastroapi/schemas.py` are generated from `spec/freeastro.json` by `scripts/generate.py` (`uv run python scripts/generate.py`); `--check` fails when they are out of date. The generator's own tests (`tests/test_generator.py`) run it on a small synthetic spec (`tests/fixtures/synthetic-spec.json`) covering component names that are not identifiers, error response schemas, 201 responses and non-JSON bodies, and type-check the output with `mypy --strict`.
 
-## Releasing
+### Tests
 
-Bump `version` in `pyproject.toml` and `__version__` in `src/freeastroapi/__init__.py`, update `CHANGELOG.md`, then push a matching tag (`git tag v0.2.0 && git push origin v0.2.0`). The `Release` workflow runs the checks, builds, and publishes to PyPI with trusted publishing.
+| Command | What it runs |
+| --- | --- |
+| `pytest` | Unit tests with a mocked transport, including the generator tests. Contract and live tests are skipped. |
+| `python scripts/with_prism.py -- pytest -m contract` | Starts [Prism](https://github.com/stoplightio/prism) (pinned version, via `npx`) in mock mode on `spec/freeastro.json` and calls every operation through the SDK (`tests/contract/`). Prism rejects any request that does not match the spec, and each response must validate against the method's return type. With Prism already running: `PRISM_URL=http://127.0.0.1:4010 pytest -m contract`. |
+| `FREEASTRO_TEST_API_KEY=... pytest -m live` | Five read-only calls against production (`tests/live/`). |
+| `python3 -m unittest discover -s scripts -p "test_*.py"` | Tests for `scripts/spec_sync.py`. |
+
+Request values for the contract tests come from `python3 scripts/spec_sync.py samples spec/freeastro.json`, which builds a minimal valid request for every operation from its schema. The hand-written v0.1 models are stricter than the spec (fixed enums and keys the spec leaves open), so for those methods the contract tests check the raw response against the spec's schema type instead.
+
+## Maintaining
+
+### How the spec stays in sync
+
+Production (`https://api.freeastroapi.com/openapi.json`) is the source of truth: the API is deployed by hand, so the live document is what customers call.
+
+1. **`Sync spec` workflow** (`.github/workflows/sync-spec.yml`, daily and on demand) fetches the live spec with `scripts/spec_sync.py fetch`, which validates it and writes it normalised (sorted keys except schema `properties`, which keep the API's field order; 2-space indent) so diffs only show real changes.
+2. If it differs from `spec/freeastro.json`, the workflow regenerates the SDK, runs the full check (generate `--check`, ruff, mypy, pytest, build) and the Prism contract tests, and opens or updates a pull request from the `spec-sync/auto` branch, labelled `spec-sync`. If generation or a check fails, the workflow run fails and no pull request is opened.
+3. The pull request body is the output of `scripts/spec_sync.py diff`: added, removed and changed operations and schemas. Breaking changes (removed operations, parameters or request fields, newly required request fields or parameters, removed request enum values, removed response fields or content types, removed schemas) are listed first and the title starts with `BREAKING:`. The script never picks the version; you do.
+4. If production goes back to matching `main`, the next run closes the stale pull request.
+
+Pull requests opened with `GITHUB_TOKEN` do not trigger other workflows, so CI does not start on its own for `spec-sync/auto`; the sync run already ran the same checks. To get CI status on the pull request, run **Actions → CI → Run workflow** on the `spec-sync/auto` branch, or close and reopen the pull request.
+
+Run the same steps locally:
+
+```sh
+cp spec/freeastro.json /tmp/previous-spec.json
+python3 scripts/spec_sync.py fetch
+python3 scripts/spec_sync.py diff /tmp/previous-spec.json spec/freeastro.json
+uv run python scripts/generate.py && uv run pytest && uv run python scripts/with_prism.py -- uv run pytest -m contract
+```
+
+The **`Live smoke test` workflow** (`.github/workflows/live-smoke.yml`, daily and on demand) runs `pytest -m live` with the `FREEASTRO_TEST_API_KEY` repository secret: geo search, moon phase, western sun sign, a natal chart and a vedic panchang, without retries (5 requests a day). Without the secret it is skipped with a notice.
+
+`scripts/spec_sync.py` and `scripts/with_prism.py` are standard-library Python and identical in every FreeAstroAPI SDK repository; copy them, `tests/fixtures/synthetic-spec.json` and the three workflows when starting a new SDK, then swap in that language's generate, check and test commands.
+
+### Releasing
+
+After merging a spec-sync pull request (or any release-worthy change):
+
+1. Pick the version: breaking changes need a major bump (a minor bump while the SDK is 0.x), new operations or types a minor bump, anything else a patch.
+2. Bump `version` in `pyproject.toml` and `__version__` in `src/freeastroapi/__init__.py`, and add a `CHANGELOG.md` entry.
+3. Commit, then push a matching tag: `git tag v0.3.0 && git push origin v0.3.0`.
+
+The `Release` workflow checks that the tag matches `pyproject.toml`, runs the checks, builds, and publishes to PyPI with trusted publishing.
 
 Issues and contributions are welcome on [GitHub](https://github.com/GabrielRw/freeastroapi-python-sdk).
 

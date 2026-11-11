@@ -1,6 +1,6 @@
 from . import schemas
 from ._generated import OPERATIONS, OperationInfo
-from .client import AsyncFreeAstro, FreeAstro, RequestOptions, RetryConfig, SDKResponse
+from .client import AsyncFreeAstro, FreeAstro, RequestOptions, ResponseType, RetryConfig, SDKResponse
 from .errors import (
     AuthenticationError,
     ConflictError,
@@ -28,6 +28,7 @@ __all__ = [
     "PermissionError",
     "RateLimitError",
     "RequestOptions",
+    "ResponseType",
     "RetryConfig",
     "SDKResponse",
     "ServerError",
