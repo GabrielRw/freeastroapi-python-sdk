@@ -1,3 +1,5 @@
+from . import schemas
+from ._generated import OPERATIONS, OperationInfo
 from .client import AsyncFreeAstro, FreeAstro, RequestOptions, RetryConfig, SDKResponse
 from .errors import (
     AuthenticationError,
@@ -12,15 +14,17 @@ from .errors import (
 )
 from .models import *  # noqa: F403
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 __all__ = [
+    "OPERATIONS",
     "AsyncFreeAstro",
     "AuthenticationError",
     "ConflictError",
     "FreeAstro",
     "FreeAstroError",
     "NetworkError",
+    "OperationInfo",
     "PermissionError",
     "RateLimitError",
     "RequestOptions",
@@ -30,4 +34,5 @@ __all__ = [
     "TimeoutError",
     "ValidationError",
     "__version__",
+    "schemas",
 ]
