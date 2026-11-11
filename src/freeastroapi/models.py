@@ -16,7 +16,7 @@ class RequestModel(BaseModel):
 
 @cache
 def _adapter(annotation: Hashable) -> TypeAdapter[Any]:
-    return TypeAdapter(annotation)
+    return TypeAdapter(cast(Any, annotation))
 
 
 class ResponseModel(BaseModel):
