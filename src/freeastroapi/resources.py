@@ -25,6 +25,7 @@ from .models import (
     SkyEventsResponse,
     WesternSignRequest,
     WesternSignResponse,
+    decode,
 )
 
 if TYPE_CHECKING:
@@ -46,8 +47,9 @@ class GeoResource(GeoResourceBase):
         options: RequestOptions | None = None,
     ) -> CitySearchResponse:
         params = GeoSearchParams(q=q, limit=limit, country=country)
-        return CitySearchResponse.model_validate(
-            self._client.request("GET", "/api/v2/geo/search", params=_params(params), options=options)
+        return decode(
+            CitySearchResponse,
+            self._client.request("GET", "/api/v2/geo/search", params=_params(params), options=options),
         )
 
 
@@ -57,21 +59,24 @@ class MoonResource(MoonResourceBase):
         self, params: MoonPhaseParams | None = None, *, options: RequestOptions | None = None
     ) -> MoonPhaseResponse:
         query = params or MoonPhaseParams()
-        return MoonPhaseResponse.model_validate(
-            self._client.request("GET", "/api/v1/moon/phase", params=_params(query), options=options)
+        return decode(
+            MoonPhaseResponse,
+            self._client.request("GET", "/api/v1/moon/phase", params=_params(query), options=options),
         )
 
     def month(self, params: MoonMonthParams, *, options: RequestOptions | None = None) -> MoonMonthResponse:
-        return MoonMonthResponse.model_validate(
-            self._client.request("GET", "/api/v1/moon/month", params=_params(params), options=options)
+        return decode(
+            MoonMonthResponse,
+            self._client.request("GET", "/api/v1/moon/month", params=_params(params), options=options),
         )
 
 
 class SkyEventsResource(SkyEventsResourceBase):
 
     def list(self, params: SkyEventsParams, *, options: RequestOptions | None = None) -> SkyEventsResponse:
-        return SkyEventsResponse.model_validate(
-            self._client.request("GET", "/api/v1/sky-events", params=_params(params), options=options)
+        return decode(
+            SkyEventsResponse,
+            self._client.request("GET", "/api/v1/sky-events", params=_params(params), options=options),
         )
 
 
@@ -97,13 +102,14 @@ class WesternSignsResource:
         request: WesternSignRequest,
         options: RequestOptions | None,
     ) -> WesternSignResponse:
-        return WesternSignResponse.model_validate(
+        return decode(
+            WesternSignResponse,
             self._client.request(
                 "POST",
                 f"/api/v1/western/signs/{point}",
                 json=_params(request),
                 options=options,
-            )
+            ),
         )
 
 
@@ -125,7 +131,7 @@ class AsyncGeoResource(AsyncGeoResourceBase):
     ) -> CitySearchResponse:
         params = GeoSearchParams(q=q, limit=limit, country=country)
         data = await self._client.request("GET", "/api/v2/geo/search", params=_params(params), options=options)
-        return CitySearchResponse.model_validate(data)
+        return decode(CitySearchResponse, data)
 
 
 class AsyncMoonResource(AsyncMoonResourceBase):
@@ -135,18 +141,18 @@ class AsyncMoonResource(AsyncMoonResourceBase):
     ) -> MoonPhaseResponse:
         query = params or MoonPhaseParams()
         data = await self._client.request("GET", "/api/v1/moon/phase", params=_params(query), options=options)
-        return MoonPhaseResponse.model_validate(data)
+        return decode(MoonPhaseResponse, data)
 
     async def month(self, params: MoonMonthParams, *, options: RequestOptions | None = None) -> MoonMonthResponse:
         data = await self._client.request("GET", "/api/v1/moon/month", params=_params(params), options=options)
-        return MoonMonthResponse.model_validate(data)
+        return decode(MoonMonthResponse, data)
 
 
 class AsyncSkyEventsResource(AsyncSkyEventsResourceBase):
 
     async def list(self, params: SkyEventsParams, *, options: RequestOptions | None = None) -> SkyEventsResponse:
         data = await self._client.request("GET", "/api/v1/sky-events", params=_params(params), options=options)
-        return SkyEventsResponse.model_validate(data)
+        return decode(SkyEventsResponse, data)
 
 
 class AsyncWesternSignsResource:
@@ -181,7 +187,7 @@ class AsyncWesternSignsResource:
             json=_params(request),
             options=options,
         )
-        return WesternSignResponse.model_validate(data)
+        return decode(WesternSignResponse, data)
 
 
 class AsyncWesternResource(AsyncWesternResourceBase):

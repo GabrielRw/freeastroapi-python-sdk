@@ -32,14 +32,14 @@ class AiResource:
         body: schemas.AtomicReportRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.AtomicReportResponse:
         """Generate Atomic Report
 
         Generates a full astrological report using the Atomic Interpretation System.
 
         ``POST /api/v1/ai/generate``
         """
-        return self._client.request("POST", "/api/v1/ai/generate", params=None, json=body, options=options)
+        return cast("schemas.AtomicReportResponse", self._client.request("POST", "/api/v1/ai/generate", params=None, json=body, options=options))
 
 
 class ChineseResource:
@@ -51,7 +51,7 @@ class ChineseResource:
         body: schemas.BaziRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.BaziChartResponse:
         """Calculate BaZi (Four Pillars)
 
         Calculate Chinese BaZi (Four Pillars of Destiny) chart.
@@ -62,14 +62,14 @@ class ChineseResource:
 
         ``POST /api/v1/chinese/bazi``
         """
-        return self._client.request("POST", "/api/v1/chinese/bazi", params=None, json=body, options=options)
+        return cast("schemas.BaziChartResponse", self._client.request("POST", "/api/v1/chinese/bazi", params=None, json=body, options=options))
 
     def bazi_dictionary(
         self,
         *,
         lang: str | None = None,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.BaziDictionaryResponse:
         """Get Bazi Interaction & Star Dictionary
 
         Get the full mapping of Integer IDs to Interaction/Star definitions.
@@ -77,14 +77,14 @@ class ChineseResource:
 
         ``GET /api/v1/chinese/bazi/dictionary``
         """
-        return self._client.request("GET", "/api/v1/chinese/bazi/dictionary", params=_query({"lang": lang}), json=None, options=options)
+        return cast("schemas.BaziDictionaryResponse", self._client.request("GET", "/api/v1/chinese/bazi/dictionary", params=_query({"lang": lang}), json=None, options=options))
 
     def bazi_flow(
         self,
         body: schemas.BaziFlowRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.BaziFlowResponse:
         """Calculate BaZi Flow (Annual/Monthly Pillars)
 
         Calculate annual and monthly flow pillars for a specific target year.
@@ -92,28 +92,28 @@ class ChineseResource:
 
         ``POST /api/v1/chinese/bazi/flow``
         """
-        return self._client.request("POST", "/api/v1/chinese/bazi/flow", params=None, json=body, options=options)
+        return cast("schemas.BaziFlowResponse", self._client.request("POST", "/api/v1/chinese/bazi/flow", params=None, json=body, options=options))
 
     def bazi_health(
         self,
         body: schemas.BaziHealthRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.BaziHealthResponse:
         """Analyze BaZi Constitution & Health Tendencies
 
         Analyze BaZi chart for constitution and health tendency themes.
 
         ``POST /api/v1/chinese/bazi/health``
         """
-        return self._client.request("POST", "/api/v1/chinese/bazi/health", params=None, json=body, options=options)
+        return cast("schemas.BaziHealthResponse", self._client.request("POST", "/api/v1/chinese/bazi/health", params=None, json=body, options=options))
 
     def bazi_lifespan(
         self,
         body: schemas.BaziLifespanRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.BaziLifespanResponse:
         """Calculate Neijing Life Curve (Jing/Qi/Shen)
 
         Experimental: Calculate energy trajectory (Jing, Qi, Shen) across 0-120y lifespan.
@@ -121,28 +121,28 @@ class ChineseResource:
 
         ``POST /api/v1/chinese/bazi/lifespan``
         """
-        return self._client.request("POST", "/api/v1/chinese/bazi/lifespan", params=None, json=body, options=options)
+        return cast("schemas.BaziLifespanResponse", self._client.request("POST", "/api/v1/chinese/bazi/lifespan", params=None, json=body, options=options))
 
     def bazi_synastry(
         self,
         body: schemas.BaziSynastryRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.BaziSynastryResponse:
         """Calculate Bazi Compatibility (Synastry)
 
         Compare two charts for compatibility.
 
         ``POST /api/v1/chinese/bazi/synastry``
         """
-        return self._client.request("POST", "/api/v1/chinese/bazi/synastry", params=None, json=body, options=options)
+        return cast("schemas.BaziSynastryResponse", self._client.request("POST", "/api/v1/chinese/bazi/synastry", params=None, json=body, options=options))
 
     def bazi_time_correction(
         self,
         body: schemas.BaziTimeCorrectionRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.BaziTimeCorrectionResponse:
         """Calculate True Solar Time Corrections
 
         Get detailed breakdown of True Solar Time corrections.
@@ -150,7 +150,7 @@ class ChineseResource:
 
         ``POST /api/v1/chinese/bazi/time-correction``
         """
-        return self._client.request("POST", "/api/v1/chinese/bazi/time-correction", params=None, json=body, options=options)
+        return cast("schemas.BaziTimeCorrectionResponse", self._client.request("POST", "/api/v1/chinese/bazi/time-correction", params=None, json=body, options=options))
 
     def calendar(
         self,
@@ -175,7 +175,7 @@ class ChineseResource:
         include_pinyin: bool | None = None,
         lang: str | None = None,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.ChineseTodayResponse:
         """Get Current BaZi Pillars (Time Now)
 
         Get current year, month, day, and hour pillars for the present moment.
@@ -183,7 +183,7 @@ class ChineseResource:
 
         ``GET /api/v1/chinese/today``
         """
-        return self._client.request("GET", "/api/v1/chinese/today", params=_query({"include_pinyin": include_pinyin, "lang": lang}), json=None, options=options)
+        return cast("schemas.ChineseTodayResponse", self._client.request("GET", "/api/v1/chinese/today", params=_query({"include_pinyin": include_pinyin, "lang": lang}), json=None, options=options))
 
 
 class EphemerisResource:
@@ -226,24 +226,24 @@ class EphemerisResource:
         sign_display: Literal["abbr", "full"] | None = None,
         show_motion_markers: bool | None = None,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.EphemerisResponse:
         """Get Ephemeris
 
         ``GET /api/v1/ephemeris``
         """
-        return self._client.request("GET", "/api/v1/ephemeris", params=_query({"start": start, "end": end, "step": step, "zodiac_type": zodiac_type, "sidereal_ayanamsa": sidereal_ayanamsa, "house_system": house_system, "bodies": bodies, "include_angles": include_angles, "include_houses": include_houses, "include_speed": include_speed, "include_retrograde": include_retrograde, "include_dignity": include_dignity, "include_sign_degree": include_sign_degree, "include_aspects": include_aspects, "include_minor_aspects": include_minor_aspects, "include_moon_void_of_course": include_moon_void_of_course, "include_fixed_stars": include_fixed_stars, "fixed_stars": fixed_stars, "fixed_star_packs": fixed_star_packs, "lat": lat, "lng": lng, "tz_str": tz_str, "timezone": timezone, "dst_policy": dst_policy, "format": format, "response_mode": response_mode, "table_style": table_style, "include_sidereal_time": include_sidereal_time, "cell_format": cell_format, "include_chart_links": include_chart_links, "sign_display": sign_display, "show_motion_markers": show_motion_markers}), json=None, options=options)
+        return cast("schemas.EphemerisResponse", self._client.request("GET", "/api/v1/ephemeris", params=_query({"start": start, "end": end, "step": step, "zodiac_type": zodiac_type, "sidereal_ayanamsa": sidereal_ayanamsa, "house_system": house_system, "bodies": bodies, "include_angles": include_angles, "include_houses": include_houses, "include_speed": include_speed, "include_retrograde": include_retrograde, "include_dignity": include_dignity, "include_sign_degree": include_sign_degree, "include_aspects": include_aspects, "include_minor_aspects": include_minor_aspects, "include_moon_void_of_course": include_moon_void_of_course, "include_fixed_stars": include_fixed_stars, "fixed_stars": fixed_stars, "fixed_star_packs": fixed_star_packs, "lat": lat, "lng": lng, "tz_str": tz_str, "timezone": timezone, "dst_policy": dst_policy, "format": format, "response_mode": response_mode, "table_style": table_style, "include_sidereal_time": include_sidereal_time, "cell_format": cell_format, "include_chart_links": include_chart_links, "sign_display": sign_display, "show_motion_markers": show_motion_markers}), json=None, options=options))
 
     def calculate(
         self,
         body: schemas.EphemerisRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.EphemerisResponse:
         """Calculate Ephemeris
 
         ``POST /api/v1/ephemeris/calculate``
         """
-        return self._client.request("POST", "/api/v1/ephemeris/calculate", params=None, json=body, options=options)
+        return cast("schemas.EphemerisResponse", self._client.request("POST", "/api/v1/ephemeris/calculate", params=None, json=body, options=options))
 
 
 class GeoResourceBase:
@@ -282,28 +282,28 @@ class HoroscopeDailyResource:
         tz_str: str | None = None,
         locale: str | None = None,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.HoroscopeDailyBulkResponse:
         """Get Bulk Horoscope
 
         Get daily horoscope for ALL signs. Optimized for caching/newsletters.
 
         ``GET /api/v1/horoscope/daily/bulk``
         """
-        return cast("dict[str, Any]", self._client.request("GET", "/api/v1/horoscope/daily/bulk", params=_query({"date": date, "timezone": timezone, "tz_str": tz_str, "locale": locale}), json=None, options=options))
+        return cast("schemas.HoroscopeDailyBulkResponse", self._client.request("GET", "/api/v1/horoscope/daily/bulk", params=_query({"date": date, "timezone": timezone, "tz_str": tz_str, "locale": locale}), json=None, options=options))
 
     def personal_v1(
         self,
         body: schemas.PersonalHoroscopeRequestV1,
         *,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.HoroscopeDailyPersonalResponse:
         """Get Personal Horoscope
 
         Get personalized daily horoscope using natal chart + transits.
 
         ``POST /api/v1/horoscope/daily/personal``
         """
-        return cast("dict[str, Any]", self._client.request("POST", "/api/v1/horoscope/daily/personal", params=None, json=body, options=options))
+        return cast("schemas.HoroscopeDailyPersonalResponse", self._client.request("POST", "/api/v1/horoscope/daily/personal", params=None, json=body, options=options))
 
     def sign_v1(
         self,
@@ -318,26 +318,26 @@ class HoroscopeDailyResource:
         style: str | None = None,
         variant: str | None = None,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.HoroscopeDailySignResponse:
         """Get Sign Horoscope
 
         Get generic daily horoscope for a specific sign.
 
         ``GET /api/v1/horoscope/daily/sign``
         """
-        return cast("dict[str, Any]", self._client.request("GET", "/api/v1/horoscope/daily/sign", params=_query({"sign": sign, "date": date, "timezone": timezone, "tz_str": tz_str, "lang": lang, "locale": locale, "type": type, "style": style, "variant": variant}), json=None, options=options))
+        return cast("schemas.HoroscopeDailySignResponse", self._client.request("GET", "/api/v1/horoscope/daily/sign", params=_query({"sign": sign, "date": date, "timezone": timezone, "tz_str": tz_str, "lang": lang, "locale": locale, "type": type, "style": style, "variant": variant}), json=None, options=options))
 
     def personal_v2(
         self,
         body: schemas.PersonalHoroscopeRequestV2,
         *,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.HoroscopeDailyPersonalV2Response:
         """Get Personal Horoscope
 
         ``POST /api/v2/horoscope/daily/personal``
         """
-        return cast("dict[str, Any]", self._client.request("POST", "/api/v2/horoscope/daily/personal", params=None, json=body, options=options))
+        return cast("schemas.HoroscopeDailyPersonalV2Response", self._client.request("POST", "/api/v2/horoscope/daily/personal", params=None, json=body, options=options))
 
     def sign_v2(
         self,
@@ -348,24 +348,24 @@ class HoroscopeDailyResource:
         lang: str | None = None,
         locale: str | None = None,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.HoroscopeDailySignV2Response:
         """Get Sign Horoscope
 
         ``GET /api/v2/horoscope/daily/sign``
         """
-        return cast("dict[str, Any]", self._client.request("GET", "/api/v2/horoscope/daily/sign", params=_query({"sign": sign, "date": date, "tz_str": tz_str, "lang": lang, "locale": locale}), json=None, options=options))
+        return cast("schemas.HoroscopeDailySignV2Response", self._client.request("GET", "/api/v2/horoscope/daily/sign", params=_query({"sign": sign, "date": date, "tz_str": tz_str, "lang": lang, "locale": locale}), json=None, options=options))
 
     def personal(
         self,
         body: schemas.PersonalHoroscopeRequestV3,
         *,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.HoroscopeDailyPersonalV3Response:
         """Get Personal Horoscope
 
         ``POST /api/v3/horoscope/daily/personal``
         """
-        return cast("dict[str, Any]", self._client.request("POST", "/api/v3/horoscope/daily/personal", params=None, json=body, options=options))
+        return cast("schemas.HoroscopeDailyPersonalV3Response", self._client.request("POST", "/api/v3/horoscope/daily/personal", params=None, json=body, options=options))
 
     def sign(
         self,
@@ -380,7 +380,7 @@ class HoroscopeDailyResource:
         style: str | None = None,
         variant: str | None = None,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.HoroscopeDailySignV3Response:
         """Get Sign Horoscope
 
         Compatibility endpoint for playground clients that selected the V3 engine
@@ -389,7 +389,7 @@ class HoroscopeDailyResource:
 
         ``GET /api/v3/horoscope/daily/sign``
         """
-        return cast("dict[str, Any]", self._client.request("GET", "/api/v3/horoscope/daily/sign", params=_query({"sign": sign, "date": date, "timezone": timezone, "tz_str": tz_str, "lang": lang, "locale": locale, "type": type, "style": style, "variant": variant}), json=None, options=options))
+        return cast("schemas.HoroscopeDailySignV3Response", self._client.request("GET", "/api/v3/horoscope/daily/sign", params=_query({"sign": sign, "date": date, "timezone": timezone, "tz_str": tz_str, "lang": lang, "locale": locale, "type": type, "style": style, "variant": variant}), json=None, options=options))
 
 
 class HoroscopeWeeklyResource:
@@ -401,12 +401,12 @@ class HoroscopeWeeklyResource:
         body: schemas.WeeklyPersonalHoroscopeRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.HoroscopeWeeklyPersonalV3Response:
         """Get Weekly Personal Horoscope
 
         ``POST /api/v3/horoscope/weekly/personal``
         """
-        return cast("dict[str, Any]", self._client.request("POST", "/api/v3/horoscope/weekly/personal", params=None, json=body, options=options))
+        return cast("schemas.HoroscopeWeeklyPersonalV3Response", self._client.request("POST", "/api/v3/horoscope/weekly/personal", params=None, json=body, options=options))
 
 
 class HoroscopeResource:
@@ -430,32 +430,38 @@ class NatalExperimentalResource:
         body: schemas.ExperimentalSolarReturnChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> str:
         """Experimental Solar Return Chart
 
         Generate a bi-wheel or standalone chart for the exact solar return in a target year.
 
         ``POST /api/v1/natal/experimental/solar-return``
 
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v1/natal/experimental/solar-return", ..., response_type="bytes")``.
+
         .. deprecated:: this operation is deprecated by the API.
         """
-        return self._client.request("POST", "/api/v1/natal/experimental/solar-return", params=None, json=body, options=options)
+        return cast("str", self._client.request("POST", "/api/v1/natal/experimental/solar-return", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
 
     def transits(
         self,
         body: schemas.ExperimentalTransitChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> str:
         """Experimental Transits Chart
 
         Generate a bi-wheel chart with natal planets inside and transits outside.
 
         ``POST /api/v1/natal/experimental/transits``
 
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v1/natal/experimental/transits", ..., response_type="bytes")``.
+
         .. deprecated:: this operation is deprecated by the API.
         """
-        return self._client.request("POST", "/api/v1/natal/experimental/transits", params=None, json=body, options=options)
+        return cast("str", self._client.request("POST", "/api/v1/natal/experimental/transits", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
 
 
 class NatalResource:
@@ -470,125 +476,146 @@ class NatalResource:
         include_minor: bool | None = None,
         include_stelliums: bool | None = None,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.NatalCalculateResponse:
         """Calculate Natal
 
         Calculate natal chart with planetary positions, houses, and aspects.
 
         ``POST /api/v1/natal/calculate``
         """
-        return self._client.request("POST", "/api/v1/natal/calculate", params=_query({"include_minor": include_minor, "include_stelliums": include_stelliums}), json=body, options=options)
+        return cast("schemas.NatalCalculateResponse", self._client.request("POST", "/api/v1/natal/calculate", params=_query({"include_minor": include_minor, "include_stelliums": include_stelliums}), json=body, options=options))
 
     def chart(
         self,
         body: schemas.ExperimentalNatalChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> str:
         """Experimental Natal Chart
 
         Render a natal chart using the bundled natal library.
 
         ``POST /api/v1/natal/chart/``
+
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v1/natal/chart/", ..., response_type="bytes")``.
         """
-        return self._client.request("POST", "/api/v1/natal/chart/", params=None, json=body, options=options)
+        return cast("str", self._client.request("POST", "/api/v1/natal/chart/", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
 
     def chart_composite(
         self,
         body: schemas.ExperimentalCompositeChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> str:
         """Experimental Composite Chart
 
         Midpoint composite single-wheel chart endpoint.
         Renders a standalone composite chart from two people, reusing the natal SVG renderer.
 
         ``POST /api/v1/natal/chart/composite``
+
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v1/natal/chart/composite", ..., response_type="bytes")``.
         """
-        return self._client.request("POST", "/api/v1/natal/chart/composite", params=None, json=body, options=options)
+        return cast("str", self._client.request("POST", "/api/v1/natal/chart/composite", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
 
     def chart_progressions(
         self,
         body: schemas.ExperimentalSecondaryProgressionsChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> str:
         """Experimental Secondary Progressions Chart
 
         Generate a bi-wheel chart with natal planets inside and secondary progressed planets outside.
 
         ``POST /api/v1/natal/chart/progressions``
+
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v1/natal/chart/progressions", ..., response_type="bytes")``.
         """
-        return self._client.request("POST", "/api/v1/natal/chart/progressions", params=None, json=body, options=options)
+        return cast("str", self._client.request("POST", "/api/v1/natal/chart/progressions", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
 
     def chart_secondary_progressions(
         self,
         body: schemas.ExperimentalSecondaryProgressionsChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> str:
         """Experimental Secondary Progressions Chart
 
         Generate a bi-wheel chart with natal planets inside and secondary progressed planets outside.
 
         ``POST /api/v1/natal/chart/secondary-progressions``
+
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v1/natal/chart/secondary-progressions", ..., response_type="bytes")``.
         """
-        return self._client.request("POST", "/api/v1/natal/chart/secondary-progressions", params=None, json=body, options=options)
+        return cast("str", self._client.request("POST", "/api/v1/natal/chart/secondary-progressions", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
 
     def chart_solar_return(
         self,
         body: schemas.ExperimentalSolarReturnChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> str:
         """Experimental Solar Return Chart
 
         Generate a bi-wheel or standalone chart for the exact solar return in a target year.
 
         ``POST /api/v1/natal/chart/solar-return``
+
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v1/natal/chart/solar-return", ..., response_type="bytes")``.
         """
-        return self._client.request("POST", "/api/v1/natal/chart/solar-return", params=None, json=body, options=options)
+        return cast("str", self._client.request("POST", "/api/v1/natal/chart/solar-return", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
 
     def chart_synastry(
         self,
         body: schemas.ExperimentalSynastryChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> str:
         """Experimental Synastry Chart
 
         Synastry bi-wheel chart endpoint.
         Renders person A (outer) and person B (inner) with optional B house ring and inter-aspects.
 
         ``POST /api/v1/natal/chart/synastry``
+
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v1/natal/chart/synastry", ..., response_type="bytes")``.
         """
-        return self._client.request("POST", "/api/v1/natal/chart/synastry", params=None, json=body, options=options)
+        return cast("str", self._client.request("POST", "/api/v1/natal/chart/synastry", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
 
     def chart_transits(
         self,
         body: schemas.ExperimentalTransitChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> str:
         """Experimental Transits Chart
 
         Generate a bi-wheel chart with natal planets inside and transits outside.
 
         ``POST /api/v1/natal/chart/transits``
+
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v1/natal/chart/transits", ..., response_type="bytes")``.
         """
-        return self._client.request("POST", "/api/v1/natal/chart/transits", params=None, json=body, options=options)
+        return cast("str", self._client.request("POST", "/api/v1/natal/chart/transits", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
 
     def report_credits(
         self,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.ReportCreditsResponse:
         """Get Report Credits For Api Key
 
         ``GET /api/v1/natal/report-credits``
         """
-        return self._client.request("GET", "/api/v1/natal/report-credits", params=None, json=None, options=options)
+        return cast("schemas.ReportCreditsResponse", self._client.request("GET", "/api/v1/natal/report-credits", params=None, json=None, options=options))
 
     def report(
         self,
@@ -597,19 +624,22 @@ class NatalResource:
         format: Literal["json", "pdf"] | None = None,
         include_profile_branding_logo: bool | None = None,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.PsychologicalReportJobResponse:
         """Get Psychological Report
 
         ``GET /api/v1/natal/report/{job_id}``
+
+        Also available as application/pdf: call
+        ``client.request("GET", "/api/v1/natal/report/{job_id}", ..., accept="application/pdf", response_type="bytes")``.
         """
-        return self._client.request("GET", f"/api/v1/natal/report/{_path(job_id)}", params=_query({"format": format, "include_profile_branding_logo": include_profile_branding_logo}), json=None, options=options)
+        return cast("schemas.PsychologicalReportJobResponse", self._client.request("GET", f"/api/v1/natal/report/{_path(job_id)}", params=_query({"format": format, "include_profile_branding_logo": include_profile_branding_logo}), json=None, options=options))
 
     def simple(
         self,
         body: schemas.SimpleNatalRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.SimpleNatalResponse:
         """Calculate Simple Natal
 
         A simplified natal endpoint for developer-facing apps.
@@ -617,7 +647,7 @@ class NatalResource:
 
         ``POST /natal``
         """
-        return self._client.request("POST", "/natal", params=None, json=body, options=options)
+        return cast("schemas.SimpleNatalResponse", self._client.request("POST", "/natal", params=None, json=body, options=options))
 
 
 class NumerologyResource:
@@ -675,26 +705,28 @@ class SpaceResource:
         body: schemas.SpaceChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.SpaceChartResponse:
         """Space Chart
 
         ``POST /api/v1/space/chart``
         """
-        return self._client.request("POST", "/api/v1/space/chart", params=None, json=body, options=options)
+        return cast("schemas.SpaceChartResponse", self._client.request("POST", "/api/v1/space/chart", params=None, json=body, options=options))
 
     def chart_svg(
         self,
         body: schemas.SpaceChartSvgRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> str:
         """Space Chart Svg
 
         The chart wheel, drawn by the natal chart renderer with the same themes and options.
 
         ``POST /api/v1/space/chart/svg``
+
+        Returns the response body (image/svg+xml) as text.
         """
-        return self._client.request("POST", "/api/v1/space/chart/svg", params=None, json=body, options=options)
+        return cast("str", self._client.request("POST", "/api/v1/space/chart/svg", params=None, json=body, options=options, accept="image/svg+xml", response_type="text"))
 
 
 class TransitsResource:
@@ -707,14 +739,14 @@ class TransitsResource:
         *,
         include_minor: bool | None = None,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.TransitsCalculateResponse:
         """Calculate Transits
 
         Calculate planetary transits relative to natal chart.
 
         ``POST /api/v1/transits/calculate``
         """
-        return self._client.request("POST", "/api/v1/transits/calculate", params=_query({"include_minor": include_minor}), json=body, options=options)
+        return cast("schemas.TransitsCalculateResponse", self._client.request("POST", "/api/v1/transits/calculate", params=_query({"include_minor": include_minor}), json=body, options=options))
 
 
 class VedicGocharResource:
@@ -927,7 +959,7 @@ class VedicResource:
         body: schemas.VedicBatchRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.VedicBatchResponse:
         """Run Vedic Batch
 
         Run up to 6 single-person Vedic endpoint calls in one HTTP request.
@@ -935,14 +967,14 @@ class VedicResource:
 
         ``POST /api/v1/vedic/batch``
         """
-        return self._client.request("POST", "/api/v1/vedic/batch", params=None, json=body, options=options)
+        return cast("schemas.VedicBatchResponse", self._client.request("POST", "/api/v1/vedic/batch", params=None, json=body, options=options))
 
     def calculate_v1(
         self,
         body: schemas.VedicChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.VedicCalculateResponse:
         """Calculate Full Chart
 
         Full Vedic chart with all optional features.
@@ -950,14 +982,14 @@ class VedicResource:
 
         ``POST /api/v1/vedic/calculate``
         """
-        return self._client.request("POST", "/api/v1/vedic/calculate", params=None, json=body, options=options)
+        return cast("schemas.VedicCalculateResponse", self._client.request("POST", "/api/v1/vedic/calculate", params=None, json=body, options=options))
 
     def chart_v1(
         self,
         body: schemas.BaseChartRequestV1,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.VedicChartResponse:
         """Get Basic Chart
 
         Get basic Vedic chart: Planets + Houses + Ascendant.
@@ -965,14 +997,14 @@ class VedicResource:
 
         ``POST /api/v1/vedic/chart``
         """
-        return self._client.request("POST", "/api/v1/vedic/chart", params=None, json=body, options=options)
+        return cast("schemas.VedicChartResponse", self._client.request("POST", "/api/v1/vedic/chart", params=None, json=body, options=options))
 
     def compatibility_v1(
         self,
         body: schemas.CompatibilityRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.VedicCompatibilityResponse:
         """Calculate Compatibility
 
         Calculate Ashtakoota (8-point) compatibility.
@@ -980,21 +1012,21 @@ class VedicResource:
 
         ``POST /api/v1/vedic/compatibility``
         """
-        return self._client.request("POST", "/api/v1/vedic/compatibility", params=None, json=body, options=options)
+        return cast("schemas.VedicCompatibilityResponse", self._client.request("POST", "/api/v1/vedic/compatibility", params=None, json=body, options=options))
 
     def dasha_v1(
         self,
         body: schemas.DashaRequestV1,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.VedicDashaResponse:
         """Get Dasha
 
         Get Vimshottari Dasha timeline only.
 
         ``POST /api/v1/vedic/dasha``
         """
-        return self._client.request("POST", "/api/v1/vedic/dasha", params=None, json=body, options=options)
+        return cast("schemas.VedicDashaResponse", self._client.request("POST", "/api/v1/vedic/dasha", params=None, json=body, options=options))
 
     def dasha_insights_v1(
         self,
@@ -1015,7 +1047,7 @@ class VedicResource:
         body: schemas.MatchRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.VedicMatchResponse:
         """Match Birth Details
 
         Calculate compatibility using birth details directly.
@@ -1023,63 +1055,63 @@ class VedicResource:
 
         ``POST /api/v1/vedic/match``
         """
-        return self._client.request("POST", "/api/v1/vedic/match", params=None, json=body, options=options)
+        return cast("schemas.VedicMatchResponse", self._client.request("POST", "/api/v1/vedic/match", params=None, json=body, options=options))
 
     def panchang_v1(
         self,
         body: schemas.PanchangRequestV1,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.VedicPanchangResponse:
         """Get Panchang
 
         Get Panchang (daily almanac): Tithi, Nakshatra, Yoga, Karana, Rahu Kalam.
 
         ``POST /api/v1/vedic/panchang``
         """
-        return self._client.request("POST", "/api/v1/vedic/panchang", params=None, json=body, options=options)
+        return cast("schemas.VedicPanchangResponse", self._client.request("POST", "/api/v1/vedic/panchang", params=None, json=body, options=options))
 
     def strength_v1(
         self,
         body: schemas.BaseChartRequestV1,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.VedicStrengthResponse:
         """Get Strength
 
         Get planetary strength: Shadbala + Ashtakavarga.
 
         ``POST /api/v1/vedic/strength``
         """
-        return self._client.request("POST", "/api/v1/vedic/strength", params=None, json=body, options=options)
+        return cast("schemas.VedicStrengthResponse", self._client.request("POST", "/api/v1/vedic/strength", params=None, json=body, options=options))
 
     def vargas_v1(
         self,
         body: schemas.VargaRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.VedicVargasResponse:
         """Get Vargas
 
         Get divisional chart positions (D1, D9, D10, etc).
 
         ``POST /api/v1/vedic/vargas``
         """
-        return self._client.request("POST", "/api/v1/vedic/vargas", params=None, json=body, options=options)
+        return cast("schemas.VedicVargasResponse", self._client.request("POST", "/api/v1/vedic/vargas", params=None, json=body, options=options))
 
     def yogas_v1(
         self,
         body: schemas.BaseChartRequestV1,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.VedicYogasResponse:
         """Get Yogas
 
         Get detected Yogas only (Manglik, Kala Sarpa, Raj Yogas, etc).
 
         ``POST /api/v1/vedic/yogas``
         """
-        return self._client.request("POST", "/api/v1/vedic/yogas", params=None, json=body, options=options)
+        return cast("schemas.VedicYogasResponse", self._client.request("POST", "/api/v1/vedic/yogas", params=None, json=body, options=options))
 
     def calculate(
         self,
@@ -1291,70 +1323,70 @@ class WesternAstrocartographyResource:
         body: schemas.AstrocartographyCityCheckRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.AstrocartographyCityCheckResponse:
         """Get Astrocartography City Check
 
         Score a single city across the five primary relocation-oriented focus areas.
 
         ``POST /api/v1/western/astrocartography/city-check``
         """
-        return cast("dict[str, Any]", self._client.request("POST", "/api/v1/western/astrocartography/city-check", params=None, json=body, options=options))
+        return cast("schemas.AstrocartographyCityCheckResponse", self._client.request("POST", "/api/v1/western/astrocartography/city-check", params=None, json=body, options=options))
 
     def lines(
         self,
         body: schemas.AstrocartographyLinesRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.AstrocartographyLinesResponse:
         """Get Astrocartography Lines
 
         Compute astrocartography map lines for a natal chart.
 
         ``POST /api/v1/western/astrocartography/lines``
         """
-        return cast("dict[str, Any]", self._client.request("POST", "/api/v1/western/astrocartography/lines", params=None, json=body, options=options))
+        return cast("schemas.AstrocartographyLinesResponse", self._client.request("POST", "/api/v1/western/astrocartography/lines", params=None, json=body, options=options))
 
     def parans(
         self,
         body: schemas.AstrocartographyParansRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.AstrocartographyParansResponse:
         """Get Astrocartography Parans
 
         Compute classical in-mundo astrocartography parans for a natal chart.
 
         ``POST /api/v1/western/astrocartography/parans``
         """
-        return cast("dict[str, Any]", self._client.request("POST", "/api/v1/western/astrocartography/parans", params=None, json=body, options=options))
+        return cast("schemas.AstrocartographyParansResponse", self._client.request("POST", "/api/v1/western/astrocartography/parans", params=None, json=body, options=options))
 
     def recommendations(
         self,
         body: schemas.AstrocartographyRecommendationsRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.AstrocartographyRecommendationsResponse:
         """Get Astrocartography Recommendations
 
         Rank candidate cities for a focus-oriented astrocartography search.
 
         ``POST /api/v1/western/astrocartography/recommendations``
         """
-        return cast("dict[str, Any]", self._client.request("POST", "/api/v1/western/astrocartography/recommendations", params=None, json=body, options=options))
+        return cast("schemas.AstrocartographyRecommendationsResponse", self._client.request("POST", "/api/v1/western/astrocartography/recommendations", params=None, json=body, options=options))
 
     def relocation(
         self,
         body: schemas.AstrocartographyRelocationRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.AstrocartographyRelocationResponse:
         """Get Astrocartography Relocation
 
         Build a full relocated chart for the natal instant at a target city.
 
         ``POST /api/v1/western/astrocartography/relocation``
         """
-        return cast("dict[str, Any]", self._client.request("POST", "/api/v1/western/astrocartography/relocation", params=None, json=body, options=options))
+        return cast("schemas.AstrocartographyRelocationResponse", self._client.request("POST", "/api/v1/western/astrocartography/relocation", params=None, json=body, options=options))
 
 
 class WesternDirectionsResource:
@@ -2146,14 +2178,14 @@ class AsyncAiResource:
         body: schemas.AtomicReportRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.AtomicReportResponse:
         """Generate Atomic Report
 
         Generates a full astrological report using the Atomic Interpretation System.
 
         ``POST /api/v1/ai/generate``
         """
-        return await self._client.request("POST", "/api/v1/ai/generate", params=None, json=body, options=options)
+        return cast("schemas.AtomicReportResponse", await self._client.request("POST", "/api/v1/ai/generate", params=None, json=body, options=options))
 
 
 class AsyncChineseResource:
@@ -2165,7 +2197,7 @@ class AsyncChineseResource:
         body: schemas.BaziRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.BaziChartResponse:
         """Calculate BaZi (Four Pillars)
 
         Calculate Chinese BaZi (Four Pillars of Destiny) chart.
@@ -2176,14 +2208,14 @@ class AsyncChineseResource:
 
         ``POST /api/v1/chinese/bazi``
         """
-        return await self._client.request("POST", "/api/v1/chinese/bazi", params=None, json=body, options=options)
+        return cast("schemas.BaziChartResponse", await self._client.request("POST", "/api/v1/chinese/bazi", params=None, json=body, options=options))
 
     async def bazi_dictionary(
         self,
         *,
         lang: str | None = None,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.BaziDictionaryResponse:
         """Get Bazi Interaction & Star Dictionary
 
         Get the full mapping of Integer IDs to Interaction/Star definitions.
@@ -2191,14 +2223,14 @@ class AsyncChineseResource:
 
         ``GET /api/v1/chinese/bazi/dictionary``
         """
-        return await self._client.request("GET", "/api/v1/chinese/bazi/dictionary", params=_query({"lang": lang}), json=None, options=options)
+        return cast("schemas.BaziDictionaryResponse", await self._client.request("GET", "/api/v1/chinese/bazi/dictionary", params=_query({"lang": lang}), json=None, options=options))
 
     async def bazi_flow(
         self,
         body: schemas.BaziFlowRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.BaziFlowResponse:
         """Calculate BaZi Flow (Annual/Monthly Pillars)
 
         Calculate annual and monthly flow pillars for a specific target year.
@@ -2206,28 +2238,28 @@ class AsyncChineseResource:
 
         ``POST /api/v1/chinese/bazi/flow``
         """
-        return await self._client.request("POST", "/api/v1/chinese/bazi/flow", params=None, json=body, options=options)
+        return cast("schemas.BaziFlowResponse", await self._client.request("POST", "/api/v1/chinese/bazi/flow", params=None, json=body, options=options))
 
     async def bazi_health(
         self,
         body: schemas.BaziHealthRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.BaziHealthResponse:
         """Analyze BaZi Constitution & Health Tendencies
 
         Analyze BaZi chart for constitution and health tendency themes.
 
         ``POST /api/v1/chinese/bazi/health``
         """
-        return await self._client.request("POST", "/api/v1/chinese/bazi/health", params=None, json=body, options=options)
+        return cast("schemas.BaziHealthResponse", await self._client.request("POST", "/api/v1/chinese/bazi/health", params=None, json=body, options=options))
 
     async def bazi_lifespan(
         self,
         body: schemas.BaziLifespanRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.BaziLifespanResponse:
         """Calculate Neijing Life Curve (Jing/Qi/Shen)
 
         Experimental: Calculate energy trajectory (Jing, Qi, Shen) across 0-120y lifespan.
@@ -2235,28 +2267,28 @@ class AsyncChineseResource:
 
         ``POST /api/v1/chinese/bazi/lifespan``
         """
-        return await self._client.request("POST", "/api/v1/chinese/bazi/lifespan", params=None, json=body, options=options)
+        return cast("schemas.BaziLifespanResponse", await self._client.request("POST", "/api/v1/chinese/bazi/lifespan", params=None, json=body, options=options))
 
     async def bazi_synastry(
         self,
         body: schemas.BaziSynastryRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.BaziSynastryResponse:
         """Calculate Bazi Compatibility (Synastry)
 
         Compare two charts for compatibility.
 
         ``POST /api/v1/chinese/bazi/synastry``
         """
-        return await self._client.request("POST", "/api/v1/chinese/bazi/synastry", params=None, json=body, options=options)
+        return cast("schemas.BaziSynastryResponse", await self._client.request("POST", "/api/v1/chinese/bazi/synastry", params=None, json=body, options=options))
 
     async def bazi_time_correction(
         self,
         body: schemas.BaziTimeCorrectionRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.BaziTimeCorrectionResponse:
         """Calculate True Solar Time Corrections
 
         Get detailed breakdown of True Solar Time corrections.
@@ -2264,7 +2296,7 @@ class AsyncChineseResource:
 
         ``POST /api/v1/chinese/bazi/time-correction``
         """
-        return await self._client.request("POST", "/api/v1/chinese/bazi/time-correction", params=None, json=body, options=options)
+        return cast("schemas.BaziTimeCorrectionResponse", await self._client.request("POST", "/api/v1/chinese/bazi/time-correction", params=None, json=body, options=options))
 
     async def calendar(
         self,
@@ -2289,7 +2321,7 @@ class AsyncChineseResource:
         include_pinyin: bool | None = None,
         lang: str | None = None,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.ChineseTodayResponse:
         """Get Current BaZi Pillars (Time Now)
 
         Get current year, month, day, and hour pillars for the present moment.
@@ -2297,7 +2329,7 @@ class AsyncChineseResource:
 
         ``GET /api/v1/chinese/today``
         """
-        return await self._client.request("GET", "/api/v1/chinese/today", params=_query({"include_pinyin": include_pinyin, "lang": lang}), json=None, options=options)
+        return cast("schemas.ChineseTodayResponse", await self._client.request("GET", "/api/v1/chinese/today", params=_query({"include_pinyin": include_pinyin, "lang": lang}), json=None, options=options))
 
 
 class AsyncEphemerisResource:
@@ -2340,24 +2372,24 @@ class AsyncEphemerisResource:
         sign_display: Literal["abbr", "full"] | None = None,
         show_motion_markers: bool | None = None,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.EphemerisResponse:
         """Get Ephemeris
 
         ``GET /api/v1/ephemeris``
         """
-        return await self._client.request("GET", "/api/v1/ephemeris", params=_query({"start": start, "end": end, "step": step, "zodiac_type": zodiac_type, "sidereal_ayanamsa": sidereal_ayanamsa, "house_system": house_system, "bodies": bodies, "include_angles": include_angles, "include_houses": include_houses, "include_speed": include_speed, "include_retrograde": include_retrograde, "include_dignity": include_dignity, "include_sign_degree": include_sign_degree, "include_aspects": include_aspects, "include_minor_aspects": include_minor_aspects, "include_moon_void_of_course": include_moon_void_of_course, "include_fixed_stars": include_fixed_stars, "fixed_stars": fixed_stars, "fixed_star_packs": fixed_star_packs, "lat": lat, "lng": lng, "tz_str": tz_str, "timezone": timezone, "dst_policy": dst_policy, "format": format, "response_mode": response_mode, "table_style": table_style, "include_sidereal_time": include_sidereal_time, "cell_format": cell_format, "include_chart_links": include_chart_links, "sign_display": sign_display, "show_motion_markers": show_motion_markers}), json=None, options=options)
+        return cast("schemas.EphemerisResponse", await self._client.request("GET", "/api/v1/ephemeris", params=_query({"start": start, "end": end, "step": step, "zodiac_type": zodiac_type, "sidereal_ayanamsa": sidereal_ayanamsa, "house_system": house_system, "bodies": bodies, "include_angles": include_angles, "include_houses": include_houses, "include_speed": include_speed, "include_retrograde": include_retrograde, "include_dignity": include_dignity, "include_sign_degree": include_sign_degree, "include_aspects": include_aspects, "include_minor_aspects": include_minor_aspects, "include_moon_void_of_course": include_moon_void_of_course, "include_fixed_stars": include_fixed_stars, "fixed_stars": fixed_stars, "fixed_star_packs": fixed_star_packs, "lat": lat, "lng": lng, "tz_str": tz_str, "timezone": timezone, "dst_policy": dst_policy, "format": format, "response_mode": response_mode, "table_style": table_style, "include_sidereal_time": include_sidereal_time, "cell_format": cell_format, "include_chart_links": include_chart_links, "sign_display": sign_display, "show_motion_markers": show_motion_markers}), json=None, options=options))
 
     async def calculate(
         self,
         body: schemas.EphemerisRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.EphemerisResponse:
         """Calculate Ephemeris
 
         ``POST /api/v1/ephemeris/calculate``
         """
-        return await self._client.request("POST", "/api/v1/ephemeris/calculate", params=None, json=body, options=options)
+        return cast("schemas.EphemerisResponse", await self._client.request("POST", "/api/v1/ephemeris/calculate", params=None, json=body, options=options))
 
 
 class AsyncGeoResourceBase:
@@ -2396,28 +2428,28 @@ class AsyncHoroscopeDailyResource:
         tz_str: str | None = None,
         locale: str | None = None,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.HoroscopeDailyBulkResponse:
         """Get Bulk Horoscope
 
         Get daily horoscope for ALL signs. Optimized for caching/newsletters.
 
         ``GET /api/v1/horoscope/daily/bulk``
         """
-        return cast("dict[str, Any]", await self._client.request("GET", "/api/v1/horoscope/daily/bulk", params=_query({"date": date, "timezone": timezone, "tz_str": tz_str, "locale": locale}), json=None, options=options))
+        return cast("schemas.HoroscopeDailyBulkResponse", await self._client.request("GET", "/api/v1/horoscope/daily/bulk", params=_query({"date": date, "timezone": timezone, "tz_str": tz_str, "locale": locale}), json=None, options=options))
 
     async def personal_v1(
         self,
         body: schemas.PersonalHoroscopeRequestV1,
         *,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.HoroscopeDailyPersonalResponse:
         """Get Personal Horoscope
 
         Get personalized daily horoscope using natal chart + transits.
 
         ``POST /api/v1/horoscope/daily/personal``
         """
-        return cast("dict[str, Any]", await self._client.request("POST", "/api/v1/horoscope/daily/personal", params=None, json=body, options=options))
+        return cast("schemas.HoroscopeDailyPersonalResponse", await self._client.request("POST", "/api/v1/horoscope/daily/personal", params=None, json=body, options=options))
 
     async def sign_v1(
         self,
@@ -2432,26 +2464,26 @@ class AsyncHoroscopeDailyResource:
         style: str | None = None,
         variant: str | None = None,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.HoroscopeDailySignResponse:
         """Get Sign Horoscope
 
         Get generic daily horoscope for a specific sign.
 
         ``GET /api/v1/horoscope/daily/sign``
         """
-        return cast("dict[str, Any]", await self._client.request("GET", "/api/v1/horoscope/daily/sign", params=_query({"sign": sign, "date": date, "timezone": timezone, "tz_str": tz_str, "lang": lang, "locale": locale, "type": type, "style": style, "variant": variant}), json=None, options=options))
+        return cast("schemas.HoroscopeDailySignResponse", await self._client.request("GET", "/api/v1/horoscope/daily/sign", params=_query({"sign": sign, "date": date, "timezone": timezone, "tz_str": tz_str, "lang": lang, "locale": locale, "type": type, "style": style, "variant": variant}), json=None, options=options))
 
     async def personal_v2(
         self,
         body: schemas.PersonalHoroscopeRequestV2,
         *,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.HoroscopeDailyPersonalV2Response:
         """Get Personal Horoscope
 
         ``POST /api/v2/horoscope/daily/personal``
         """
-        return cast("dict[str, Any]", await self._client.request("POST", "/api/v2/horoscope/daily/personal", params=None, json=body, options=options))
+        return cast("schemas.HoroscopeDailyPersonalV2Response", await self._client.request("POST", "/api/v2/horoscope/daily/personal", params=None, json=body, options=options))
 
     async def sign_v2(
         self,
@@ -2462,24 +2494,24 @@ class AsyncHoroscopeDailyResource:
         lang: str | None = None,
         locale: str | None = None,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.HoroscopeDailySignV2Response:
         """Get Sign Horoscope
 
         ``GET /api/v2/horoscope/daily/sign``
         """
-        return cast("dict[str, Any]", await self._client.request("GET", "/api/v2/horoscope/daily/sign", params=_query({"sign": sign, "date": date, "tz_str": tz_str, "lang": lang, "locale": locale}), json=None, options=options))
+        return cast("schemas.HoroscopeDailySignV2Response", await self._client.request("GET", "/api/v2/horoscope/daily/sign", params=_query({"sign": sign, "date": date, "tz_str": tz_str, "lang": lang, "locale": locale}), json=None, options=options))
 
     async def personal(
         self,
         body: schemas.PersonalHoroscopeRequestV3,
         *,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.HoroscopeDailyPersonalV3Response:
         """Get Personal Horoscope
 
         ``POST /api/v3/horoscope/daily/personal``
         """
-        return cast("dict[str, Any]", await self._client.request("POST", "/api/v3/horoscope/daily/personal", params=None, json=body, options=options))
+        return cast("schemas.HoroscopeDailyPersonalV3Response", await self._client.request("POST", "/api/v3/horoscope/daily/personal", params=None, json=body, options=options))
 
     async def sign(
         self,
@@ -2494,7 +2526,7 @@ class AsyncHoroscopeDailyResource:
         style: str | None = None,
         variant: str | None = None,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.HoroscopeDailySignV3Response:
         """Get Sign Horoscope
 
         Compatibility endpoint for playground clients that selected the V3 engine
@@ -2503,7 +2535,7 @@ class AsyncHoroscopeDailyResource:
 
         ``GET /api/v3/horoscope/daily/sign``
         """
-        return cast("dict[str, Any]", await self._client.request("GET", "/api/v3/horoscope/daily/sign", params=_query({"sign": sign, "date": date, "timezone": timezone, "tz_str": tz_str, "lang": lang, "locale": locale, "type": type, "style": style, "variant": variant}), json=None, options=options))
+        return cast("schemas.HoroscopeDailySignV3Response", await self._client.request("GET", "/api/v3/horoscope/daily/sign", params=_query({"sign": sign, "date": date, "timezone": timezone, "tz_str": tz_str, "lang": lang, "locale": locale, "type": type, "style": style, "variant": variant}), json=None, options=options))
 
 
 class AsyncHoroscopeWeeklyResource:
@@ -2515,12 +2547,12 @@ class AsyncHoroscopeWeeklyResource:
         body: schemas.WeeklyPersonalHoroscopeRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.HoroscopeWeeklyPersonalV3Response:
         """Get Weekly Personal Horoscope
 
         ``POST /api/v3/horoscope/weekly/personal``
         """
-        return cast("dict[str, Any]", await self._client.request("POST", "/api/v3/horoscope/weekly/personal", params=None, json=body, options=options))
+        return cast("schemas.HoroscopeWeeklyPersonalV3Response", await self._client.request("POST", "/api/v3/horoscope/weekly/personal", params=None, json=body, options=options))
 
 
 class AsyncHoroscopeResource:
@@ -2544,32 +2576,38 @@ class AsyncNatalExperimentalResource:
         body: schemas.ExperimentalSolarReturnChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> str:
         """Experimental Solar Return Chart
 
         Generate a bi-wheel or standalone chart for the exact solar return in a target year.
 
         ``POST /api/v1/natal/experimental/solar-return``
 
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v1/natal/experimental/solar-return", ..., response_type="bytes")``.
+
         .. deprecated:: this operation is deprecated by the API.
         """
-        return await self._client.request("POST", "/api/v1/natal/experimental/solar-return", params=None, json=body, options=options)
+        return cast("str", await self._client.request("POST", "/api/v1/natal/experimental/solar-return", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
 
     async def transits(
         self,
         body: schemas.ExperimentalTransitChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> str:
         """Experimental Transits Chart
 
         Generate a bi-wheel chart with natal planets inside and transits outside.
 
         ``POST /api/v1/natal/experimental/transits``
 
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v1/natal/experimental/transits", ..., response_type="bytes")``.
+
         .. deprecated:: this operation is deprecated by the API.
         """
-        return await self._client.request("POST", "/api/v1/natal/experimental/transits", params=None, json=body, options=options)
+        return cast("str", await self._client.request("POST", "/api/v1/natal/experimental/transits", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
 
 
 class AsyncNatalResource:
@@ -2584,125 +2622,146 @@ class AsyncNatalResource:
         include_minor: bool | None = None,
         include_stelliums: bool | None = None,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.NatalCalculateResponse:
         """Calculate Natal
 
         Calculate natal chart with planetary positions, houses, and aspects.
 
         ``POST /api/v1/natal/calculate``
         """
-        return await self._client.request("POST", "/api/v1/natal/calculate", params=_query({"include_minor": include_minor, "include_stelliums": include_stelliums}), json=body, options=options)
+        return cast("schemas.NatalCalculateResponse", await self._client.request("POST", "/api/v1/natal/calculate", params=_query({"include_minor": include_minor, "include_stelliums": include_stelliums}), json=body, options=options))
 
     async def chart(
         self,
         body: schemas.ExperimentalNatalChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> str:
         """Experimental Natal Chart
 
         Render a natal chart using the bundled natal library.
 
         ``POST /api/v1/natal/chart/``
+
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v1/natal/chart/", ..., response_type="bytes")``.
         """
-        return await self._client.request("POST", "/api/v1/natal/chart/", params=None, json=body, options=options)
+        return cast("str", await self._client.request("POST", "/api/v1/natal/chart/", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
 
     async def chart_composite(
         self,
         body: schemas.ExperimentalCompositeChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> str:
         """Experimental Composite Chart
 
         Midpoint composite single-wheel chart endpoint.
         Renders a standalone composite chart from two people, reusing the natal SVG renderer.
 
         ``POST /api/v1/natal/chart/composite``
+
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v1/natal/chart/composite", ..., response_type="bytes")``.
         """
-        return await self._client.request("POST", "/api/v1/natal/chart/composite", params=None, json=body, options=options)
+        return cast("str", await self._client.request("POST", "/api/v1/natal/chart/composite", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
 
     async def chart_progressions(
         self,
         body: schemas.ExperimentalSecondaryProgressionsChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> str:
         """Experimental Secondary Progressions Chart
 
         Generate a bi-wheel chart with natal planets inside and secondary progressed planets outside.
 
         ``POST /api/v1/natal/chart/progressions``
+
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v1/natal/chart/progressions", ..., response_type="bytes")``.
         """
-        return await self._client.request("POST", "/api/v1/natal/chart/progressions", params=None, json=body, options=options)
+        return cast("str", await self._client.request("POST", "/api/v1/natal/chart/progressions", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
 
     async def chart_secondary_progressions(
         self,
         body: schemas.ExperimentalSecondaryProgressionsChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> str:
         """Experimental Secondary Progressions Chart
 
         Generate a bi-wheel chart with natal planets inside and secondary progressed planets outside.
 
         ``POST /api/v1/natal/chart/secondary-progressions``
+
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v1/natal/chart/secondary-progressions", ..., response_type="bytes")``.
         """
-        return await self._client.request("POST", "/api/v1/natal/chart/secondary-progressions", params=None, json=body, options=options)
+        return cast("str", await self._client.request("POST", "/api/v1/natal/chart/secondary-progressions", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
 
     async def chart_solar_return(
         self,
         body: schemas.ExperimentalSolarReturnChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> str:
         """Experimental Solar Return Chart
 
         Generate a bi-wheel or standalone chart for the exact solar return in a target year.
 
         ``POST /api/v1/natal/chart/solar-return``
+
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v1/natal/chart/solar-return", ..., response_type="bytes")``.
         """
-        return await self._client.request("POST", "/api/v1/natal/chart/solar-return", params=None, json=body, options=options)
+        return cast("str", await self._client.request("POST", "/api/v1/natal/chart/solar-return", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
 
     async def chart_synastry(
         self,
         body: schemas.ExperimentalSynastryChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> str:
         """Experimental Synastry Chart
 
         Synastry bi-wheel chart endpoint.
         Renders person A (outer) and person B (inner) with optional B house ring and inter-aspects.
 
         ``POST /api/v1/natal/chart/synastry``
+
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v1/natal/chart/synastry", ..., response_type="bytes")``.
         """
-        return await self._client.request("POST", "/api/v1/natal/chart/synastry", params=None, json=body, options=options)
+        return cast("str", await self._client.request("POST", "/api/v1/natal/chart/synastry", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
 
     async def chart_transits(
         self,
         body: schemas.ExperimentalTransitChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> str:
         """Experimental Transits Chart
 
         Generate a bi-wheel chart with natal planets inside and transits outside.
 
         ``POST /api/v1/natal/chart/transits``
+
+        Returns the response body (image/svg+xml, image/png) as text; for binary formats such as PNG call
+        ``client.request("POST", "/api/v1/natal/chart/transits", ..., response_type="bytes")``.
         """
-        return await self._client.request("POST", "/api/v1/natal/chart/transits", params=None, json=body, options=options)
+        return cast("str", await self._client.request("POST", "/api/v1/natal/chart/transits", params=None, json=body, options=options, accept="image/svg+xml, image/png", response_type="text"))
 
     async def report_credits(
         self,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.ReportCreditsResponse:
         """Get Report Credits For Api Key
 
         ``GET /api/v1/natal/report-credits``
         """
-        return await self._client.request("GET", "/api/v1/natal/report-credits", params=None, json=None, options=options)
+        return cast("schemas.ReportCreditsResponse", await self._client.request("GET", "/api/v1/natal/report-credits", params=None, json=None, options=options))
 
     async def report(
         self,
@@ -2711,19 +2770,22 @@ class AsyncNatalResource:
         format: Literal["json", "pdf"] | None = None,
         include_profile_branding_logo: bool | None = None,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.PsychologicalReportJobResponse:
         """Get Psychological Report
 
         ``GET /api/v1/natal/report/{job_id}``
+
+        Also available as application/pdf: call
+        ``client.request("GET", "/api/v1/natal/report/{job_id}", ..., accept="application/pdf", response_type="bytes")``.
         """
-        return await self._client.request("GET", f"/api/v1/natal/report/{_path(job_id)}", params=_query({"format": format, "include_profile_branding_logo": include_profile_branding_logo}), json=None, options=options)
+        return cast("schemas.PsychologicalReportJobResponse", await self._client.request("GET", f"/api/v1/natal/report/{_path(job_id)}", params=_query({"format": format, "include_profile_branding_logo": include_profile_branding_logo}), json=None, options=options))
 
     async def simple(
         self,
         body: schemas.SimpleNatalRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.SimpleNatalResponse:
         """Calculate Simple Natal
 
         A simplified natal endpoint for developer-facing apps.
@@ -2731,7 +2793,7 @@ class AsyncNatalResource:
 
         ``POST /natal``
         """
-        return await self._client.request("POST", "/natal", params=None, json=body, options=options)
+        return cast("schemas.SimpleNatalResponse", await self._client.request("POST", "/natal", params=None, json=body, options=options))
 
 
 class AsyncNumerologyResource:
@@ -2789,26 +2851,28 @@ class AsyncSpaceResource:
         body: schemas.SpaceChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.SpaceChartResponse:
         """Space Chart
 
         ``POST /api/v1/space/chart``
         """
-        return await self._client.request("POST", "/api/v1/space/chart", params=None, json=body, options=options)
+        return cast("schemas.SpaceChartResponse", await self._client.request("POST", "/api/v1/space/chart", params=None, json=body, options=options))
 
     async def chart_svg(
         self,
         body: schemas.SpaceChartSvgRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> str:
         """Space Chart Svg
 
         The chart wheel, drawn by the natal chart renderer with the same themes and options.
 
         ``POST /api/v1/space/chart/svg``
+
+        Returns the response body (image/svg+xml) as text.
         """
-        return await self._client.request("POST", "/api/v1/space/chart/svg", params=None, json=body, options=options)
+        return cast("str", await self._client.request("POST", "/api/v1/space/chart/svg", params=None, json=body, options=options, accept="image/svg+xml", response_type="text"))
 
 
 class AsyncTransitsResource:
@@ -2821,14 +2885,14 @@ class AsyncTransitsResource:
         *,
         include_minor: bool | None = None,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.TransitsCalculateResponse:
         """Calculate Transits
 
         Calculate planetary transits relative to natal chart.
 
         ``POST /api/v1/transits/calculate``
         """
-        return await self._client.request("POST", "/api/v1/transits/calculate", params=_query({"include_minor": include_minor}), json=body, options=options)
+        return cast("schemas.TransitsCalculateResponse", await self._client.request("POST", "/api/v1/transits/calculate", params=_query({"include_minor": include_minor}), json=body, options=options))
 
 
 class AsyncVedicGocharResource:
@@ -3041,7 +3105,7 @@ class AsyncVedicResource:
         body: schemas.VedicBatchRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.VedicBatchResponse:
         """Run Vedic Batch
 
         Run up to 6 single-person Vedic endpoint calls in one HTTP request.
@@ -3049,14 +3113,14 @@ class AsyncVedicResource:
 
         ``POST /api/v1/vedic/batch``
         """
-        return await self._client.request("POST", "/api/v1/vedic/batch", params=None, json=body, options=options)
+        return cast("schemas.VedicBatchResponse", await self._client.request("POST", "/api/v1/vedic/batch", params=None, json=body, options=options))
 
     async def calculate_v1(
         self,
         body: schemas.VedicChartRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.VedicCalculateResponse:
         """Calculate Full Chart
 
         Full Vedic chart with all optional features.
@@ -3064,14 +3128,14 @@ class AsyncVedicResource:
 
         ``POST /api/v1/vedic/calculate``
         """
-        return await self._client.request("POST", "/api/v1/vedic/calculate", params=None, json=body, options=options)
+        return cast("schemas.VedicCalculateResponse", await self._client.request("POST", "/api/v1/vedic/calculate", params=None, json=body, options=options))
 
     async def chart_v1(
         self,
         body: schemas.BaseChartRequestV1,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.VedicChartResponse:
         """Get Basic Chart
 
         Get basic Vedic chart: Planets + Houses + Ascendant.
@@ -3079,14 +3143,14 @@ class AsyncVedicResource:
 
         ``POST /api/v1/vedic/chart``
         """
-        return await self._client.request("POST", "/api/v1/vedic/chart", params=None, json=body, options=options)
+        return cast("schemas.VedicChartResponse", await self._client.request("POST", "/api/v1/vedic/chart", params=None, json=body, options=options))
 
     async def compatibility_v1(
         self,
         body: schemas.CompatibilityRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.VedicCompatibilityResponse:
         """Calculate Compatibility
 
         Calculate Ashtakoota (8-point) compatibility.
@@ -3094,21 +3158,21 @@ class AsyncVedicResource:
 
         ``POST /api/v1/vedic/compatibility``
         """
-        return await self._client.request("POST", "/api/v1/vedic/compatibility", params=None, json=body, options=options)
+        return cast("schemas.VedicCompatibilityResponse", await self._client.request("POST", "/api/v1/vedic/compatibility", params=None, json=body, options=options))
 
     async def dasha_v1(
         self,
         body: schemas.DashaRequestV1,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.VedicDashaResponse:
         """Get Dasha
 
         Get Vimshottari Dasha timeline only.
 
         ``POST /api/v1/vedic/dasha``
         """
-        return await self._client.request("POST", "/api/v1/vedic/dasha", params=None, json=body, options=options)
+        return cast("schemas.VedicDashaResponse", await self._client.request("POST", "/api/v1/vedic/dasha", params=None, json=body, options=options))
 
     async def dasha_insights_v1(
         self,
@@ -3129,7 +3193,7 @@ class AsyncVedicResource:
         body: schemas.MatchRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.VedicMatchResponse:
         """Match Birth Details
 
         Calculate compatibility using birth details directly.
@@ -3137,63 +3201,63 @@ class AsyncVedicResource:
 
         ``POST /api/v1/vedic/match``
         """
-        return await self._client.request("POST", "/api/v1/vedic/match", params=None, json=body, options=options)
+        return cast("schemas.VedicMatchResponse", await self._client.request("POST", "/api/v1/vedic/match", params=None, json=body, options=options))
 
     async def panchang_v1(
         self,
         body: schemas.PanchangRequestV1,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.VedicPanchangResponse:
         """Get Panchang
 
         Get Panchang (daily almanac): Tithi, Nakshatra, Yoga, Karana, Rahu Kalam.
 
         ``POST /api/v1/vedic/panchang``
         """
-        return await self._client.request("POST", "/api/v1/vedic/panchang", params=None, json=body, options=options)
+        return cast("schemas.VedicPanchangResponse", await self._client.request("POST", "/api/v1/vedic/panchang", params=None, json=body, options=options))
 
     async def strength_v1(
         self,
         body: schemas.BaseChartRequestV1,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.VedicStrengthResponse:
         """Get Strength
 
         Get planetary strength: Shadbala + Ashtakavarga.
 
         ``POST /api/v1/vedic/strength``
         """
-        return await self._client.request("POST", "/api/v1/vedic/strength", params=None, json=body, options=options)
+        return cast("schemas.VedicStrengthResponse", await self._client.request("POST", "/api/v1/vedic/strength", params=None, json=body, options=options))
 
     async def vargas_v1(
         self,
         body: schemas.VargaRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.VedicVargasResponse:
         """Get Vargas
 
         Get divisional chart positions (D1, D9, D10, etc).
 
         ``POST /api/v1/vedic/vargas``
         """
-        return await self._client.request("POST", "/api/v1/vedic/vargas", params=None, json=body, options=options)
+        return cast("schemas.VedicVargasResponse", await self._client.request("POST", "/api/v1/vedic/vargas", params=None, json=body, options=options))
 
     async def yogas_v1(
         self,
         body: schemas.BaseChartRequestV1,
         *,
         options: RequestOptions | None = None,
-    ) -> Any:
+    ) -> schemas.VedicYogasResponse:
         """Get Yogas
 
         Get detected Yogas only (Manglik, Kala Sarpa, Raj Yogas, etc).
 
         ``POST /api/v1/vedic/yogas``
         """
-        return await self._client.request("POST", "/api/v1/vedic/yogas", params=None, json=body, options=options)
+        return cast("schemas.VedicYogasResponse", await self._client.request("POST", "/api/v1/vedic/yogas", params=None, json=body, options=options))
 
     async def calculate(
         self,
@@ -3405,70 +3469,70 @@ class AsyncWesternAstrocartographyResource:
         body: schemas.AstrocartographyCityCheckRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.AstrocartographyCityCheckResponse:
         """Get Astrocartography City Check
 
         Score a single city across the five primary relocation-oriented focus areas.
 
         ``POST /api/v1/western/astrocartography/city-check``
         """
-        return cast("dict[str, Any]", await self._client.request("POST", "/api/v1/western/astrocartography/city-check", params=None, json=body, options=options))
+        return cast("schemas.AstrocartographyCityCheckResponse", await self._client.request("POST", "/api/v1/western/astrocartography/city-check", params=None, json=body, options=options))
 
     async def lines(
         self,
         body: schemas.AstrocartographyLinesRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.AstrocartographyLinesResponse:
         """Get Astrocartography Lines
 
         Compute astrocartography map lines for a natal chart.
 
         ``POST /api/v1/western/astrocartography/lines``
         """
-        return cast("dict[str, Any]", await self._client.request("POST", "/api/v1/western/astrocartography/lines", params=None, json=body, options=options))
+        return cast("schemas.AstrocartographyLinesResponse", await self._client.request("POST", "/api/v1/western/astrocartography/lines", params=None, json=body, options=options))
 
     async def parans(
         self,
         body: schemas.AstrocartographyParansRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.AstrocartographyParansResponse:
         """Get Astrocartography Parans
 
         Compute classical in-mundo astrocartography parans for a natal chart.
 
         ``POST /api/v1/western/astrocartography/parans``
         """
-        return cast("dict[str, Any]", await self._client.request("POST", "/api/v1/western/astrocartography/parans", params=None, json=body, options=options))
+        return cast("schemas.AstrocartographyParansResponse", await self._client.request("POST", "/api/v1/western/astrocartography/parans", params=None, json=body, options=options))
 
     async def recommendations(
         self,
         body: schemas.AstrocartographyRecommendationsRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.AstrocartographyRecommendationsResponse:
         """Get Astrocartography Recommendations
 
         Rank candidate cities for a focus-oriented astrocartography search.
 
         ``POST /api/v1/western/astrocartography/recommendations``
         """
-        return cast("dict[str, Any]", await self._client.request("POST", "/api/v1/western/astrocartography/recommendations", params=None, json=body, options=options))
+        return cast("schemas.AstrocartographyRecommendationsResponse", await self._client.request("POST", "/api/v1/western/astrocartography/recommendations", params=None, json=body, options=options))
 
     async def relocation(
         self,
         body: schemas.AstrocartographyRelocationRequest,
         *,
         options: RequestOptions | None = None,
-    ) -> dict[str, Any]:
+    ) -> schemas.AstrocartographyRelocationResponse:
         """Get Astrocartography Relocation
 
         Build a full relocated chart for the natal instant at a target city.
 
         ``POST /api/v1/western/astrocartography/relocation``
         """
-        return cast("dict[str, Any]", await self._client.request("POST", "/api/v1/western/astrocartography/relocation", params=None, json=body, options=options))
+        return cast("schemas.AstrocartographyRelocationResponse", await self._client.request("POST", "/api/v1/western/astrocartography/relocation", params=None, json=body, options=options))
 
 
 class AsyncWesternDirectionsResource:

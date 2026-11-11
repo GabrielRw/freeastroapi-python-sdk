@@ -1,17 +1,71 @@
 from __future__ import annotations
 
-from typing import Any, Literal
+from collections.abc import Hashable, Mapping
+from functools import cache
+from typing import Any, Literal, Self, TypeVar, cast
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, ModelWrapValidatorHandler, TypeAdapter, model_validator
+from pydantic import ValidationError as PydanticValidationError
+
+M = TypeVar("M", bound="ResponseModel")
 
 
 class RequestModel(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+@cache
+def _adapter(annotation: Hashable) -> TypeAdapter[Any]:
+    return TypeAdapter(annotation)
+
+
 class ResponseModel(BaseModel):
-    # Additive API response fields remain forward compatible and are preserved.
+    """Base class of the response models.
+
+    Decoding is lenient: unknown fields are kept (``model_extra``), and a response that breaks
+    the declared types (a missing or null required field, an unknown enum value) still decodes.
+    Fields that validate are converted as usual; a missing required field is ``None`` and any
+    other value that does not validate is kept as received.
+    """
+
     model_config = ConfigDict(extra="allow")
+
+    @model_validator(mode="wrap")
+    @classmethod
+    def _decode_leniently(cls, data: Any, handler: ModelWrapValidatorHandler[Self]) -> Self:
+        try:
+            return handler(data)
+        except PydanticValidationError:
+            # Only objects become models: re-raising for other values lets ``Model | None``
+            # unions keep ``None`` and lets the parent model keep the raw value.
+            if not isinstance(data, Mapping):
+                raise
+            return cls._construct_leniently(data)
+
+    @classmethod
+    def _construct_leniently(cls, data: Mapping[str, Any]) -> Self:
+        values: dict[str, Any] = {}
+        for name, info in cls.model_fields.items():
+            if name in data:
+                try:
+                    values[name] = _adapter(cast(Hashable, info.annotation)).validate_python(data[name])
+                except PydanticValidationError:
+                    values[name] = data[name]
+            elif info.is_required():
+                values[name] = None
+        extra = {key: value for key, value in data.items() if key not in cls.model_fields}
+        return cast(Self, cls.model_construct(**values, **extra))
+
+
+def decode(model: type[M], data: Any) -> M:
+    """Decode a response body into ``model`` without raising (see :class:`ResponseModel`).
+
+    A body that is not a JSON object at all gives a model whose fields are all ``None``.
+    """
+    try:
+        return model.model_validate(data)
+    except PydanticValidationError:
+        return model._construct_leniently({})
 
 
 class GeoSearchParams(RequestModel):
@@ -65,6 +119,21 @@ MoonPhaseName = Literal[
     "Waning Crescent",
 ]
 
+SignId = Literal[
+    "aries",
+    "taurus",
+    "gemini",
+    "cancer",
+    "leo",
+    "virgo",
+    "libra",
+    "scorpio",
+    "sagittarius",
+    "capricorn",
+    "aquarius",
+    "pisces",
+]
+
 
 class MoonPhaseData(ResponseModel):
     name: MoonPhaseName
@@ -75,14 +144,48 @@ class MoonPhaseData(ResponseModel):
     is_waxing: bool
 
 
+class ZodiacData(ResponseModel):
+    sign: str
+    sign_id: SignId
+    degree: float
+    zodiac_type: str = "tropical"
+
+
+class RiseSetData(ResponseModel):
+    rise: str | None
+    set: str | None
+    rise_local: str | None = None
+    set_local: str | None = None
+    location: str | None = None
+    timezone: str = "UTC"
+    timezone_local: str | None = None
+
+
+class MoonVisualData(ResponseModel):
+    type: str = "svg"
+    svg: str
+    shadow_ratio: float
+    waxing: bool
+
+
+class SpecialMoonData(ResponseModel):
+    is_supermoon: bool = False
+    is_micromoon: bool = False
+    is_blue_moon: bool = False
+    is_black_moon: bool = False
+    is_harvest_moon: bool = False
+    is_hunter_moon: bool = False
+    labels: list[str] = Field(default_factory=list)
+
+
 class MaximumLocation(ResponseModel):
     lat: float
     lon: float
 
 
 class EclipseData(ResponseModel):
-    is_eclipse: bool
-    is_blood_moon: bool
+    is_eclipse: bool = False
+    is_blood_moon: bool = False
     kind: Literal["solar", "lunar"] | None = None
     type: Literal["total", "annular", "hybrid", "partial", "penumbral"] | None = None
     date: str | None = None
@@ -92,19 +195,37 @@ class EclipseData(ResponseModel):
     central_phase_ends_at: str | None = None
     visibility: str | None = None
     visible_at_location: bool | None = None
-    type_at_location: Literal["total", "annular", "partial"] | None = None
+    type_at_location: Literal["total", "annular", "hybrid", "partial"] | None = None
     days_from_query: float | None = None
     magnitude: float | None = None
-    obscuration: float | None = Field(default=None, ge=0, le=1)
+    obscuration: float | None = None
     maximum_location: MaximumLocation | None = None
     local_starts_at: str | None = None
     local_maximum_at: str | None = None
     local_ends_at: str | None = None
     magnitude_at_location: float | None = None
-    obscuration_at_location: float | None = Field(default=None, ge=0, le=1)
+    obscuration_at_location: float | None = None
+
+
+class MoonInterpretationData(ResponseModel):
+    key: str
+    title: str
+    body: str
+    tone: str | None = None
+    tags: list[str] = Field(default_factory=list)
+
+
+class TraditionalMoonData(ResponseModel):
+    name: str
+    naming_system: str = "north_american_traditional"
+    month: str
+    applies_to_full_moon_at: str
+    is_current_full_moon: bool = False
 
 
 class NextMoonPhases(ResponseModel):
+    """UTC instants (ISO 8601) of the next four principal phases."""
+
     new_moon: str
     first_quarter: str
     full_moon: str
@@ -114,7 +235,14 @@ class NextMoonPhases(ResponseModel):
 class MoonPhaseResponse(ResponseModel):
     timestamp: str
     phase: MoonPhaseData
+    zodiac: ZodiacData | None = None
+    rise_set: RiseSetData | None = None
+    moon_visual: MoonVisualData | None = None
+    special_moon: SpecialMoonData | None = None
     eclipse: EclipseData | None = None
+    forecast: dict[str, Any] | None = None
+    interpretation: MoonInterpretationData | None = None
+    traditional_moon: TraditionalMoonData | None = None
     next_phases: NextMoonPhases
 
 
@@ -122,13 +250,42 @@ class MoonMonthDay(MoonPhaseResponse):
     calendar_date: str
 
 
+class MoonSignTimelineSegment(ResponseModel):
+    sign: str
+    sign_id: str
+    starts_at: str
+    ends_at: str
+    starts_at_local: str | None = None
+    ends_at_local: str | None = None
+    duration_hours: float
+    duration_minutes: int
+    continues_from_previous_month: bool
+    continues_to_next_month: bool
+    next_sign: str | None = None
+    next_sign_id: str | None = None
+    label: str | None = None
+
+
+class MoonSignIngress(ResponseModel):
+    from_sign: str
+    from_sign_id: str
+    to_sign: str
+    to_sign_id: str
+    at: str
+    at_local: str | None = None
+    label: str
+
+
 class MoonMonthResponse(ResponseModel):
     year: int
     month: int
     month_name: str
     days_in_month: int
-    calendar_basis: Literal["local", "utc"]
+    #: ``"local"`` or ``"utc"``.
+    calendar_basis: str
     calendar_timezone: str
+    sign_timeline: list[MoonSignTimelineSegment] | None = None
+    ingresses: list[MoonSignIngress] | None = None
     days: list[MoonMonthDay]
 
 
@@ -155,7 +312,7 @@ class SkyEvent(ResponseModel):
     sign: str | None = None
     bodies: list[str] | None = None
     aspect: Literal["conjunction", "sextile", "square", "trine", "opposition"] | None = None
-    angle: Literal[0, 60, 90, 120, 180] | None = None
+    angle: int | None = None
     orb: int | None = None
     direction: Literal["retrograde", "direct"] | None = None
     phase: Literal["new_moon", "full_moon"] | None = None
@@ -193,24 +350,12 @@ class WesternSignRequest(RequestModel):
 class WesternSignResponse(ResponseModel):
     point: str
     sign: str
-    sign_id: Literal[
-        "aries",
-        "taurus",
-        "gemini",
-        "cancer",
-        "leo",
-        "virgo",
-        "libra",
-        "scorpio",
-        "sagittarius",
-        "capricorn",
-        "aquarius",
-        "pisces",
-    ]
+    sign_id: SignId
     degree: float
     abs_pos: float
     house: int
-    interpretation: None = None
+    interpretation: dict[str, Any] | None = None
+    resolved_time: dict[str, Any] | None = None
 
 
 class ErrorResponse(ResponseModel):
@@ -218,4 +363,7 @@ class ErrorResponse(ResponseModel):
     error: str | None = None
     message: str | None = None
     code: str | None = None
+    docs: str | None = None
+    retry_after_ms: int | None = None
+    limit_info: dict[str, Any] | None = None
     trace_id: str | None = None

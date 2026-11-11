@@ -339,6 +339,15 @@ def response_note(o: dict[str, Any]) -> str | None:
     types = ", ".join(o["response_types"])
     if o["response_kind"] == "bytes":
         return f"\nReturns the response body ({types}) as bytes."
+    if o["response_kind"] == "json":
+        others = [t for t in o["response_types"] if not is_json_type(t)]
+        if not others:
+            return None
+        kind = "text" if all(is_text_type(t) for t in others) else "bytes"
+        return (
+            f"\nAlso available as {', '.join(others)}: call\n"
+            f'``client.request("{o["method"]}", "{o["path"]}", ..., accept="{others[0]}", response_type="{kind}")``.'
+        )
     if o["response_kind"] != "text":
         return None
     if all(is_text_type(t) for t in o["response_types"]):

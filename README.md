@@ -73,17 +73,23 @@ Resource groups: `ai`, `chinese`, `ephemeris`, `geo`, `horoscope`, `moon`, `nata
 
 ### Types
 
-Request bodies and responses are typed with `TypedDict`s generated from the spec's component schemas, in `freeastroapi.schemas`. They are plain dictionaries at runtime: responses are returned as parsed JSON without validation, so additive API fields never break your code. Where the spec does not describe a response, the method returns `Any`.
+Request bodies and responses are typed with `TypedDict`s generated from the spec's component schemas, in `freeastroapi.schemas`. Every JSON operation has a typed response. They are plain dictionaries at runtime: responses are returned as parsed JSON without validation, so a response with a missing or `null` field, an unknown field or an unknown enum value never raises.
 
-Operations with non-JSON responses send the matching `Accept` header and return `str` (SVG, Markdown) or `bytes` (PNG, PDF). The chart render endpoints (`client.vedic.kp_render`, `client.vedic.visual.chart`) return SVG as text; for PNG output read the body as bytes:
+Operations with non-JSON responses send the matching `Accept` header and return `str` (SVG, Markdown) or `bytes` (PNG, PDF). The chart endpoints (`client.natal.chart`, `client.natal.chart_*` such as `chart_synastry`, `client.natal.experimental.solar_return` and `.transits`, `client.space.chart_svg`, `client.vedic.kp_render`, `client.vedic.visual.chart`) return SVG as text; for PNG output read the body as bytes:
 
 ```python
-png = client.request("POST", "/api/v2/vedic/kp/render", json={**birth, "format": "png"}, accept="image/png", response_type="bytes")
+png = client.request(
+    "POST", "/api/v2/vedic/kp/render", json={**birth, "format": "png"}, accept="image/png", response_type="bytes"
+)
 ```
+
+`client.natal.report(job_id)` returns the report job as JSON; for the finished PDF call `client.request("GET", f"/api/v1/natal/report/{job_id}", params={"format": "pdf"}, accept="application/pdf", response_type="bytes")`.
 
 ### v0.1 methods
 
-`client.geo.search`, `client.moon.phase`, `client.moon.month`, `client.sky_events.list` and `client.western.signs.*` keep their v0.1 signatures and return Pydantic v2 models.
+`client.geo.search`, `client.moon.phase`, `client.moon.month`, `client.sky_events.list` and `client.western.signs.*` keep their v0.1 signatures and return Pydantic v2 models whose fields follow the spec (for example `MoonPhaseResponse.interpretation` is a `MoonInterpretationData` with `key`, `title`, `body`, `tone` and `tags`, and `next_phases` has `new_moon`, `first_quarter`, `full_moon` and `last_quarter`).
+
+Decoding into these models never raises on a response from the API: unknown fields are kept in `model_extra`, and when a value does not match its declared type (a missing or `null` required field, an unknown enum value) the model is still built: valid fields are converted as usual, a missing required field is `None` and any other mismatched value is kept as received. `freeastroapi.models.decode(Model, data)` applies the same rules to your own data.
 
 Use `client.request(...)` for any other endpoint.
 
@@ -106,9 +112,31 @@ with FreeAstro(api_key="YOUR_API_KEY") as client:
     )
 ```
 
-GET, HEAD, and OPTIONS requests retry transient network failures and HTTP 408, 429, 500, 502, 503, and 504 responses by default. Unsafe methods require an idempotency key or explicit retry opt-in. `Retry-After` is honored.
+## Retries
 
-All API failures derive from `FreeAstroError`. Specific subclasses cover authentication, permission, validation, conflict, rate limit, server, network, and timeout failures.
+By default a request is retried up to 2 times (`RetryConfig(retries=2)`), with exponential backoff and full jitter: before retry *n* (from 0) the client waits a random time between 0 and `min(8, 0.5 * 2**n)` seconds.
+
+- **HTTP 429** is retried for every operation: the request was rejected before it ran. The wait is the `Retry-After` header (seconds or an HTTP date), else `retry_after_ms` from the error body, else the backoff. If the suggested wait is longer than 30 seconds (`RetryConfig.max_retry_after`), the client does not wait and raises `RateLimitError` at once, with the wait in `retry_after`.
+- **HTTP 408, 500, 502, 503, 504, network errors and timeouts** are retried for every operation except the side-effecting ones in `freeastroapi.SIDE_EFFECT_OPERATIONS`: `v1_natal_calculate` (may create a paid report job), `v1_ai_generate`, `v2_vedic_chat`, `v2_western_chat`, `v2_vedic_qa`, `v1_western_transits_timeline` and `v1_western_transits_insights`. Those are retried only when the request carries an idempotency key (sent as the `Idempotency-Key` header) or opts in with `RequestOptions(retry=True)`. A `Retry-After` on these responses is honoured the same way.
+- **Other 4xx responses** are never retried.
+
+`client.request(...)` follows the same rules, matching the path against the known operations; a path that matches none is treated as side-effecting unless the method is GET, HEAD or OPTIONS.
+
+```python
+from freeastroapi import FreeAstro, RequestOptions, RetryConfig
+
+client = FreeAstro(api_key="YOUR_API_KEY", retry=RetryConfig(retries=4))  # retry=None disables retries
+
+client.vedic.chat(body, options=RequestOptions(idempotency_key="chat-turn-42"))  # retried on 5xx
+client.natal.calculate(body, options=RequestOptions(max_retries=0))  # no retries for this call
+client.geo.search("Paris", options=RequestOptions(retry=False))  # no retries, not even on 429
+```
+
+A `RetryConfig` passed in `RequestOptions(retry=...)` replaces the client's settings for that request and also opts it in.
+
+## Errors
+
+All API failures derive from `FreeAstroError`. Specific subclasses cover authentication, permission, validation, conflict, rate limit, server, network, and timeout failures. Each error carries `status`, `code` (the stable error code from the body's `error`, `code` or `detail.error`), `request_id` and `details` (the parsed error body, the spec's `ErrorResponse`); the message is the body's `detail` message.
 
 ## Development
 
@@ -133,7 +161,7 @@ uv run python -m build
 | `FREEASTRO_TEST_API_KEY=... pytest -m live` | Five read-only calls against production (`tests/live/`). |
 | `python3 -m unittest discover -s scripts -p "test_*.py"` | Tests for `scripts/spec_sync.py`. |
 
-Request values for the contract tests come from `python3 scripts/spec_sync.py samples spec/freeastro.json`, which builds a minimal valid request for every operation from its schema. The hand-written v0.1 models are stricter than the spec (fixed enums and keys the spec leaves open), so for those methods the contract tests check the raw response against the spec's schema type instead.
+Request values for the contract tests come from `python3 scripts/spec_sync.py samples spec/freeastro.json`, which builds a minimal valid request for every operation from its schema. For the hand-written v0.1 methods the contract tests also check that Prism's spec-valid data decodes into the Pydantic models without falling back to lenient decoding, so the models stay in line with the spec.
 
 ## Maintaining
 

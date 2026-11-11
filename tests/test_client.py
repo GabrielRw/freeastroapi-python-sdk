@@ -85,7 +85,9 @@ def test_get_retries_and_honors_retry_after() -> None:
     assert attempts == 2
 
 
-def test_post_does_not_retry_without_opt_in() -> None:
+def test_calculation_post_retries_server_errors(monkeypatch: pytest.MonkeyPatch) -> None:
+    sleeps: list[float] = []
+    monkeypatch.setattr("freeastroapi.client.time.sleep", sleeps.append)
     attempts = 0
 
     def handler(request: httpx.Request) -> httpx.Response:
@@ -98,7 +100,9 @@ def test_post_does_not_retry_without_opt_in() -> None:
         with pytest.raises(ServerError, match="busy"):
             client.western.signs.sun(birth)
 
-    assert attempts == 1
+    assert attempts == 3
+    assert len(sleeps) == 2
+    assert 0 <= sleeps[0] <= 0.5 and 0 <= sleeps[1] <= 1.0
 
 
 def test_post_retries_with_idempotency_key() -> None:

@@ -242,6 +242,152 @@ class AspectsPayload(TypedDict):
     progressed_to_progressed: list["ProgressedToProgressedAspect"]
 
 
+class AstrocartographyCityCheckCity(TypedDict):
+    name: str
+    country: str
+    state: str
+    lat: float
+    lng: float
+    timezone: str
+    population: int
+
+
+class AstrocartographyCityCheckCityVisualExplanation(TypedDict):
+    primary_lines: list["AstrocartographyCityCheckCityVisualExplanationPrimaryLine"]
+    nearest_lines: list["AstrocartographyCityCheckCityVisualExplanationPrimaryLine"]
+    primary_parans: list["AstrocartographyCityCheckCityVisualExplanationPrimaryParan"]
+    relevant_crossings: list["AstrocartographyCityCheckCityVisualExplanationRelevantCrossing"]
+    map_line_ids: list[str]
+    explanation_mode: str
+
+
+class AstrocartographyCityCheckCityVisualExplanationPrimaryLine(TypedDict):
+    body: str
+    angle: str
+    distance_km: float
+    line_id: str
+    is_close: bool
+    visual_strength: str
+    source_focuses: list[str]
+
+
+class AstrocartographyCityCheckCityVisualExplanationPrimaryParan(TypedDict):
+    id: str
+    body_a: str
+    event_a: str
+    body_b: str
+    event_b: str
+    distance_km: float
+    is_close: bool
+    visual_strength: str
+    source_focuses: list[str]
+
+
+class AstrocartographyCityCheckCityVisualExplanationRelevantCrossing(TypedDict):
+    lat: NotRequired[Union[float, None]]
+    lng: NotRequired[Union[float, None]]
+    distance_km: NotRequired[Union[float, None]]
+    lines: NotRequired[Union[list["AstrocartographyLinesCrossingLine"], None]]
+
+
+class AstrocartographyCityCheckFocusScores(TypedDict):
+    career: "AstrocartographyCityCheckFocusScoresCareer"
+    romance: "AstrocartographyCityCheckFocusScoresCareer"
+    home: "AstrocartographyCityCheckFocusScoresCareer"
+    health: "AstrocartographyCityCheckFocusScoresCareer"
+    spiritual: "AstrocartographyCityCheckFocusScoresCareer"
+
+
+class AstrocartographyCityCheckFocusScoresCareer(TypedDict):
+    score: float
+    summary: str
+    top_factors: list["AstrocartographyCityCheckFocusScoresCareerTopFactor"]
+    nearest_favorable_distance_km: float
+    nearest_challenging_distance_km: float
+    nearest_favorable_line: "AstrocartographyCityCheckFocusScoresCareerNearestFavorableLine"
+    nearest_challenging_line: "AstrocartographyCityCheckFocusScoresCareerNearestFavorableLine"
+    line_score: float
+    paran_score: float
+    relocation_score: float
+    top_parans: list["AstrocartographyCityCheckFocusScoresCareerTopParan"]
+    nearest_favorable_paran: NotRequired[Union["AstrocartographyCityCheckFocusScoresCareerNearestFavorableParan", None]]
+    nearest_challenging_paran: NotRequired[Union["AstrocartographyCityCheckFocusScoresCareerNearestFavorableParan", None]]
+
+
+class AstrocartographyCityCheckFocusScoresCareerNearestFavorableLine(TypedDict):
+    body: str
+    angle: str
+    distance_km: float
+
+
+class AstrocartographyCityCheckFocusScoresCareerNearestFavorableParan(TypedDict):
+    id: str
+    body_a: str
+    event_a: str
+    body_b: str
+    event_b: str
+    latitude: float
+    distance_km: float
+
+
+class AstrocartographyCityCheckFocusScoresCareerTopFactor(TypedDict):
+    body: str
+    angle: str
+    distance_km: float
+    weight: float
+    score: float
+
+
+class AstrocartographyCityCheckFocusScoresCareerTopParan(TypedDict):
+    id: str
+    body_a: str
+    event_a: str
+    body_b: str
+    event_b: str
+    latitude: float
+    distance_km: float
+    score: float
+
+
+class AstrocartographyCityCheckMeta(TypedDict):
+    mode: str
+    bodies: list[str]
+    angles: list[str]
+    timezone: str
+
+
+class AstrocartographyCityCheckRelocationSummary(TypedDict):
+    resolved_timezone: str
+    angles: "AstrocartographyCityCheckRelocationSummaryAngles"
+    angles_details: dict[str, "AstrocartographyCityCheckRelocationSummaryAnglesDetailsEntry"]
+    angular_planets: list["AstrocartographyCityCheckRelocationSummaryAngularPlanet"]
+    dominant_themes: list[str]
+    summary_short: str
+    summary_caution: str
+
+
+class AstrocartographyCityCheckRelocationSummaryAngles(TypedDict):
+    asc: float
+    mc: float
+    ic: float
+    dc: float
+
+
+class AstrocartographyCityCheckRelocationSummaryAnglesDetailsEntry(TypedDict):
+    sign: str
+    sign_id: str
+    pos: float
+    abs_pos: float
+    house: int
+
+
+class AstrocartographyCityCheckRelocationSummaryAngularPlanet(TypedDict):
+    body: str
+    angle: str
+    orb_deg: float
+    house: int
+
+
 class AstrocartographyCityCheckRequest(TypedDict):
     natal: "NatalChartRequest"
     city: str
@@ -260,6 +406,140 @@ class AstrocartographyCityCheckRequest(TypedDict):
     include_crossings: NotRequired[bool]
 
 
+class AstrocartographyCityCheckResponse(TypedDict):
+    meta: "AstrocartographyCityCheckMeta"
+    warnings: list[str]
+    city: "AstrocartographyCityCheckCity"
+    overall_score: float
+    focus_scores: "AstrocartographyCityCheckFocusScores"
+    city_visual_explanation: "AstrocartographyCityCheckCityVisualExplanation"
+    relocation_summary: NotRequired[Union["AstrocartographyCityCheckRelocationSummary", None]]
+    map: NotRequired[Union["AstrocartographyLinesResponse", None]]
+
+
+class AstrocartographyLinesChartFamily(TypedDict):
+    id: str
+    body: str
+    kind: str
+    angles: list[str]
+    member_line_ids: list[str]
+    geometry: "AstrocartographyLinesLineGeometry"
+    line_family: str
+    geometry_scope: str
+    endpoint_behavior: str
+    complete_geometry: bool
+    world_wrapped: bool
+    segment_count: int
+    lat_range: "AstrocartographyLinesLineLatRange"
+    lng_range: "AstrocartographyLinesLineLatRange"
+
+
+class AstrocartographyLinesCrossing(TypedDict):
+    lat: float
+    lng: float
+    lines: list["AstrocartographyLinesCrossingLine"]
+    geometry: "AstrocartographyLinesCrossingGeometry"
+    nearest_city: "AstrocartographyLinesCrossingNearestCity"
+    quality: "AstrocartographyLinesCrossingQuality"
+    strongest_focus: str
+    secondary_focus: str
+    polarity: str
+    interpretation_short: str
+    interpretation_caution: str
+    benefit_keywords: list[str]
+    risk_keywords: list[str]
+
+
+class AstrocartographyLinesCrossingGeometry(TypedDict):
+    type: str
+    coordinates: list[float]
+
+
+class AstrocartographyLinesCrossingLine(TypedDict):
+    id: str
+    body: str
+    angle: str
+
+
+class AstrocartographyLinesCrossingNearestCity(TypedDict):
+    name: str
+    country: str
+    state: str
+    lat: float
+    lng: float
+    timezone: str
+    population: int
+    distance_km: float
+
+
+class AstrocartographyLinesCrossingQuality(TypedDict):
+    overall_score: float
+    strongest_focus: str
+    strongest_focus_score: float
+    secondary_focus: str
+    secondary_focus_score: float
+    polarity: str
+    match_tier: str
+    focus_scores: "AstrocartographyLinesCrossingQualityFocusScores"
+
+
+class AstrocartographyLinesCrossingQualityFocusScores(TypedDict):
+    career: float
+    health: float
+    home: float
+    romance: float
+    spiritual: float
+
+
+class AstrocartographyLinesLine(TypedDict):
+    id: str
+    body: str
+    angle: str
+    _kind: str
+    _segments: NotRequired[Union[list[list["AstrocartographyLinesLineSegmentItem"]], None]]
+    geometry: "AstrocartographyLinesLineGeometry"
+    chart_family_id: NotRequired[Union[str, None]]
+    paired_line_id: NotRequired[Union[str, None]]
+    line_family: str
+    geometry_scope: str
+    endpoint_behavior: str
+    complete_geometry: bool
+    world_wrapped: bool
+    segment_count: int
+    lat_range: "AstrocartographyLinesLineLatRange"
+    lng_range: "AstrocartographyLinesLineLatRange"
+    _longitude: NotRequired[Union[float, None]]
+
+
+class AstrocartographyLinesLineGeometry(TypedDict):
+    type: str
+    coordinates: list[list[Union[list[float], float]]]
+
+
+class AstrocartographyLinesLineLatRange(TypedDict):
+    min: float
+    max: float
+
+
+class AstrocartographyLinesLineSegmentItem(TypedDict):
+    lat: float
+    lng: float
+
+
+class AstrocartographyLinesMeta(TypedDict):
+    mode: str
+    bodies: list[str]
+    angles: list[str]
+    timezone: str
+    geometry_format: str
+    coordinate_reference_system: str
+    coordinate_order: str
+    sample_step_degrees: float
+    line_sample_step_degrees: float
+    crossing_count: int
+    chart_family_count: int
+
+
 class AstrocartographyLinesRequest(TypedDict):
     natal: "NatalChartRequest"
     mode: NotRequired[Literal["in_mundo", "projected"]]
@@ -267,6 +547,52 @@ class AstrocartographyLinesRequest(TypedDict):
     angles: NotRequired[Union[list[str], None]]
     topocentric: NotRequired[bool]
     include_crossings: NotRequired[bool]
+
+
+class AstrocartographyLinesResponse(TypedDict):
+    meta: "AstrocartographyLinesMeta"
+    warnings: list[str]
+    lines: list["AstrocartographyLinesLine"]
+    chart_families: list["AstrocartographyLinesChartFamily"]
+    crossings: list["AstrocartographyLinesCrossing"]
+
+
+class AstrocartographyParansMeta(TypedDict):
+    mode: str
+    bodies: list[str]
+    events: list[str]
+    timezone: str
+    paran_orb_deg: float
+    paran_tail_deg: float
+    count: int
+
+
+class AstrocartographyParansParan(TypedDict):
+    id: str
+    body_a: str
+    event_a: str
+    body_b: str
+    event_b: str
+    latitude: float
+    orb_deg: float
+    kind: str
+    geometry: "AstrocartographyParansParanGeometry"
+    nearest_cities: list["AstrocartographyLinesCrossingNearestCity"]
+    strength: float
+    strongest_focus: str
+    secondary_focus: str
+    polarity: str
+    interpretation_short: str
+    interpretation_caution: str
+    benefit_keywords: list[str]
+    risk_keywords: list[str]
+
+
+class AstrocartographyParansParanGeometry(TypedDict):
+    center_lat: float
+    north_lat: float
+    south_lat: float
+    segments: list[list["AstrocartographyLinesLineSegmentItem"]]
 
 
 class AstrocartographyParansRequest(TypedDict):
@@ -279,6 +605,30 @@ class AstrocartographyParansRequest(TypedDict):
     paran_orb_deg: NotRequired[float]
     paran_tail_deg: NotRequired[float]
     include_nearby_cities: NotRequired[bool]
+
+
+class AstrocartographyParansResponse(TypedDict):
+    meta: "AstrocartographyParansMeta"
+    warnings: list[str]
+    parans: list["AstrocartographyParansParan"]
+
+
+class AstrocartographyRecommendationsMeta(TypedDict):
+    focus: str
+    mode: str
+    country_scope: str
+    city_size: NotRequired[Union[str, None]]
+    population_min: NotRequired[Union[int, None]]
+    population_max: NotRequired[Union[int, None]]
+    bodies: list[str]
+    angles: list[str]
+    timezone: str
+    candidate_count: int
+    scored_count: int
+    signal_strength: str
+    confidence: str
+    match_tier: str
+    no_strong_matches: bool
 
 
 class AstrocartographyRecommendationsRequest(TypedDict):
@@ -304,12 +654,224 @@ class AstrocartographyRecommendationsRequest(TypedDict):
     include_relocation_summary: NotRequired[bool]
 
 
+class AstrocartographyRecommendationsResponse(TypedDict):
+    meta: "AstrocartographyRecommendationsMeta"
+    warnings: list[str]
+    results: list["AstrocartographyRecommendationsResult"]
+    map: NotRequired[Union["AstrocartographyLinesResponse", None]]
+
+
+class AstrocartographyRecommendationsResult(TypedDict):
+    city: "AstrocartographyRecommendationsResultCity"
+    distance_from_natal_km: NotRequired[Union[float, None]]
+    score: float
+    summary: str
+    top_factors: list["AstrocartographyCityCheckFocusScoresCareerTopFactor"]
+    nearest_favorable_distance_km: float
+    nearest_challenging_distance_km: float
+    nearest_favorable_line: "AstrocartographyCityCheckFocusScoresCareerNearestFavorableLine"
+    nearest_challenging_line: "AstrocartographyCityCheckFocusScoresCareerNearestFavorableLine"
+    line_score: float
+    paran_score: float
+    relocation_score: float
+    top_parans: list["AstrocartographyCityCheckFocusScoresCareerTopParan"]
+    nearest_favorable_paran: NotRequired[Union["AstrocartographyCityCheckFocusScoresCareerNearestFavorableParan", None]]
+    nearest_challenging_paran: NotRequired[Union["AstrocartographyCityCheckFocusScoresCareerNearestFavorableParan", None]]
+    rank: int
+    relocation_summary: NotRequired[Union["AstrocartographyCityCheckRelocationSummary", None]]
+    city_visual_explanation: "AstrocartographyCityCheckCityVisualExplanation"
+    signal_strength: str
+    match_tier: str
+
+
+class AstrocartographyRecommendationsResultCity(TypedDict):
+    name: str
+    country: str
+    state: NotRequired[Union[str, None]]
+    lat: float
+    lng: float
+    timezone: str
+    population: int
+
+
+class AstrocartographyRelocationChart(TypedDict):
+    subject: "AstrocartographyRelocationChartSubject"
+    planets: list["AstrocartographyRelocationChartPlanet"]
+    aspects: list["AstrocartographyRelocationChartAspect"]
+    aspects_summary: "AstrocartographyRelocationChartAspectsSummary"
+    confidence: "AstrocartographyRelocationChartConfidence"
+    houses: list["AstrocartographyRelocationChartHouse"]
+    angles: "AstrocartographyRelocationChartAngles"
+    angles_details: dict[str, "AstrocartographyCityCheckRelocationSummaryAnglesDetailsEntry"]
+
+
+class AstrocartographyRelocationChartAngles(TypedDict):
+    asc: float
+    mc: float
+    ic: float
+    dc: float
+    vertex: float
+
+
+class AstrocartographyRelocationChartAspect(TypedDict):
+    p1: str
+    p2: str
+    type: str
+    orb: float
+    deg: float
+    is_major: bool
+    is_applying: bool
+
+
+class AstrocartographyRelocationChartAspectsSummary(TypedDict):
+    total: int
+    major: int
+    minor: int
+    by_type: "AstrocartographyRelocationChartAspectsSummaryByType"
+
+
+class AstrocartographyRelocationChartAspectsSummaryByType(TypedDict):
+    square: int
+    trine: int
+    opposition: NotRequired[Union[int, None]]
+    sextile: int
+    conjunction: int
+    semi_square: NotRequired[Union[int, None]]
+    quintile: NotRequired[Union[int, None]]
+    quincunx: NotRequired[Union[int, None]]
+    semi_sextile: NotRequired[Union[int, None]]
+    sesquiquadrate: NotRequired[Union[int, None]]
+
+
+class AstrocartographyRelocationChartConfidence(TypedDict):
+    houses: str
+    angles: str
+    overall: str
+
+
+class AstrocartographyRelocationChartHouse(TypedDict):
+    house: int
+    name: str
+    sign: str
+    sign_id: str
+    pos: float
+    abs_pos: float
+
+
+class AstrocartographyRelocationChartPlanet(TypedDict):
+    id: str
+    name: str
+    sign: str
+    sign_id: str
+    pos: float
+    abs_pos: float
+    retrograde: bool
+    house: int
+    declination_deg: NotRequired[Union[float, None]]
+    variant: NotRequired[Union[str, None]]
+    dignity: NotRequired[Union[str, None]]
+    speed: NotRequired[Union[float, None]]
+    is_stationary: NotRequired[Union[bool, None]]
+
+
+class AstrocartographyRelocationChartSubject(TypedDict):
+    name: str
+    datetime: str
+    location: "AstrocartographyRelocationChartSubjectLocation"
+    settings: "AstrocartographyRelocationChartSubjectSettings"
+
+
+class AstrocartographyRelocationChartSubjectLocation(TypedDict):
+    city: str
+    lat: float
+    lng: float
+    timezone: str
+
+
+class AstrocartographyRelocationChartSubjectSettings(TypedDict):
+    house_system: str
+    julian_day: float
+    julian_day_tt: float
+    delta_t_days: float
+    delta_t_seconds: float
+    zodiac_type: str
+    time_known: bool
+
+
+class AstrocartographyRelocationMeta(TypedDict):
+    mode: str
+    timezone: str
+    house_system: str
+
+
 class AstrocartographyRelocationRequest(TypedDict):
     natal: "NatalChartRequest"
     city: str
     country: NotRequired[Union[str, None]]
     lat: NotRequired[Union[float, None]]
     lng: NotRequired[Union[float, None]]
+
+
+class AstrocartographyRelocationResponse(TypedDict):
+    meta: "AstrocartographyRelocationMeta"
+    warnings: list[str]
+    city: "AstrocartographyCityCheckCity"
+    relocation_summary: "AstrocartographyCityCheckRelocationSummary"
+    chart: "AstrocartographyRelocationChart"
+
+
+class AtomicInterpretation(TypedDict):
+    """Interpretation blocks for the chart's placements and aspects, grouped by theme."""
+    metadata: "AtomicInterpretationMetadata"
+    sections: "AtomicInterpretationSections"
+    index: "AtomicInterpretationIndex"
+
+
+class AtomicInterpretationAspect(TypedDict):
+    p1: str
+    p2: str
+    type: str
+    key: str
+    title: NotRequired[Union[str, None]]
+    content: NotRequired[Union[str, dict[str, Any], None]]
+
+
+class AtomicInterpretationBlock(TypedDict):
+    """An interpretation text block (a row of the interpretation library)."""
+    key: NotRequired[Union[str, None]]
+    category: NotRequired[Union[str, None]]
+    title: NotRequired[Union[str, None]]
+    body: NotRequired[Union[str, dict[str, Any], None]]
+    tone: NotRequired[Union[str, None]]
+    tags: NotRequired[Union[list[str], None]]
+
+
+class AtomicInterpretationIndex(TypedDict):
+    placements: list["AtomicInterpretationPlacement"]
+    aspects: list["AtomicInterpretationAspect"]
+
+
+class AtomicInterpretationMetadata(TypedDict):
+    key_count: int
+    found_count: int
+    missing_keys: list[str]
+
+
+class AtomicInterpretationPlacement(TypedDict):
+    planet: str
+    key: str
+    type: str
+    title: NotRequired[Union[str, None]]
+    content: NotRequired[Union[str, dict[str, Any], None]]
+
+
+class AtomicInterpretationSections(TypedDict):
+    core_self: list["AtomicInterpretationBlock"]
+    mind: list["AtomicInterpretationBlock"]
+    love_relating: list["AtomicInterpretationBlock"]
+    work_path: list["AtomicInterpretationBlock"]
+    social_collective: list["AtomicInterpretationBlock"]
+    karmic_healing: list["AtomicInterpretationBlock"]
 
 
 class AtomicReportRequest(TypedDict):
@@ -325,6 +887,14 @@ class AtomicReportRequest(TypedDict):
     tz_str: NotRequired[Union[str, None]]
     dst_policy: NotRequired[Union[Literal["reject", "earlier", "later", "shift_forward"], None]]
     template: NotRequired[str]
+
+
+class AtomicReportResponse(TypedDict):
+    """Interpretation report for a natal chart."""
+    metadata: "AtomicInterpretationMetadata"
+    sections: "AtomicInterpretationSections"
+    index: "AtomicInterpretationIndex"
+    resolved_time: NotRequired[Union["ResolvedTime", None]]
 
 
 class BaseChartRequestV1(TypedDict):
@@ -360,6 +930,268 @@ class BaseChartRequestV2(TypedDict):
     reference_date: NotRequired[Union[str, None]]
 
 
+class BaziChartAstroDebug(TypedDict):
+    input_local_time: str
+    input_calendar: str
+    input_gregorian_equivalent: str
+    effective_solar_time_local: str
+    effective_solar_time_absolute: str
+    effective_solar_time_absolute_reference: str
+    resolved_timezone: str
+    time_standard: str
+    equation_of_time_minutes: float
+    solar_terms: dict[str, str]
+
+
+class BaziChartCurrentYearTriggers(TypedDict):
+    year: int
+    gan_zhi: str
+    interactions: list["BaziChartCurrentYearTriggersInteraction"]
+    stars: list["BaziChartCurrentYearTriggersStar"]
+
+
+class BaziChartCurrentYearTriggersInteraction(TypedDict):
+    id: str
+    type: str
+    scope: str
+    pillars: list[str]
+    stems: NotRequired[Union[list[str], None]]
+    can_transform: NotRequired[Union[bool, None]]
+    transform_level: NotRequired[Union[str, None]]
+    transform_score: NotRequired[Union[float, None]]
+    transform_to: NotRequired[Union[str, None]]
+    branches: NotRequired[Union[list[str], None]]
+    missing_branch: NotRequired[Union[str, None]]
+    is_formed: NotRequired[Union[bool, None]]
+    note: NotRequired[Union[str, None]]
+    interpretation: NotRequired[Union[str, None]]
+
+
+class BaziChartCurrentYearTriggersStar(TypedDict):
+    name: str
+    pillar: str
+    zhi: str
+    xun_audit: NotRequired[Union["BaziChartStarXunAudit", None]]
+
+
+class BaziChartDayMaster(TypedDict):
+    stem: str
+    info: "BaziChartDayMasterInfo"
+    pinyin: NotRequired[Union[str, None]]
+
+
+class BaziChartDayMasterInfo(TypedDict):
+    name: str
+    pinyin: NotRequired[Union[str, None]]
+    element: str
+    polarity: str
+
+
+class BaziChartElements(TypedDict):
+    scoring_model: str
+    weights: "BaziChartElementsWeights"
+    points: "BaziChartElementsPoints"
+    percentages: "BaziChartElementsPercentages"
+    dominant: str
+
+
+class BaziChartElementsPercentages(TypedDict):
+    Wood: float
+    Fire: float
+    Earth: float
+    Metal: float
+    Water: float
+
+
+class BaziChartElementsPoints(TypedDict):
+    Wood: int
+    Fire: int
+    Earth: int
+    Metal: int
+    Water: int
+
+
+class BaziChartElementsWeights(TypedDict):
+    stem: int
+    branch: int
+    hidden_stem: int
+
+
+class BaziChartInteraction(TypedDict):
+    id: str
+    type: str
+    scope: str
+    pillars: list[str]
+    stems: NotRequired[Union[list[str], None]]
+    can_transform: NotRequired[Union[bool, None]]
+    transform_level: NotRequired[Union[str, None]]
+    transform_score: NotRequired[Union[float, None]]
+    transform_to: NotRequired[Union[str, None]]
+    transform_evidence: NotRequired[Union["BaziChartInteractionTransformEvidence", None]]
+    conditions: NotRequired[Union[str, None]]
+    interpretation: str
+    branches: NotRequired[Union[list[str], None]]
+    is_formed: NotRequired[Union[bool, None]]
+    note: NotRequired[Union[str, None]]
+    missing_branch: NotRequired[Union[str, None]]
+    mitigated_by_branches: NotRequired[Union[list[str], None]]
+
+
+class BaziChartInteractionTransformEvidence(TypedDict):
+    month_branch: str
+    supporting_elements: NotRequired[Union[list[str], None]]
+    opposing_elements: NotRequired[Union[list[str], None]]
+    season_support_score: NotRequired[Union[float, None]]
+    final_decision: str
+    season_support: NotRequired[Union[bool, None]]
+
+
+class BaziChartLuckCycle(TypedDict):
+    start_age_years: int
+    is_forward: bool
+    pillars: list["BaziChartLuckCyclePillar"]
+
+
+class BaziChartLuckCyclePillar(TypedDict):
+    start_age: int
+    start_year: int
+    end_year: int
+    gan_zhi: str
+    gan: str
+    zhi: str
+    gan_pinyin: NotRequired[Union[str, None]]
+    zhi_pinyin: NotRequired[Union[str, None]]
+
+
+class BaziChartMetadata(TypedDict):
+    engine_version: str
+    ruleset: str
+    solar_term_source: str
+    life_stage_method: str
+
+
+class BaziChartPillar(TypedDict):
+    label: str
+    gan: str
+    zhi: str
+    gan_info: "BaziChartDayMasterInfo"
+    zhi_info: "BaziChartPillarZhiInfo"
+    nayin: str
+    life_stage: "BaziChartPillarLifeStage"
+    gan_pinyin: NotRequired[Union[str, None]]
+    zhi_pinyin: NotRequired[Union[str, None]]
+    ten_gods: NotRequired[Union["BaziChartPillarTenGods", None]]
+    interpretation: NotRequired[Union[str, None]]
+
+
+class BaziChartPillarLifeStage(TypedDict):
+    chinese: str
+    name: str
+
+
+class BaziChartPillarTenGods(TypedDict):
+    stem: str
+    hidden: list["BaziChartPillarTenGodsHiddenItem"]
+
+
+class BaziChartPillarTenGodsHiddenItem(TypedDict):
+    gan: str
+    info: "BaziChartDayMasterInfo"
+    ten_god: str
+    pinyin: NotRequired[Union[str, None]]
+
+
+class BaziChartPillarZhiInfo(TypedDict):
+    name: str
+    pinyin: NotRequired[Union[str, None]]
+    element: str
+    polarity: str
+    zodiac: str
+    hidden: list[str]
+
+
+class BaziChartProfessional(TypedDict):
+    dm_strength: str
+    structure: str
+    yong_shen_candidates: list[str]
+    favorable_elements: list[str]
+    unfavorable_elements: list[str]
+    professional_debug: NotRequired[Union["BaziChartProfessionalProfessionalDebug", None]]
+    interpretation: str
+
+
+class BaziChartProfessionalProfessionalDebug(TypedDict):
+    dm_strength_score: float
+    seasonal_factor: float
+    season_reason: str
+    balance_ratio: float
+    yong_shen_rationale: list[str]
+    structure_rationale: str
+    xi_ji_method: str
+
+
+class BaziChartResponse(TypedDict):
+    day_master: "BaziChartDayMaster"
+    pillars: list["BaziChartPillar"]
+    luck_cycle: "BaziChartLuckCycle"
+    elements: "BaziChartElements"
+    summary: "BaziChartSummary"
+    stars: NotRequired[Union[list["BaziChartStar"], None]]
+    interactions: NotRequired[Union[list["BaziChartInteraction"], None]]
+    professional: NotRequired[Union["BaziChartProfessional", None]]
+    xun_kong: NotRequired[Union["BaziChartStarXunAudit", None]]
+    stars_ruleset: NotRequired[Union[str, None]]
+    interpretation_ruleset: str
+    metadata: "BaziChartMetadata"
+    astro_debug: NotRequired[Union["BaziChartAstroDebug", None]]
+    current_year_triggers: NotRequired[Union["BaziChartCurrentYearTriggers", None]]
+
+
+class BaziChartStar(TypedDict):
+    name: str
+    pillar: str
+    zhi: str
+    desc: str
+    trigger_rule: Union["BaziChartStarTriggerRule", str]
+    trigger_text: str
+    xun_audit: NotRequired[Union["BaziChartStarXunAudit", None]]
+
+
+class BaziChartStarTriggerRule(TypedDict):
+    type: str
+    dm: NotRequired[Union[str, None]]
+    target: NotRequired[Union[str, None]]
+    star: NotRequired[Union[str, None]]
+    ref_branch: NotRequired[Union[str, None]]
+    day_pillar: NotRequired[Union[str, None]]
+    xun: NotRequired[Union[str, None]]
+    void_branches: NotRequired[Union[list[str], None]]
+
+
+class BaziChartStarXunAudit(TypedDict):
+    void_branches: list[str]
+    xun_name: str
+    xun_index: int
+    day_pillar: str
+
+
+class BaziChartSummary(TypedDict):
+    lunar_date: str
+    zodiac: str
+    solar_term: NotRequired[Union[str, None]]
+
+
+class BaziDictionaryEntry(TypedDict):
+    type: str
+    name: str
+    stems: NotRequired[Union[list[str], None]]
+    branches: NotRequired[Union[list[str], None]]
+    element: NotRequired[Union[str, None]]
+
+
+BaziDictionaryResponse: TypeAlias = dict[str, "BaziDictionaryEntry"]
+
+
 class BaziFlowRequest(TypedDict):
     year: int
     month: int
@@ -382,6 +1214,191 @@ class BaziFlowRequest(TypedDict):
     lang: NotRequired[str]
 
 
+class BaziFlowResponse(TypedDict):
+    years: list["BaziFlowYear"]
+    x_dict: NotRequired[Union[dict[str, "BaziDictionaryEntry"], None]]
+
+
+class BaziFlowYear(TypedDict):
+    year: int
+    gan_zhi: str
+    gan: str
+    zhi: str
+    age: int
+    months: list["BaziFlowYearMonth"]
+    gan_pinyin: NotRequired[Union[str, None]]
+    zhi_pinyin: NotRequired[Union[str, None]]
+    active_luck: NotRequired[Union["BaziFlowYearActiveLuck", None]]
+    interactions: list[Union["BaziFlowYearMonthInteraction", int]]
+    stars: NotRequired[Union[list[Union["BaziFlowYearMonthStar", int]], None]]
+    baseline_interactions: NotRequired[Union[list[Union["BaziFlowYearBaselineInteraction", int]], None]]
+
+
+class BaziFlowYearActiveLuck(TypedDict):
+    gan_zhi: str
+    start_year: int
+    end_year: int
+
+
+class BaziFlowYearBaselineInteraction(TypedDict):
+    id: str
+    type: str
+    scope: str
+    pillars: list[str]
+    stems: NotRequired[Union[list[str], None]]
+    can_transform: NotRequired[Union[bool, None]]
+    transform_level: NotRequired[Union[str, None]]
+    transform_score: NotRequired[Union[float, None]]
+    transform_to: NotRequired[Union[str, None]]
+    transform_evidence: NotRequired[Union["BaziChartInteractionTransformEvidence", None]]
+    conditions: NotRequired[Union[str, None]]
+    interpretation: str
+    branches: NotRequired[Union[list[str], None]]
+    is_formed: NotRequired[Union[bool, None]]
+    note: NotRequired[Union[str, None]]
+
+
+class BaziFlowYearMonth(TypedDict):
+    index: int
+    gan_zhi: str
+    gan: str
+    zhi: str
+    gan_pinyin: NotRequired[Union[str, None]]
+    zhi_pinyin: NotRequired[Union[str, None]]
+    interactions: list[Union["BaziFlowYearMonthInteraction", int]]
+    stars: NotRequired[Union[list[Union["BaziFlowYearMonthStar", int]], None]]
+
+
+class BaziFlowYearMonthInteraction(TypedDict):
+    id: str
+    type: str
+    scope: str
+    pillars: list[str]
+    stems: NotRequired[Union[list[str], None]]
+    can_transform: NotRequired[Union[bool, None]]
+    transform_level: NotRequired[Union[str, None]]
+    transform_score: NotRequired[Union[float, None]]
+    transform_to: NotRequired[Union[str, None]]
+    branches: NotRequired[Union[list[str], None]]
+    missing_branch: NotRequired[Union[str, None]]
+    is_formed: NotRequired[Union[bool, None]]
+    mitigated_by_branches: NotRequired[Union[list[str], None]]
+    note: NotRequired[Union[str, None]]
+    interpretation: NotRequired[Union[str, None]]
+    transform_evidence: NotRequired[Union["BaziChartInteractionTransformEvidence", None]]
+    conditions: NotRequired[Union[str, None]]
+
+
+class BaziFlowYearMonthStar(TypedDict):
+    name: str
+    pillar: str
+    zhi: str
+    xun_audit: NotRequired[Union["BaziChartStarXunAudit", None]]
+    desc: NotRequired[Union[str, None]]
+    trigger_rule: NotRequired[Union["BaziChartStarTriggerRule", str, None]]
+    trigger_text: NotRequired[Union[str, None]]
+
+
+class BaziHealthBaziContext(TypedDict):
+    day_master: str
+    day_master_element: str
+    day_master_strength: str
+    favorable_elements: list[str]
+    unfavorable_elements: list[str]
+    rationale: list[str]
+    balance_strategy: "BaziHealthBaziContextBalanceStrategy"
+
+
+class BaziHealthBaziContextBalanceStrategy(TypedDict):
+    priority_elements: list[str]
+    reason: list[str]
+
+
+class BaziHealthConstitution(TypedDict):
+    temperature: str
+    temperature_score: float
+    temperature_scale: str
+    temperature_components: "BaziChartElementsPercentages"
+    temperature_confidence: float
+    moisture: str
+    moisture_score: float
+    moisture_scale: str
+    moisture_components: "BaziChartElementsPercentages"
+    moisture_confidence: float
+    yin_yang_skew: str
+    yang_ratio: float
+
+
+class BaziHealthDataQuality(TypedDict):
+    rooting_model: str
+    hidden_stems_weighting: str
+    transformations: str
+
+
+class BaziHealthElementBalance(TypedDict):
+    raw_absolute: "BaziChartElementsPercentages"
+    raw_total: float
+    raw_distribution: "BaziChartElementsPercentages"
+    effective_pre_normalized: "BaziChartElementsPercentages"
+    effective_distribution: "BaziChartElementsPercentages"
+    effective_method: str
+    seasonal_adjustments: "BaziHealthElementBalanceSeasonalAdjustments"
+    rooting_scores: "BaziChartElementsPercentages"
+    rooting_raw: "BaziChartElementsPercentages"
+    dominant_elements: list[str]
+    weak_elements: list[str]
+
+
+class BaziHealthElementBalanceSeasonalAdjustments(TypedDict):
+    month_branch: str
+    multipliers: "BaziChartElementsPercentages"
+
+
+class BaziHealthInstabilityMarkers(TypedDict):
+    markers: "BaziHealthInstabilityMarkersMarkers"
+    total_clashes: int
+    total_punishments: int
+    total_harms: int
+    instability_index: float
+    level: str
+
+
+class BaziHealthInstabilityMarkersMarkers(TypedDict):
+    clashes: list["BaziHealthInstabilityMarkersMarkersClash"]
+    punishments: list["BaziHealthInstabilityMarkersMarkersPunishment"]
+    harms: list["BaziHealthInstabilityMarkersMarkersPunishment"]
+    self_punishments: list["BaziHealthInstabilityMarkersMarkersSelfPunishment"]
+
+
+class BaziHealthInstabilityMarkersMarkersClash(TypedDict):
+    type: str
+    pillars: list[str]
+    elements: list[str]
+    impact: str
+
+
+class BaziHealthInstabilityMarkersMarkersPunishment(TypedDict):
+    type: str
+    pillars: list[str]
+    branches: list[str]
+    impact: str
+
+
+class BaziHealthInstabilityMarkersMarkersSelfPunishment(TypedDict):
+    type: str
+    pillars: list[str]
+    branch: NotRequired[Union[str, None]]
+    impact: str
+
+
+class BaziHealthMetadata(TypedDict):
+    version: str
+    framework: str
+    day_master: str
+    month_branch: str
+    birth_year: int
+
+
 class BaziHealthRequest(TypedDict):
     year: int
     month: int
@@ -399,6 +1416,131 @@ class BaziHealthRequest(TypedDict):
     lang: NotRequired[str]
 
 
+class BaziHealthResponse(TypedDict):
+    bazi_context: "BaziHealthBaziContext"
+    constitution: "BaziHealthConstitution"
+    element_balance: "BaziHealthElementBalance"
+    susceptibility_themes: list["BaziHealthSusceptibilityTheme"]
+    stress_patterns: "BaziHealthStressPatterns"
+    tcm_correspondences: list["BaziHealthTcmCorrespondence"]
+    instability_markers: "BaziHealthInstabilityMarkers"
+    timing: NotRequired[Union["BaziHealthTiming", None]]
+    metadata: "BaziHealthMetadata"
+    data_quality: "BaziHealthDataQuality"
+    disclaimer: str
+
+
+class BaziHealthStressPatterns(TypedDict):
+    patterns: "BaziHealthStressPatternsPatterns"
+    ten_god_distribution: "BaziHealthStressPatternsTenGodDistribution"
+    dm_strength_context: str
+    overall_stress_index: float
+
+
+class BaziHealthStressPatternsPatterns(TypedDict):
+    depletion_risk: "BaziHealthStressPatternsPatternsDepletionRisk"
+    overwork_risk: "BaziHealthStressPatternsPatternsDepletionRisk"
+    pressure_load: "BaziHealthStressPatternsPatternsDepletionRisk"
+    recovery_capacity: "BaziHealthStressPatternsPatternsDepletionRisk"
+
+
+class BaziHealthStressPatternsPatternsDepletionRisk(TypedDict):
+    level: str
+    score: float
+    drivers: list[str]
+    description: str
+
+
+BaziHealthStressPatternsTenGodDistribution = TypedDict(
+    "BaziHealthStressPatternsTenGodDistribution",
+    {
+        "Friend": float,
+        "Rob Wealth": float,
+        "Eating God": float,
+        "Hurting Officer": float,
+        "Indirect Wealth": float,
+        "Direct Wealth": float,
+        "7 Killings": float,
+        "Direct Officer": float,
+        "Indirect Resource": float,
+        "Direct Resource": float,
+    },
+)
+
+
+class BaziHealthSusceptibilityTheme(TypedDict):
+    theme: str
+    category: str
+    drivers: list[str]
+    confidence: float
+
+
+class BaziHealthTcmCorrespondence(TypedDict):
+    element: str
+    system: str
+    tendency: str
+    themes: list[str]
+    drivers: list[str]
+    confidence: float
+
+
+class BaziHealthTiming(TypedDict):
+    decade_peaks: list["BaziHealthTimingDecadePeak"]
+    year_peaks: list["BaziHealthTimingYearPeak"]
+    analysis_range: str
+    note: str
+
+
+class BaziHealthTimingDecadePeak(TypedDict):
+    period: str
+    gan_zhi: str
+    strain_index: float
+    strain_breakdown: "BaziHealthTimingDecadePeakStrainBreakdown"
+    strain_type: str
+    drivers: list[str]
+    level: str
+
+
+class BaziHealthTimingDecadePeakStrainBreakdown(TypedDict):
+    unfavorable_elements: float
+    clash_activation: float
+
+
+class BaziHealthTimingYearPeak(TypedDict):
+    year: int
+    gan_zhi: str
+    strain_index: float
+    strain_type: str
+    drivers: list[str]
+    level: str
+
+
+class BaziLifespanCurveItem(TypedDict):
+    age: int
+    year: int
+    j0: float
+    j_final: float
+    jing_prenatal: float
+    jing_postnatal: float
+    qi: float
+    qi_pre_heaven: float
+    qi_post_heaven: float
+    prenatal_integrity: float
+    shen: float
+    S: float
+    D: float
+    V: float
+    H: float
+    explain: str
+
+
+class BaziLifespanMetadata(TypedDict):
+    max_age: int
+    sex: str
+    cultivation_level: float
+    algorithm: str
+
+
 class BaziLifespanRequest(TypedDict):
     year: int
     month: int
@@ -414,6 +1556,11 @@ class BaziLifespanRequest(TypedDict):
     max_age: NotRequired[int]
     cultivation_factor: NotRequired[float]
     lang: NotRequired[str]
+
+
+class BaziLifespanResponse(TypedDict):
+    metadata: "BaziLifespanMetadata"
+    curve: list["BaziLifespanCurveItem"]
 
 
 class BaziRequest(TypedDict):
@@ -439,10 +1586,88 @@ class BaziRequest(TypedDict):
     lang: NotRequired[str]
 
 
+class BaziSynastryConflictScan(TypedDict):
+    clashes: int
+    harms: int
+    punishments: int
+    destructions: int
+
+
+class BaziSynastryDayMasterAnalysis(TypedDict):
+    dm_a: str
+    dm_b: str
+    relation: str
+    score: float
+    description: str
+    dynamic: str
+
+
+class BaziSynastryElementAnalysis(TypedDict):
+    score: float
+    details: list[str]
+    a_needs: str
+    b_needs: str
+
+
+class BaziSynastryHiddenInteractions(TypedDict):
+    connections: list[str]
+    count: int
+
+
+class BaziSynastryPillarInteraction(TypedDict):
+    pillar: str
+    weight: float
+    branch_interaction: "BaziSynastryPillarInteractionBranchInteraction"
+    stem_interaction: str
+    net_score: float
+
+
+class BaziSynastryPillarInteractionBranchInteraction(TypedDict):
+    type: str
+    label: str
+    score_modifier: float
+
+
 class BaziSynastryRequest(TypedDict):
     person_a: "BaziRequest"
     person_b: "BaziRequest"
     lang: NotRequired[str]
+
+
+class BaziSynastryResponse(TypedDict):
+    score: float
+    score_breakdown: "BaziSynastryScoreBreakdown"
+    overall_compatibility: str
+    day_master_analysis: "BaziSynastryDayMasterAnalysis"
+    spouse_palace_analysis: "BaziSynastrySpousePalaceAnalysis"
+    element_analysis: "BaziSynastryElementAnalysis"
+    pillar_interactions: list["BaziSynastryPillarInteraction"]
+    hidden_interactions: "BaziSynastryHiddenInteractions"
+    conflict_scan: "BaziSynastryConflictScan"
+    conflict_summary: str
+
+
+class BaziSynastryScoreBreakdown(TypedDict):
+    day_master: float
+    spouse_palace: float
+    pillars: float
+    elements: float
+    hidden_bonus: float
+
+
+class BaziSynastrySpousePalaceAnalysis(TypedDict):
+    branch_a: str
+    branch_b: str
+    interaction: str
+    score: float
+    description: str
+    type: str
+
+
+class BaziTimeCorrectionModalities(TypedDict):
+    civil: str
+    true_solar: str
+    true_solar_absolute: str
 
 
 class BaziTimeCorrectionRequest(TypedDict):
@@ -456,6 +1681,19 @@ class BaziTimeCorrectionRequest(TypedDict):
     city: NotRequired[Union[str, None]]
     tz_str: NotRequired[Union[str, None]]
     lang: NotRequired[str]
+
+
+class BaziTimeCorrectionResponse(TypedDict):
+    civil_time: str
+    lmt: str
+    true_solar_relative: str
+    true_solar_absolute: str
+    equation_of_time_minutes: float
+    longitude_correction_minutes: float
+    standard_meridian: float
+    resolved_timezone: str
+    dst_offset_hours: float
+    modalities: "BaziTimeCorrectionModalities"
 
 
 class BhavaChalitAscendant(TypedDict):
@@ -962,6 +2200,41 @@ class ChineseCalendarYearProfile(TypedDict):
 class ChineseCalendarYearProfiles(TypedDict):
     lunar_new_year: "ChineseCalendarYearProfile"
     li_chun: "ChineseCalendarYearProfile"
+
+
+class ChineseTodayPillar(TypedDict):
+    label: str
+    gan: str
+    zhi: str
+    info: "ChineseTodayPillarInfo"
+    gan_pinyin: str
+    zhi_pinyin: str
+
+
+class ChineseTodayPillarInfo(TypedDict):
+    stem: "ChineseTodayPillarInfoStem"
+    branch: "ChineseTodayPillarInfoBranch"
+
+
+class ChineseTodayPillarInfoBranch(TypedDict):
+    name: str
+    pinyin: str
+    element: str
+    polarity: str
+    zodiac: str
+    hidden: list[str]
+
+
+class ChineseTodayPillarInfoStem(TypedDict):
+    name: str
+    pinyin: str
+    element: str
+    polarity: str
+
+
+class ChineseTodayResponse(TypedDict):
+    timestamp: str
+    pillars: list["ChineseTodayPillar"]
 
 
 class CityResult(TypedDict):
@@ -1512,8 +2785,8 @@ class DashaV2Response(TypedDict):
 class EclipseData(TypedDict):
     is_eclipse: NotRequired[bool]
     is_blood_moon: NotRequired[bool]
-    kind: NotRequired[Union[str, None]]
-    type: NotRequired[Union[str, None]]
+    kind: NotRequired[Union[Literal["solar", "lunar"], None]]
+    type: NotRequired[Union[Literal["total", "annular", "hybrid", "partial", "penumbral"], None]]
     date: NotRequired[Union[str, None]]
     starts_at: NotRequired[Union[str, None]]
     ends_at: NotRequired[Union[str, None]]
@@ -1521,7 +2794,7 @@ class EclipseData(TypedDict):
     central_phase_ends_at: NotRequired[Union[str, None]]
     visibility: NotRequired[Union[str, None]]
     visible_at_location: NotRequired[Union[bool, None]]
-    type_at_location: NotRequired[Union[str, None]]
+    type_at_location: NotRequired[Union[Literal["total", "annular", "hybrid", "partial"], None]]
     days_from_query: NotRequired[Union[float, None]]
     magnitude: NotRequired[Union[float, None]]
     obscuration: NotRequired[Union[float, None]]
@@ -1541,6 +2814,213 @@ class EclipseMaximumLocationData(TypedDict):
 class EngineMeta(TypedDict):
     name: NotRequired[str]
     version: NotRequired[str]
+
+
+class EphemerisDataAngles(TypedDict):
+    asc: float
+    mc: float
+    ic: float
+    dc: float
+    vertex: float
+
+
+class EphemerisDataAnglesDetailsEntry(TypedDict):
+    sign: str
+    sign_abbr: str
+    sign_id: str
+    pos: float
+    abs_pos: float
+    house: int
+
+
+class EphemerisDataAspect(TypedDict):
+    p1: str
+    p2: str
+    type: str
+    orb: float
+    deg: float
+    is_major: bool
+    is_applying: bool
+
+
+class EphemerisDataAstrology(TypedDict):
+    retrograde_bodies: list[str]
+    stations: list["EphemerisDataAstrologyStation"]
+    ingresses: list["EphemerisDataAstrologyIngress"]
+    angular_bodies: list["EphemerisDataAstrologyAngularBody"]
+    notable_conditions: list[str]
+    moon_phase: "EphemerisDataAstrologyMoonPhase"
+    moon_void_of_course: NotRequired[Union["EphemerisDataAstrologyMoonVoidOfCourse", None]]
+
+
+class EphemerisDataAstrologyAngularBody(TypedDict):
+    body: str
+    house: int
+
+
+class EphemerisDataAstrologyIngress(TypedDict):
+    body: str
+    sign: str
+    degree_in_sign: float
+    direction: str
+
+
+class EphemerisDataAstrologyMoonPhase(TypedDict):
+    name: str
+    phase_angle_deg: float
+    is_waxing: bool
+
+
+class EphemerisDataAstrologyMoonVoidOfCourse(TypedDict):
+    is_void: bool
+    definition: str
+    current_sign: str
+    next_sign: str
+    sign_ingress_at: str
+    next_applying_aspect: NotRequired[Union["EphemerisDataAstrologyMoonVoidOfCourseNextApplyingAspect", None]]
+
+
+class EphemerisDataAstrologyMoonVoidOfCourseNextApplyingAspect(TypedDict):
+    body: str
+    aspect: str
+    exact_at: str
+
+
+class EphemerisDataAstrologyStation(TypedDict):
+    body: str
+    motion_state: str
+    speed: NotRequired[Union[float, None]]
+
+
+class EphemerisDataBodiesEntry(TypedDict):
+    id: str
+    name: str
+    sign: str
+    sign_id: str
+    pos: float
+    abs_pos: float
+    retrograde: NotRequired[Union[bool, None]]
+    speed: NotRequired[Union[float, None]]
+    is_stationary: NotRequired[Union[bool, None]]
+    latitude_deg: float
+    distance_au: float
+    sign_abbr: str
+    position_text: str
+    degree_in_sign: float
+    longitude_deg: float
+    declination_deg: NotRequired[Union[float, None]]
+    motion_state: NotRequired[Union[str, None]]
+    house: NotRequired[Union[int, None]]
+    dignity: NotRequired[Union[str, None]]
+    variant: NotRequired[Union[str, None]]
+
+
+class EphemerisDataFixedStarError(TypedDict):
+    name: NotRequired[Union[str, None]]
+    error: NotRequired[Union[str, None]]
+
+
+class EphemerisDataFixedStarsEntry(TypedDict):
+    id: str
+    name: str
+    requested_name: str
+    swiss_name: str
+    sign: str
+    sign_abbr: str
+    sign_id: str
+    pos: float
+    abs_pos: float
+    longitude_deg: float
+    latitude_deg: float
+    distance_au: NotRequired[Union[float, None]]
+    position_text: str
+    degree_in_sign: float
+    right_ascension_deg: NotRequired[Union[float, None]]
+    declination_deg: NotRequired[Union[float, None]]
+    speed: NotRequired[Union[float, None]]
+    motion_state: NotRequired[Union[str, None]]
+
+
+class EphemerisDataHouse(TypedDict):
+    house: int
+    name: str
+    sign: str
+    sign_abbr: str
+    sign_id: str
+    pos: float
+    abs_pos: float
+
+
+class EphemerisDataSubject(TypedDict):
+    datetime: str
+    location: "EphemerisDataSubjectLocation"
+    settings: "EphemerisDataSubjectSettings"
+
+
+class EphemerisDataSubjectLocation(TypedDict):
+    city: NotRequired[Union[str, None]]
+    lat: float
+    lng: float
+    timezone: str
+
+
+class EphemerisDataSubjectSettings(TypedDict):
+    julian_day: float
+    julian_day_tt: float
+    delta_t_days: float
+    delta_t_seconds: float
+    zodiac_type: str
+    house_system: str
+    sidereal_ayanamsa: NotRequired[Union[str, None]]
+
+
+class EphemerisDisplay(TypedDict):
+    sign_style: str
+    position_text_suffixes: NotRequired[Union[list[str], None]]
+    body_order: NotRequired[Union[list[str], None]]
+    cell_format: NotRequired[Union[str, None]]
+    motion_markers: NotRequired[Union["EphemerisDisplayMotionMarkers", None]]
+    columns: NotRequired[Union[list[str], None]]
+
+
+class EphemerisDisplayMotionMarkers(TypedDict):
+    retrograde: str
+    stationary: str
+
+
+class EphemerisGridCell(TypedDict):
+    text: str
+    degree_text: str
+    sign: str
+    sign_abbr: str
+    motion_marker: NotRequired[Union[str, None]]
+    entered_sign: bool
+    station: bool
+
+
+class EphemerisMeta(TypedDict):
+    start: str
+    end: NotRequired[Union[str, None]]
+    step: NotRequired[Union[str, None]]
+    rows: int
+    bodies: list[str]
+    format: str
+    zodiac_type: str
+    sidereal_ayanamsa: NotRequired[Union[str, None]]
+    timezone: str
+    fixed_stars: NotRequired[Union[list[str], None]]
+    resolved_time: NotRequired[Union["ResolvedTime", None]]
+    table_style: NotRequired[Union[str, None]]
+
+
+class EphemerisRawRow(TypedDict):
+    timestamp: str
+    bodies: dict[str, "EphemerisDataBodiesEntry"]
+    astrology: "EphemerisDataAstrology"
+    angles: NotRequired[Union["EphemerisDataAngles", None]]
+    houses: NotRequired[Union[list["EphemerisDataHouse"], None]]
+    fixed_stars: NotRequired[Union[dict[str, "EphemerisDataFixedStarsEntry"], None]]
+    fixed_star_errors: NotRequired[Union[list["EphemerisDataFixedStarError"], None]]
 
 
 class EphemerisRequest(TypedDict):
@@ -1576,6 +3056,70 @@ class EphemerisRequest(TypedDict):
     include_chart_links: NotRequired[bool]
     sign_display: NotRequired[Union[Literal["abbr", "full"], None]]
     show_motion_markers: NotRequired[Union[bool, None]]
+
+
+class EphemerisResponse(TypedDict):
+    """Ephemeris for one instant (``data`` is an object) or a range (``data`` is a list, or a table)."""
+    meta: "EphemerisMeta"
+    data: NotRequired[Union["EphemerisSnapshot", list["EphemerisSnapshot"], None]]
+    display: NotRequired[Union["EphemerisDisplay", None]]
+    columns: NotRequired[Union[list[str], dict[str, list[str]], None]]
+    rows: NotRequired[Union[list["EphemerisRow"], None]]
+    raw_rows: NotRequired[Union[list["EphemerisRawRow"], None]]
+    index: NotRequired[Union[list[str], None]]
+
+
+class EphemerisRow(TypedDict):
+    """One table row. Besides the fields below, each requested body is a column keyed by its
+    display name (``Sun``, ``North Node``, ...): position text in ``rows``/``columns`` tables,
+    a cell object in ``grid`` tables.
+    """
+    timestamp: NotRequired[Union[str, None]]
+    date: NotRequired[Union["EphemerisRowDate", None]]
+    weekday: NotRequired[Union[str, None]]
+    sidereal_time: NotRequired[Union[str, None]]
+    chart: NotRequired[Union["EphemerisRowChart", None]]
+
+
+class EphemerisRowChart(TypedDict):
+    timestamp: str
+    date: str
+
+
+class EphemerisRowDate(TypedDict):
+    iso: str
+    day: int
+
+
+class EphemerisSnapshot(TypedDict):
+    timestamp: str
+    local_timestamp: str
+    subject: "EphemerisDataSubject"
+    bodies: dict[str, "EphemerisDataBodiesEntry"]
+    astrology: "EphemerisDataAstrology"
+    angles: NotRequired[Union["EphemerisDataAngles", None]]
+    angles_details: NotRequired[Union[dict[str, "EphemerisDataAnglesDetailsEntry"], None]]
+    houses: NotRequired[Union[list["EphemerisDataHouse"], None]]
+    aspects: NotRequired[Union[list["EphemerisDataAspect"], None]]
+    fixed_stars: NotRequired[Union[dict[str, "EphemerisDataFixedStarsEntry"], None]]
+    resolved_time: NotRequired[Union["ResolvedTime", None]]
+    fixed_star_errors: NotRequired[Union[list["EphemerisDataFixedStarError"], None]]
+
+
+class ErrorResponse(TypedDict):
+    """Error body.
+
+    Route errors carry ``detail``: a message, or an object with a stable ``error`` code, a
+    ``message`` and context fields. Gateway errors (authentication, quota, rate limits,
+    idempotency, capacity) carry a top-level ``error`` code and usually a ``detail`` message;
+    rate-limit errors add ``retry_after_ms`` or ``limit_info``. Request validation errors (422)
+    can also use the ``HTTPValidationError`` shape.
+    """
+    detail: NotRequired[Union[str, dict[str, Any], list[Any], None]]
+    error: NotRequired[Union[str, None]]
+    docs: NotRequired[Union[str, None]]
+    retry_after_ms: NotRequired[Union[int, None]]
+    limit_info: NotRequired[Union[dict[str, Any], None]]
 
 
 class ExactAspectSearchRequest(TypedDict):
@@ -2219,6 +3763,545 @@ class HighlightPayload(TypedDict):
     reason_codes: list[str]
 
 
+class HoroscopeDailyBulkDataEntry(TypedDict):
+    sign: str
+    date: str
+    scores: "HoroscopeDailyBulkDataEntryScores"
+    score_factors: list["HoroscopeDailyBulkDataEntryScoreFactor"]
+    lucky: "HoroscopeDailyBulkDataEntryLucky"
+    content: "HoroscopeDailyBulkDataEntryContent"
+    astro: "HoroscopeDailyBulkDataEntryAstro"
+    sign_label: str
+
+
+class HoroscopeDailyBulkDataEntryAstro(TypedDict):
+    moon_sign: "HoroscopeDailyBulkDataEntryLuckyColor"
+    moon_phase: "HoroscopeDailyBulkDataEntryLuckyColor"
+    highlights: list["HoroscopeDailyBulkDataEntryAstroHighlight"]
+
+
+class HoroscopeDailyBulkDataEntryAstroHighlight(TypedDict):
+    type: str
+    key: str
+    label: str
+
+
+class HoroscopeDailyBulkDataEntryContent(TypedDict):
+    text: str
+    theme: str
+    keywords: list[str]
+    supporting_insights: list[str]
+
+
+class HoroscopeDailyBulkDataEntryLucky(TypedDict):
+    color: "HoroscopeDailyBulkDataEntryLuckyColor"
+    number: int
+    time_window: "HoroscopeDailyBulkDataEntryLuckyTimeWindow"
+
+
+class HoroscopeDailyBulkDataEntryLuckyColor(TypedDict):
+    key: str
+    label: str
+
+
+class HoroscopeDailyBulkDataEntryLuckyTimeWindow(TypedDict):
+    display: str
+    start: str
+    end: str
+    tz: str
+
+
+class HoroscopeDailyBulkDataEntryScoreFactor(TypedDict):
+    dimension: str
+    reason: str
+
+
+class HoroscopeDailyBulkDataEntryScores(TypedDict):
+    overall: int
+    love: int
+    career: int
+    money: int
+    health: int
+
+
+class HoroscopeDailyBulkMeta(TypedDict):
+    request_id: str
+    generated_at: str
+    settings: "HoroscopeDailyBulkMetaSettings"
+    cache: "HoroscopeDailyBulkMetaCache"
+    engine: "HoroscopeDailyBulkMetaEngine"
+
+
+class HoroscopeDailyBulkMetaCache(TypedDict):
+    hit: bool
+    ttl_seconds: float
+
+
+class HoroscopeDailyBulkMetaEngine(TypedDict):
+    name: str
+    version: str
+
+
+class HoroscopeDailyBulkMetaSettings(TypedDict):
+    timezone: str
+    locale: str
+    date_resolved: str
+    orb_policy: str
+
+
+class HoroscopeDailyBulkResponse(TypedDict):
+    meta: "HoroscopeDailyBulkMeta"
+    data: dict[str, "HoroscopeDailyBulkDataEntry"]
+
+
+class HoroscopeDailyPersonalData(TypedDict):
+    sign: str
+    date: str
+    scores: "HoroscopeDailyBulkDataEntryScores"
+    score_factors: list["HoroscopeDailyBulkDataEntryScoreFactor"]
+    lucky: "HoroscopeDailyBulkDataEntryLucky"
+    content: "HoroscopeDailyBulkDataEntryContent"
+    astro: "HoroscopeDailyBulkDataEntryAstro"
+    sign_label: str
+    personal: "HoroscopeDailyPersonalDataPersonal"
+
+
+class HoroscopeDailyPersonalDataPersonal(TypedDict):
+    transits_top: list["HoroscopeDailyPersonalDataPersonalTransitsTopItem"]
+    focus_areas: list[str]
+    confidence_score: float
+
+
+class HoroscopeDailyPersonalDataPersonalTransitsTopItem(TypedDict):
+    transit_planet: "HoroscopeDailyBulkDataEntryLuckyColor"
+    natal_planet: "HoroscopeDailyBulkDataEntryLuckyColor"
+    aspect: "HoroscopeDailyBulkDataEntryLuckyColor"
+    orb_deg: float
+    score: float
+    is_applying: bool
+    exact_at: NotRequired[Union[str, None]]
+
+
+class HoroscopeDailyPersonalResponse(TypedDict):
+    meta: "HoroscopeDailyBulkMeta"
+    data: "HoroscopeDailyPersonalData"
+
+
+class HoroscopeDailyPersonalV2Data(TypedDict):
+    sign: str
+    date: str
+    scores: "HoroscopeDailyBulkDataEntryScores"
+    score_factors: list["HoroscopeDailySignV2DataScoreFactor"]
+    lucky: "HoroscopeDailyBulkDataEntryLucky"
+    content: "HoroscopeDailyBulkDataEntryContent"
+    astro: "HoroscopeDailyBulkDataEntryAstro"
+    sign_label: str
+    personal: "HoroscopeDailyPersonalV2DataPersonal"
+    scores_meta: "HoroscopeDailyPersonalV2DataScoresMeta"
+
+
+class HoroscopeDailyPersonalV2DataPersonal(TypedDict):
+    transits_top: list["HoroscopeDailyPersonalV2DataPersonalTransitsTopItem"]
+    focus_areas: list[str]
+    confidence_score: float
+
+
+class HoroscopeDailyPersonalV2DataPersonalTransitsTopItem(TypedDict):
+    transit_planet: "HoroscopeDailyBulkDataEntryLuckyColor"
+    natal_planet: "HoroscopeDailyBulkDataEntryLuckyColor"
+    aspect: "HoroscopeDailyBulkDataEntryLuckyColor"
+    orb_deg: float
+    score: float
+    is_applying: bool
+
+
+class HoroscopeDailyPersonalV2DataScoresMeta(TypedDict):
+    overall_method: str
+    weights: "HoroscopeDailyPersonalV2DataScoresMetaWeights"
+    rounding: str
+
+
+class HoroscopeDailyPersonalV2DataScoresMetaWeights(TypedDict):
+    love: float
+    career: float
+    money: float
+    health: float
+
+
+class HoroscopeDailyPersonalV2Meta(TypedDict):
+    request_id: str
+    generated_at: str
+    settings: "HoroscopeDailyPersonalV2MetaSettings"
+    engine: "HoroscopeDailyBulkMetaEngine"
+
+
+class HoroscopeDailyPersonalV2MetaSettings(TypedDict):
+    date_resolved: str
+    version: str
+
+
+class HoroscopeDailyPersonalV2Response(TypedDict):
+    meta: "HoroscopeDailyPersonalV2Meta"
+    data: "HoroscopeDailyPersonalV2Data"
+
+
+class HoroscopeDailyPersonalV3Data(TypedDict):
+    sign: str
+    date: str
+    scores: "HoroscopeDailyBulkDataEntryScores"
+    score_factors: list["HoroscopeDailySignV2DataScoreFactor"]
+    lucky: "HoroscopeDailyBulkDataEntryLucky"
+    content: "HoroscopeDailyPersonalV3DataContent"
+    astro: "HoroscopeDailyBulkDataEntryAstro"
+    sign_label: str
+    personal: "HoroscopeDailyPersonalV3DataPersonal"
+    scores_meta: "HoroscopeDailyPersonalV2DataScoresMeta"
+
+
+class HoroscopeDailyPersonalV3DataContent(TypedDict):
+    theme: str
+    keywords: list[str]
+
+
+class HoroscopeDailyPersonalV3DataPersonal(TypedDict):
+    transits_top: list["HoroscopeDailyPersonalV3DataPersonalTransitsTopItem"]
+    focus_areas: list[str]
+    confidence_score: float
+    day_context: "HoroscopeDailyPersonalV3DataPersonalDayContext"
+    active_windows: list["HoroscopeDailyPersonalV3DataPersonalDayContextActiveWindow"]
+    exact_hits: list["HoroscopeDailyPersonalV3DataPersonalDayContextExactHit"]
+    next_shift: "HoroscopeDailyPersonalV3DataPersonalDayContextNextShift"
+    dominant_topics: list["HoroscopeDailyPersonalV3DataPersonalDayContextDominantTopic"]
+    supportive_vs_challenging: "HoroscopeDailyPersonalV3DataPersonalDayContextSupportiveVsChallenging"
+    insights_meta: "HoroscopeDailyPersonalV3DataPersonalInsightsMeta"
+
+
+class HoroscopeDailyPersonalV3DataPersonalDayContext(TypedDict):
+    active_windows: list["HoroscopeDailyPersonalV3DataPersonalDayContextActiveWindow"]
+    exact_hits: list["HoroscopeDailyPersonalV3DataPersonalDayContextExactHit"]
+    next_shift: "HoroscopeDailyPersonalV3DataPersonalDayContextNextShift"
+    dominant_topics: list["HoroscopeDailyPersonalV3DataPersonalDayContextDominantTopic"]
+    supportive_vs_challenging: "HoroscopeDailyPersonalV3DataPersonalDayContextSupportiveVsChallenging"
+
+
+class HoroscopeDailyPersonalV3DataPersonalDayContextActiveWindow(TypedDict):
+    id: str
+    label: str
+    category: str
+    transit_planet: str
+    natal_point: str
+    aspect_type: str
+    pass_type: str
+    start: str
+    end: str
+    exact_hits: list[str]
+    lookup_key: str
+    has_interpretation_block: bool
+
+
+class HoroscopeDailyPersonalV3DataPersonalDayContextDominantTopic(TypedDict):
+    title: str
+    category: str
+    focus_type: str
+    score: float
+    peak_datetime: str
+
+
+class HoroscopeDailyPersonalV3DataPersonalDayContextExactHit(TypedDict):
+    timestamp: str
+    label: str
+    category: str
+    aspect_type: str
+    transit_planet: str
+    natal_point: str
+    lookup_key: str
+    has_interpretation_block: bool
+
+
+class HoroscopeDailyPersonalV3DataPersonalDayContextNextShift(TypedDict):
+    timestamp: str
+    label: str
+    type: str
+
+
+class HoroscopeDailyPersonalV3DataPersonalDayContextSupportiveVsChallenging(TypedDict):
+    supportive: int
+    challenging: int
+
+
+class HoroscopeDailyPersonalV3DataPersonalInsightsMeta(TypedDict):
+    source: str
+    timeline_enabled: bool
+    insights_enabled: bool
+    interpretation_blocks_enabled: bool
+    timeline_pass_count: int
+    generated_fact_count: int
+    range_start: str
+    range_end: str
+
+
+class HoroscopeDailyPersonalV3DataPersonalTransitsTopItem(TypedDict):
+    transit_planet: "HoroscopeDailyBulkDataEntryLuckyColor"
+    natal_planet: "HoroscopeDailyBulkDataEntryLuckyColor"
+    aspect: "HoroscopeDailyBulkDataEntryLuckyColor"
+    label: str
+    score: float
+    exact_at: NotRequired[Union[str, None]]
+
+
+class HoroscopeDailyPersonalV3Meta(TypedDict):
+    request_id: str
+    generated_at: str
+    settings: "HoroscopeDailyPersonalV3MetaSettings"
+    engine: "HoroscopeDailyBulkMetaEngine"
+
+
+class HoroscopeDailyPersonalV3MetaSettings(TypedDict):
+    date_resolved: str
+    version: str
+    include_interpretation_blocks: bool
+
+
+class HoroscopeDailyPersonalV3Response(TypedDict):
+    meta: "HoroscopeDailyPersonalV3Meta"
+    data: "HoroscopeDailyPersonalV3Data"
+
+
+class HoroscopeDailySignMeta(TypedDict):
+    request_id: str
+    generated_at: str
+    settings: "HoroscopeDailySignMetaSettings"
+    cache: "HoroscopeDailyBulkMetaCache"
+    engine: "HoroscopeDailyBulkMetaEngine"
+
+
+class HoroscopeDailySignMetaSettings(TypedDict):
+    timezone: str
+    lang: str
+    locale: str
+    date_resolved: str
+    orb_policy: str
+
+
+class HoroscopeDailySignResponse(TypedDict):
+    meta: "HoroscopeDailySignMeta"
+    data: "HoroscopeDailyBulkDataEntry"
+
+
+class HoroscopeDailySignV2Data(TypedDict):
+    sign: str
+    date: str
+    scores: "HoroscopeDailyBulkDataEntryScores"
+    score_factors: list["HoroscopeDailySignV2DataScoreFactor"]
+    lucky: "HoroscopeDailyBulkDataEntryLucky"
+    content: "HoroscopeDailyBulkDataEntryContent"
+    astro: "HoroscopeDailyBulkDataEntryAstro"
+    sign_label: str
+
+
+class HoroscopeDailySignV2DataScoreFactor(TypedDict):
+    dimension: str
+    type: str
+    reason: "HoroscopeDailySignV2DataScoreFactorReason"
+    drivers: list["HoroscopeDailySignV2DataScoreFactorDriver"]
+
+
+class HoroscopeDailySignV2DataScoreFactorDriver(TypedDict):
+    type: str
+    key: str
+    value: NotRequired[Union[float, None]]
+    label: NotRequired[Union[str, None]]
+    weight: NotRequired[Union[float, None]]
+    intensity: NotRequired[Union[str, None]]
+    orb_deg: NotRequired[Union[float, None]]
+    house: NotRequired[Union[int, None]]
+    condition_score: NotRequired[Union[float, None]]
+
+
+class HoroscopeDailySignV2DataScoreFactorReason(TypedDict):
+    main: str
+    secondary: NotRequired[Union[str, None]]
+
+
+class HoroscopeDailySignV2Meta(TypedDict):
+    request_id: str
+    generated_at: str
+    settings: "HoroscopeDailySignV2MetaSettings"
+    engine: "HoroscopeDailyBulkMetaEngine"
+
+
+class HoroscopeDailySignV2MetaSettings(TypedDict):
+    date_resolved: str
+    version: str
+    lang: str
+    locale: str
+
+
+class HoroscopeDailySignV2Response(TypedDict):
+    meta: "HoroscopeDailySignV2Meta"
+    data: "HoroscopeDailySignV2Data"
+
+
+class HoroscopeDailySignV3Meta(TypedDict):
+    request_id: str
+    generated_at: str
+    settings: "HoroscopeDailySignV3MetaSettings"
+    engine: "HoroscopeDailyBulkMetaEngine"
+
+
+class HoroscopeDailySignV3MetaSettings(TypedDict):
+    date_resolved: str
+    timezone: str
+    lang: str
+    locale: str
+    type: str
+    style: str
+    variant: NotRequired[Union[str, None]]
+    version: str
+    compatibility_source: str
+
+
+class HoroscopeDailySignV3Response(TypedDict):
+    meta: "HoroscopeDailySignV3Meta"
+    data: "HoroscopeDailySignV2Data"
+
+
+class HoroscopeWeeklyPersonalV3Data(TypedDict):
+    sign: str
+    scores: "HoroscopeDailyBulkDataEntryScores"
+    score_factors: list["HoroscopeDailySignV2DataScoreFactor"]
+    lucky: "HoroscopeDailyBulkDataEntryLucky"
+    content: "HoroscopeWeeklyPersonalV3DataContent"
+    astro: "HoroscopeDailyBulkDataEntryAstro"
+    sign_label: str
+    personal: "HoroscopeWeeklyPersonalV3DataPersonal"
+    scores_meta: "HoroscopeWeeklyPersonalV3DataScoresMeta"
+    period: "HoroscopeWeeklyPersonalV3DataPeriod"
+
+
+class HoroscopeWeeklyPersonalV3DataContent(TypedDict):
+    text: str
+    theme: str
+    keywords: list[str]
+    supporting_insights: list[str]
+    weekly_summary: str
+
+
+class HoroscopeWeeklyPersonalV3DataPeriod(TypedDict):
+    start: str
+    end: str
+    days: int
+
+
+class HoroscopeWeeklyPersonalV3DataPersonal(TypedDict):
+    transits_top: list["HoroscopeWeeklyPersonalV3DataPersonalTransitsTopItem"]
+    focus_areas: list[str]
+    confidence_score: float
+    days: list["HoroscopeWeeklyPersonalV3DataPersonalDay"]
+    week_context: "HoroscopeWeeklyPersonalV3DataPersonalDayDayContext"
+    active_windows: list["HoroscopeWeeklyPersonalV3DataPersonalDayDayContextActiveWindow"]
+    exact_hits: list["HoroscopeWeeklyPersonalV3DataPersonalDayDayContextExactHit"]
+    next_shift: "HoroscopeDailyPersonalV3DataPersonalDayContextNextShift"
+    dominant_topics: list["HoroscopeDailyPersonalV3DataPersonalDayContextDominantTopic"]
+    supportive_vs_challenging: "HoroscopeDailyPersonalV3DataPersonalDayContextSupportiveVsChallenging"
+    insights_meta: "HoroscopeWeeklyPersonalV3DataPersonalInsightsMeta"
+
+
+class HoroscopeWeeklyPersonalV3DataPersonalDay(TypedDict):
+    date: str
+    weekday: str
+    scores: "HoroscopeDailyBulkDataEntryScores"
+    focus_areas: list[str]
+    transits_top: list["HoroscopeWeeklyPersonalV3DataPersonalTransitsTopItem"]
+    day_context: "HoroscopeWeeklyPersonalV3DataPersonalDayDayContext"
+
+
+class HoroscopeWeeklyPersonalV3DataPersonalDayDayContext(TypedDict):
+    range_start: str
+    range_end: str
+    active_windows: list["HoroscopeWeeklyPersonalV3DataPersonalDayDayContextActiveWindow"]
+    exact_hits: list["HoroscopeWeeklyPersonalV3DataPersonalDayDayContextExactHit"]
+    next_shift: "HoroscopeDailyPersonalV3DataPersonalDayContextNextShift"
+    dominant_topics: list["HoroscopeDailyPersonalV3DataPersonalDayContextDominantTopic"]
+    supportive_vs_challenging: "HoroscopeDailyPersonalV3DataPersonalDayContextSupportiveVsChallenging"
+
+
+class HoroscopeWeeklyPersonalV3DataPersonalDayDayContextActiveWindow(TypedDict):
+    id: str
+    label: str
+    category: str
+    transit_planet: str
+    natal_point: str
+    aspect_type: str
+    pass_type: str
+    start: str
+    end: str
+    exact_hits: list[str]
+
+
+class HoroscopeWeeklyPersonalV3DataPersonalDayDayContextExactHit(TypedDict):
+    timestamp: str
+    label: str
+    category: str
+    aspect_type: str
+    transit_planet: str
+    natal_point: str
+
+
+class HoroscopeWeeklyPersonalV3DataPersonalInsightsMeta(TypedDict):
+    source: str
+    timeline_enabled: bool
+    insights_enabled: bool
+    interpretation_blocks_enabled: bool
+    period: str
+    timeline_segment_count: int
+    timeline_pass_count: int
+    generated_fact_count: int
+    range_start: str
+    range_end: str
+
+
+class HoroscopeWeeklyPersonalV3DataPersonalTransitsTopItem(TypedDict):
+    transit_planet: "HoroscopeDailyBulkDataEntryLuckyColor"
+    natal_planet: "HoroscopeDailyBulkDataEntryLuckyColor"
+    aspect: "HoroscopeDailyBulkDataEntryLuckyColor"
+    label: str
+    score: float
+    event_date: str
+    active_start: str
+    active_end: str
+    exact_hits: list[str]
+    exact_at: NotRequired[Union[str, None]]
+
+
+class HoroscopeWeeklyPersonalV3DataScoresMeta(TypedDict):
+    overall_method: str
+    weights: "HoroscopeDailyPersonalV2DataScoresMetaWeights"
+    daily_sample_count: int
+    rounding: str
+
+
+class HoroscopeWeeklyPersonalV3Meta(TypedDict):
+    request_id: str
+    generated_at: str
+    settings: "HoroscopeWeeklyPersonalV3MetaSettings"
+    engine: "HoroscopeDailyBulkMetaEngine"
+
+
+class HoroscopeWeeklyPersonalV3MetaSettings(TypedDict):
+    week_start: str
+    week_end: str
+    date_anchor: NotRequired[Union[str, None]]
+    start_week_on: str
+    version: str
+    include_interpretation_blocks: bool
+
+
+class HoroscopeWeeklyPersonalV3Response(TypedDict):
+    meta: "HoroscopeWeeklyPersonalV3Meta"
+    data: "HoroscopeWeeklyPersonalV3Data"
+
+
 class HouseOverlayItem(TypedDict):
     sr_body: str
     natal_house: int
@@ -2299,6 +4382,12 @@ class InterpretationSettings(TypedDict):
     template_id: NotRequired[Union[str, None]]
     language: NotRequired[Union[str, None]]
     style: NotRequired[Union[str, None]]
+
+
+class InterpretationUnavailable(TypedDict):
+    """Returned in place of the interpretation when the library could not be read."""
+    error: str
+    details: NotRequired[Union[str, None]]
 
 
 class InvestMoneyElectionFactor(TypedDict):
@@ -3236,7 +5325,7 @@ class MoonMonthDayResponse(TypedDict):
     forecast: NotRequired[Union[dict[str, Any], None]]
     interpretation: NotRequired[Union["MoonInterpretationData", None]]
     traditional_moon: NotRequired[Union["TraditionalMoonData", None]]
-    next_phases: dict[str, str]
+    next_phases: dict[str, Any]
     calendar_date: str
 
 
@@ -3253,7 +5342,7 @@ class MoonMonthResponse(TypedDict):
 
 
 class MoonPhaseData(TypedDict):
-    name: str
+    name: Literal["New Moon", "Waxing Crescent", "First Quarter", "Waxing Gibbous", "Full Moon", "Waning Gibbous", "Last Quarter", "Waning Crescent"]
     phase_angle_deg: float
     illumination: float
     age_days: float
@@ -3272,7 +5361,7 @@ class MoonPhaseResponse(TypedDict):
     forecast: NotRequired[Union[dict[str, Any], None]]
     interpretation: NotRequired[Union["MoonInterpretationData", None]]
     traditional_moon: NotRequired[Union["TraditionalMoonData", None]]
-    next_phases: dict[str, str]
+    next_phases: dict[str, Any]
 
 
 class MoonSignIngressData(TypedDict):
@@ -3443,6 +5532,487 @@ class NameAnalysis(TypedDict):
     missing_digits: list[int]
     frequency_grid: dict[str, int]
     balance: "NumberResult"
+
+
+class NatalCalculateAngles(TypedDict):
+    asc: float
+    mc: float
+    ic: float
+    dc: float
+    vertex: float
+
+
+class NatalCalculateAnglesDetailsEntry(TypedDict):
+    sign: str
+    sign_id: str
+    pos: float
+    abs_pos: float
+    house: int
+    name: NotRequired[Union[str, None]]
+
+
+class NatalCalculateAspect(TypedDict):
+    p1: str
+    p2: str
+    type: str
+    orb: float
+    deg: float
+    is_major: bool
+    is_applying: bool
+
+
+class NatalCalculateAspectsSummary(TypedDict):
+    total: int
+    major: int
+    minor: int
+    by_type: dict[str, int]
+
+
+class NatalCalculateConfidence(TypedDict):
+    houses: str
+    angles: str
+    overall: str
+
+
+class NatalCalculateConfigurations(TypedDict):
+    total: int
+    items: list["NatalCalculateConfigurationsItem"]
+
+
+class NatalCalculateConfigurationsItem(TypedDict):
+    type: str
+    aliases: NotRequired[Union[list[str], None]]
+    bodies: list[str]
+    base: NotRequired[Union[list[str], None]]
+    apex: str
+    sextiles: NotRequired[Union[list[list[str]], None]]
+    trines: NotRequired[Union[list[list[str]], None]]
+    aspects: list["NatalCalculateConfigurationsItemAspect"]
+    derived_from_minor_aspects: bool
+    opposition: NotRequired[Union[list[str], None]]
+
+
+class NatalCalculateConfigurationsItemAspect(TypedDict):
+    p1: str
+    p2: str
+    type: str
+    orb: float
+    deg: float
+    is_major: bool
+
+
+class NatalCalculateDeclinationAspect(TypedDict):
+    p1: str
+    p2: str
+    type: str
+    orb: float
+    orb_deg: float
+    declination_1: float
+    declination_2: float
+    is_major: bool
+
+
+class NatalCalculateDeclinationAspectsSummary(TypedDict):
+    total: int
+    parallel: int
+    contra_parallel: int
+    orb: float
+    by_type: dict[str, int]
+
+
+class NatalCalculateDominants(TypedDict):
+    elements: "NatalCalculateDominantsElements"
+    modalities: "NatalCalculateDominantsModalities"
+    polarities: "NatalCalculateDominantsPolarities"
+    dominant_element: str
+    dominant_modality: str
+    dominant_polarity: str
+
+
+class NatalCalculateDominantsElements(TypedDict):
+    fire: float
+    earth: float
+    air: float
+    water: float
+
+
+class NatalCalculateDominantsModalities(TypedDict):
+    cardinal: float
+    fixed: float
+    mutable: float
+
+
+class NatalCalculateDominantsPolarities(TypedDict):
+    masculine: float
+    feminine: float
+
+
+class NatalCalculateDominantsProfile(TypedDict):
+    method: str
+    dominant_planets: list["NatalCalculateDominantsProfileDominantPlanet"]
+    top_planets: list[str]
+    dominant_element: "NatalCalculateDominantsProfileDominantElement"
+    signature_sign: "NatalCalculateDominantsProfileSignatureSign"
+
+
+class NatalCalculateDominantsProfileDominantElement(TypedDict):
+    table: "NatalCalculateDominantsProfileDominantElementTable"
+    element: str
+    ties: list[str]
+
+
+class NatalCalculateDominantsProfileDominantElementTable(TypedDict):
+    fire: "NatalCalculateDominantsProfileDominantElementTableFire"
+    earth: "NatalCalculateDominantsProfileDominantElementTableFire"
+    air: "NatalCalculateDominantsProfileDominantElementTableFire"
+    water: "NatalCalculateDominantsProfileDominantElementTableFire"
+
+
+class NatalCalculateDominantsProfileDominantElementTableFire(TypedDict):
+    sun_moon_asc: int
+    personal: int
+    transpersonal: int
+    dominant: int
+    total: int
+    percent: float
+
+
+class NatalCalculateDominantsProfileDominantPlanet(TypedDict):
+    id: str
+    name: str
+    sign: int
+    house: int
+    angle: int
+    ruler: int
+    aspects: int
+    total: int
+    percent: float
+    rank: int
+
+
+class NatalCalculateDominantsProfileSignatureSign(TypedDict):
+    element_counts: "NatalCalculateDominantsProfileSignatureSignElementCounts"
+    modality_counts: "NatalCalculateDominantsProfileSignatureSignModalityCounts"
+    element: str
+    modality: NotRequired[Union[str, None]]
+    signature: NotRequired[Union[str, None]]
+    sign: NotRequired[Union[str, None]]
+    includes_asc: bool
+    element_ties: list[str]
+    modality_ties: list[str]
+
+
+class NatalCalculateDominantsProfileSignatureSignElementCounts(TypedDict):
+    fire: int
+    earth: int
+    air: int
+    water: int
+
+
+class NatalCalculateDominantsProfileSignatureSignModalityCounts(TypedDict):
+    cardinal: int
+    fixed: int
+    mutable: int
+
+
+class NatalCalculateFixedStarError(TypedDict):
+    name: NotRequired[Union[str, None]]
+    error: NotRequired[Union[str, None]]
+
+
+class NatalCalculateFixedStarsEntry(TypedDict):
+    id: str
+    name: str
+    requested_name: str
+    swiss_name: str
+    sign: str
+    sign_id: str
+    pos: float
+    abs_pos: float
+    longitude_deg: float
+    latitude_deg: float
+    distance_au: NotRequired[Union[float, None]]
+    degree_in_sign: float
+    right_ascension_deg: NotRequired[Union[float, None]]
+    declination_deg: NotRequired[Union[float, None]]
+    speed: NotRequired[Union[float, None]]
+    is_stationary: NotRequired[Union[bool, None]]
+    house: NotRequired[Union[int, None]]
+
+
+class NatalCalculateHouse(TypedDict):
+    house: int
+    name: str
+    sign: str
+    sign_id: str
+    pos: float
+    abs_pos: float
+    ruler: NotRequired[Union["NatalCalculateHouseRuler", None]]
+    classic_ruler: NotRequired[Union["NatalCalculateHouseRuler", None]]
+
+
+class NatalCalculateHouseRuler(TypedDict):
+    id: str
+    name: str
+    sign: str
+    sign_id: str
+    house: int
+
+
+class NatalCalculatePlanet(TypedDict):
+    id: str
+    name: str
+    sign: str
+    sign_id: str
+    pos: float
+    abs_pos: float
+    retrograde: bool
+    house: NotRequired[Union[int, None]]
+    declination_deg: NotRequired[Union[float, None]]
+    variant: NotRequired[Union[str, None]]
+    dignity: NotRequired[Union[str, None]]
+    speed: NotRequired[Union[float, None]]
+    is_stationary: NotRequired[Union[bool, None]]
+
+
+class NatalCalculateResponse(TypedDict):
+    subject: NotRequired[Union["NatalCalculateSubject", None]]
+    planets: NotRequired[Union[list["NatalCalculatePlanet"], None]]
+    aspects: NotRequired[Union[list["NatalCalculateAspect"], None]]
+    aspects_summary: NotRequired[Union["NatalCalculateAspectsSummary", None]]
+    confidence: NotRequired[Union["NatalCalculateConfidence", None]]
+    houses: NotRequired[Union[list["NatalCalculateHouse"], None]]
+    angles: NotRequired[Union["NatalCalculateAngles", None]]
+    angles_details: NotRequired[Union[dict[str, "NatalCalculateAnglesDetailsEntry"], None]]
+    declination_aspects: NotRequired[Union[list["NatalCalculateDeclinationAspect"], None]]
+    declination_aspects_summary: NotRequired[Union["NatalCalculateDeclinationAspectsSummary", None]]
+    fixed_stars: NotRequired[Union[dict[str, "NatalCalculateFixedStarsEntry"], None]]
+    dominants: NotRequired[Union["NatalCalculateDominants", None]]
+    configurations: NotRequired[Union["NatalCalculateConfigurations", None]]
+    stelliums: NotRequired[Union["NatalCalculateStelliums", None]]
+    tables: NotRequired[Union["NatalCalculateTables", None]]
+    resolved_time: NotRequired[Union["ResolvedTime", None]]
+    dominants_profile: NotRequired[Union["NatalCalculateDominantsProfile", None]]
+    status: NotRequired[Union[str, None]]
+    response_format: NotRequired[Union[str, None]]
+    text: NotRequired[Union[str, None]]
+    subject_name: NotRequired[Union[str, None]]
+    datetime: NotRequired[Union[str, None]]
+    city: NotRequired[Union[str, None]]
+    timezone: NotRequired[Union[str, None]]
+    time_known: NotRequired[Union[bool, None]]
+    zodiac_type: NotRequired[Union[str, None]]
+    house_system: NotRequired[Union[str, None]]
+    planet_count: NotRequired[Union[int, None]]
+    house_count: NotRequired[Union[int, None]]
+    aspect_count: NotRequired[Union[int, None]]
+    fixed_star_count: NotRequired[Union[int, None]]
+    fixed_star_names: NotRequired[Union[str, None]]
+    fixed_star_errors: NotRequired[Union[list["NatalCalculateFixedStarError"], None]]
+    interpretation: NotRequired[Union["AtomicInterpretation", "InterpretationUnavailable", None]]
+    credits_used: NotRequired[Union[int, None]]
+    psychological_report: NotRequired[Union["NatalPsychologicalReportStatus", None]]
+
+
+class NatalCalculateStelliums(TypedDict):
+    threshold: int
+    signs: list["NatalCalculateStelliumsSign"]
+    houses: list["NatalCalculateStelliumsHouse"]
+    total: int
+    policy: NotRequired[Union[str, None]]
+    definition: NotRequired[Union[str, None]]
+    eligible_body_ids: NotRequired[Union[list[str], None]]
+    conjunction_orb_deg: NotRequired[Union[float, None]]
+    clusters: NotRequired[Union[list["NatalStelliumCluster"], None]]
+    concentrations: NotRequired[Union["NatalCalculateStelliumsConcentrations", None]]
+
+
+class NatalCalculateStelliumsConcentrations(TypedDict):
+    signs: NotRequired[Union[list["NatalCalculateStelliumsConcentrationsSign"], None]]
+    houses: NotRequired[Union[list["NatalCalculateStelliumsConcentrationsHouse"], None]]
+    total: NotRequired[Union[int, None]]
+
+
+class NatalCalculateStelliumsConcentrationsHouse(TypedDict):
+    house: NotRequired[Union[int, None]]
+    count: NotRequired[Union[int, None]]
+    bodies: NotRequired[Union[list[str], None]]
+    co_present_points: NotRequired[Union[list[str], None]]
+
+
+class NatalCalculateStelliumsConcentrationsSign(TypedDict):
+    sign_id: NotRequired[Union[str, None]]
+    count: NotRequired[Union[int, None]]
+    bodies: NotRequired[Union[list[str], None]]
+    co_present_points: NotRequired[Union[list[str], None]]
+
+
+class NatalCalculateStelliumsHouse(TypedDict):
+    house: int
+    count: int
+    bodies: list[str]
+
+
+class NatalCalculateStelliumsSign(TypedDict):
+    sign_id: str
+    count: int
+    bodies: list[str]
+
+
+class NatalCalculateSubject(TypedDict):
+    name: str
+    datetime: str
+    location: "NatalCalculateSubjectLocation"
+    settings: "NatalCalculateSubjectSettings"
+
+
+class NatalCalculateSubjectLocation(TypedDict):
+    city: str
+    lat: float
+    lng: float
+    timezone: str
+
+
+class NatalCalculateSubjectSettings(TypedDict):
+    house_system: str
+    julian_day: float
+    julian_day_tt: float
+    delta_t_days: float
+    delta_t_seconds: float
+    zodiac_type: str
+    time_known: bool
+    sidereal_ayanamsa: NotRequired[Union[str, None]]
+
+
+class NatalCalculateTables(TypedDict):
+    meta: "NatalCalculateTablesMeta"
+    positions: "NatalCalculateTablesPositions"
+    element_modality: "NatalCalculateTablesElementModality"
+    aspect_matrix: "NatalCalculateTablesAspectMatrix"
+
+
+class NatalCalculateTablesAspectMatrix(TypedDict):
+    points: list["NatalCalculateTablesAspectMatrixPoint"]
+    rows: list["NatalCalculateTablesAspectMatrixRow"]
+
+
+class NatalCalculateTablesAspectMatrixPoint(TypedDict):
+    id: str
+    name: str
+    glyph: NotRequired[Union[str, None]]
+    table_glyph: NotRequired[Union[str, None]]
+    glyph_source: str
+
+
+class NatalCalculateTablesAspectMatrixRow(TypedDict):
+    point: "NatalCalculateTablesAspectMatrixPoint"
+    cells: list["NatalCalculateTablesAspectMatrixRowCell"]
+
+
+class NatalCalculateTablesAspectMatrixRowCell(TypedDict):
+    with_id: str
+    with_name: str
+    with_glyph: NotRequired[Union[str, None]]
+    with_table_glyph: NotRequired[Union[str, None]]
+    with_glyph_source: str
+    has_aspect: bool
+    type: NotRequired[Union[str, None]]
+    type_key: NotRequired[Union[str, None]]
+    glyph: NotRequired[Union[str, None]]
+    orb: NotRequired[Union[float, None]]
+    deg: NotRequired[Union[float, None]]
+    is_major: NotRequired[Union[bool, None]]
+    is_applying: NotRequired[Union[bool, None]]
+    derived_from_angles: NotRequired[Union[bool, None]]
+
+
+class NatalCalculateTablesElementModality(TypedDict):
+    columns: list["NatalCalculateTablesElementModalityColumn"]
+    rows: list["NatalCalculateTablesElementModalityRow"]
+
+
+class NatalCalculateTablesElementModalityColumn(TypedDict):
+    modality: str
+    label: str
+
+
+class NatalCalculateTablesElementModalityRow(TypedDict):
+    element: str
+    element_label: str
+    cells: list["NatalCalculateTablesElementModalityRowCell"]
+
+
+class NatalCalculateTablesElementModalityRowCell(TypedDict):
+    modality: str
+    modality_label: str
+    count: int
+    items: list["NatalCalculateTablesElementModalityRowCellItem"]
+
+
+class NatalCalculateTablesElementModalityRowCellItem(TypedDict):
+    id: str
+    name: str
+    glyph: NotRequired[Union[str, None]]
+    table_glyph: NotRequired[Union[str, None]]
+    glyph_source: str
+    sign: str
+    sign_id: str
+    sign_glyph: str
+
+
+class NatalCalculateTablesMeta(TypedDict):
+    font_family: str
+    mapping_source: str
+
+
+class NatalCalculateTablesPositions(TypedDict):
+    point_rows: list["NatalCalculateTablesPositionsPointRow"]
+    angle_rows: list["NatalCalculateTablesPositionsAngleRow"]
+    house_rows: list["NatalCalculateTablesPositionsHouseRow"]
+
+
+class NatalCalculateTablesPositionsAngleRow(TypedDict):
+    id: str
+    name: str
+    glyph: NotRequired[Union[str, None]]
+    table_glyph: NotRequired[Union[str, None]]
+    glyph_source: str
+    sign: str
+    sign_id: str
+    sign_glyph: str
+    position_in_sign_deg: float
+    longitude_deg: float
+    longitude_text: str
+    house: int
+
+
+class NatalCalculateTablesPositionsHouseRow(TypedDict):
+    house: int
+    name: str
+    sign: str
+    sign_id: str
+    sign_glyph: str
+    position_in_sign_deg: float
+    longitude_deg: float
+    longitude_text: str
+
+
+class NatalCalculateTablesPositionsPointRow(TypedDict):
+    id: str
+    name: str
+    glyph: NotRequired[Union[str, None]]
+    table_glyph: NotRequired[Union[str, None]]
+    glyph_source: str
+    sign: str
+    sign_id: str
+    sign_glyph: str
+    position_in_sign_deg: float
+    longitude_deg: float
+    longitude_text: str
+    house: NotRequired[Union[int, None]]
+    retrograde: bool
+    variant: NotRequired[Union[str, None]]
+    dignity: NotRequired[Union[str, None]]
 
 
 class NatalChartRequest(TypedDict):
@@ -3732,10 +6302,51 @@ class NatalInsightsResponse(TypedDict):
     signatures_by_category: NotRequired[Union[dict[str, dict[str, Any]], None]]
 
 
+class NatalPsychologicalReportStatus(TypedDict):
+    """The psychological report requested with the chart: a job to poll, or the report itself."""
+    status: str
+    mode: str
+    style: str
+    output_format: NotRequired[Union[str, None]]
+    include_chart_in_pdf: NotRequired[Union[bool, None]]
+    job_id: NotRequired[Union[str, None]]
+    fetch_url: NotRequired[Union[str, None]]
+    pdf_url: NotRequired[Union[str, None]]
+    credits_used: NotRequired[Union[int, None]]
+    include_profile_branding_logo: NotRequired[Union[bool, None]]
+    subject: NotRequired[Union["NatalCalculateSubject", None]]
+    report_metadata: NotRequired[Union["PsychologicalReportMetadata", None]]
+    report_content: NotRequired[Union["PsychologicalReportContent", None]]
+    report_markdown: NotRequired[Union[str, None]]
+    next_poll_after_seconds: NotRequired[Union[int, None]]
+    error: NotRequired[Union[str, None]]
+    details: NotRequired[Any]
+
+
 class NatalReference(TypedDict):
     natal_datetime_utc: str
     natal_location: "SolarReturnLocation"
     natal_sun_abs_pos: float
+
+
+class NatalStelliumCluster(TypedDict):
+    """A connected conjunction cluster (``stellium_policy="classified"``)."""
+    count: int
+    bodies: list[str]
+    positions_deg: dict[str, float]
+    span_deg: float
+    conjunction_orb_deg: float
+    conjunction_links: list["NatalStelliumLink"]
+    sign_ids: list[str]
+    houses: list[int]
+    personal_planet_count: int
+    co_present_points: list[str]
+
+
+class NatalStelliumLink(TypedDict):
+    p1: str
+    p2: str
+    separation_deg: float
 
 
 class NatalTimeLordDetails(TypedDict):
@@ -4596,6 +7207,76 @@ class ProgressionTablesPayload(TypedDict):
     events: NotRequired[list["TableEventRow"]]
 
 
+class PsychologicalReportChapter(TypedDict):
+    id: str
+    title: str
+    question: str
+    sections: list["PsychologicalReportSection"]
+
+
+class PsychologicalReportChapterPlan(TypedDict):
+    id: NotRequired[Union[str, None]]
+    title: NotRequired[Union[str, None]]
+    question: NotRequired[Union[str, None]]
+    target_words: NotRequired[Union[int, None]]
+    subsections: list["PsychologicalReportSubsectionPlan"]
+    evidence: list["PsychologicalReportEvidence"]
+
+
+class PsychologicalReportContent(TypedDict):
+    title: str
+    summary: str
+    word_count: int
+    chapters: list["PsychologicalReportChapter"]
+
+
+class PsychologicalReportEvidence(TypedDict):
+    id: NotRequired[Union[str, None]]
+    type: NotRequired[Union[str, None]]
+    ref: NotRequired[Union[str, None]]
+    note: NotRequired[Union[str, None]]
+    weight: NotRequired[Union[float, None]]
+    source_field: NotRequired[Union[str, None]]
+    topics: NotRequired[Union[list[str], None]]
+    bodies: NotRequired[Union[list[str], None]]
+    houses: NotRequired[Union[list[int], None]]
+    signs: NotRequired[Union[list[str], None]]
+    confidence: NotRequired[Union[float, str, None]]
+
+
+class PsychologicalReportJobResponse(TypedDict):
+    """Status of a psychological report job, with the report once it is completed."""
+    job_id: str
+    status: str
+    credits_used: NotRequired[Union[int, None]]
+    pdf_url: NotRequired[Union[str, None]]
+    include_profile_branding_logo: NotRequired[Union[bool, None]]
+    subject: NotRequired[Union[dict[str, Any], None]]
+    natal_chart: NotRequired[Union[dict[str, Any], None]]
+    next_poll_after_seconds: NotRequired[Union[int, None]]
+    report_metadata: NotRequired[Union["PsychologicalReportMetadata", None]]
+    report_content: NotRequired[Union["PsychologicalReportContent", None]]
+    report_markdown: NotRequired[Union[str, None]]
+    error: NotRequired[Union[str, dict[str, Any], None]]
+
+
+class PsychologicalReportMetadata(TypedDict):
+    report_id: NotRequired[Union[str, None]]
+    title: NotRequired[Union[str, None]]
+    generated_at: NotRequired[Union[str, None]]
+    provider: NotRequired[Union[str, None]]
+    model: NotRequired[Union[str, None]]
+    summary: NotRequired[Union[str, None]]
+    language: str
+    word_count: NotRequired[Union[int, None]]
+    structure_plan: NotRequired[Union[list["PsychologicalReportChapterPlan"], None]]
+
+
+class PsychologicalReportSection(TypedDict):
+    title: str
+    paragraphs: list[str]
+
+
 class PsychologicalReportSettings(TypedDict):
     enabled: NotRequired[bool]
     mode: NotRequired[Literal["async", "sync"]]
@@ -4619,6 +7300,11 @@ class PsychologicalReportSettings(TypedDict):
     include_profile_branding_logo: NotRequired[bool]
     callback_url: NotRequired[Union[str, None]]
     callback_signing_secret: NotRequired[Union[str, None]]
+
+
+class PsychologicalReportSubsectionPlan(TypedDict):
+    heading: NotRequired[Union[str, None]]
+    purpose: NotRequired[Union[str, None]]
 
 
 class PurchaseCarElectionBuyerResonance(TypedDict):
@@ -4970,6 +7656,14 @@ class RashifalTransit(TypedDict):
     house_from_moon: int
 
 
+class ReportCreditsResponse(TypedDict):
+    user_id: str
+    key_id: NotRequired[Union[str, None]]
+    report_credits_remaining: int
+    auto_recharge_enabled: bool
+    auto_recharge_threshold: int
+
+
 class ResolvedAnkJyotishMethod(TypedDict):
     system: Literal["ank_jyotish"]
     profile: Literal["ank-jyotish-civil-cheiro-navagraha-reduce-all-v1"]
@@ -5006,6 +7700,16 @@ class ResolvedPythagoreanMethod(TypedDict):
     profile: Literal["pythagorean-component-preserve-core-v1", "pythagorean-raw-date-preserve-core-v1"]
     master_policy: Literal["preserve_core_11_22_33"]
     compound_policy: Literal["root_only", "compound_and_root", "full_trace"]
+
+
+class ResolvedTime(TypedDict):
+    """How a local wall-clock time was resolved (DST gaps and overlaps, tz database version)."""
+    input_timezone: str
+    resolved_timezone: str
+    utc_offset: str
+    utc_instant: str
+    resolution_status: str
+    tzdb_version: str
 
 
 class ResponseMeta(TypedDict):
@@ -5182,12 +7886,39 @@ class SignInfo(TypedDict):
 class SignResponse(TypedDict):
     point: str
     sign: str
-    sign_id: str
+    sign_id: Literal["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"]
     degree: float
     abs_pos: float
     house: int
     interpretation: NotRequired[Union[dict[str, Any], None]]
     resolved_time: NotRequired[Union[dict[str, Any], None]]
+
+
+class SimpleNatalHouse(TypedDict):
+    house: int
+    sign: str
+    sign_id: str
+    degree: float
+    absolute_degree: float
+
+
+class SimpleNatalMeta(TypedDict):
+    endpoint: str
+    zodiac_type: str
+    house_system: str
+    planet_count: int
+    house_count: int
+
+
+class SimpleNatalPlanet(TypedDict):
+    id: str
+    name: str
+    sign: str
+    sign_id: str
+    degree: float
+    absolute_degree: float
+    house: NotRequired[Union[int, None]]
+    retrograde: bool
 
 
 class SimpleNatalRequest(TypedDict):
@@ -5202,6 +7933,30 @@ class SimpleNatalRequest(TypedDict):
     lat: NotRequired[Union[float, None]]
     lng: NotRequired[Union[float, None]]
     tz_str: NotRequired[Union[str, None]]
+
+
+class SimpleNatalResponse(TypedDict):
+    subject: "SimpleNatalSubject"
+    summary: "SimpleNatalSummary"
+    planets: list["SimpleNatalPlanet"]
+    planets_by_name: dict[str, "SimpleNatalPlanet"]
+    houses: list["SimpleNatalHouse"]
+    houses_by_number: dict[str, "SimpleNatalHouse"]
+    angles: dict[str, Union["SimpleNatalHouse", None]]
+    meta: "SimpleNatalMeta"
+
+
+class SimpleNatalSubject(TypedDict):
+    name: str
+    datetime: str
+    time_known: bool
+    location: "NatalCalculateSubjectLocation"
+
+
+class SimpleNatalSummary(TypedDict):
+    sun_sign: str
+    moon_sign: str
+    rising_sign: NotRequired[Union[str, None]]
 
 
 class SkyEvent(TypedDict):
@@ -5332,6 +8087,59 @@ class SolarReturnUncertainty(TypedDict):
     suppressed_fields: list[str]
 
 
+class SpaceChartEngine(TypedDict):
+    name: str
+    extension: str
+
+
+class SpaceChartHouses(TypedDict):
+    cusps: list["SpaceChartHousesCusp"]
+    asc: "SpaceChartPoint"
+    mc: "SpaceChartPoint"
+    obliquity: float
+
+
+class SpaceChartHousesCusp(TypedDict):
+    house: int
+    lon: float
+    sign: str
+    sign_degree: float
+
+
+class SpaceChartInstant(TypedDict):
+    jd_ut: float
+    jd_tt: float
+    utc: str
+    timezone: NotRequired[Union[str, None]]
+    time_basis: str
+    light_time_seconds: NotRequired[Union[float, None]]
+
+
+class SpaceChartMarsTime(TypedDict):
+    sol: int
+    mars_sol_date: float
+    local_mean_solar_time: float
+    local_time: str
+
+
+class SpaceChartPlanet(TypedDict):
+    id: str
+    lon: float
+    sign: str
+    sign_degree: float
+    lat: float
+    distance_au: float
+    speed: float
+    retrograde: bool
+    house: int
+
+
+class SpaceChartPoint(TypedDict):
+    lon: float
+    sign: str
+    sign_degree: float
+
+
 class SpaceChartRequest(TypedDict):
     year: NotRequired[Union[int, None]]
     month: NotRequired[Union[int, None]]
@@ -5353,6 +8161,28 @@ class SpaceChartRequest(TypedDict):
     lng: NotRequired[Union[float, None]]
     zodiac: NotRequired[Literal["earth", "native"]]
     house_system: NotRequired[Literal["placidus", "whole_sign", "equal", "koch", "porphyry", "regiomontanus", "campanus"]]
+
+
+class SpaceChartResponse(TypedDict):
+    site: "SpaceChartSite"
+    instant: "SpaceChartInstant"
+    zodiac: str
+    house_system: str
+    house_note: NotRequired[Union[str, None]]
+    planets: list["SpaceChartPlanet"]
+    houses: "SpaceChartHouses"
+    engine: "SpaceChartEngine"
+    mars_time: NotRequired[Union["SpaceChartMarsTime", None]]
+    earth_comparison: NotRequired[Union[dict[str, Union["SpaceChartPoint", None]], None]]
+
+
+class SpaceChartSite(TypedDict):
+    key: str
+    name: str
+    description: NotRequired[Union[str, None]]
+    world: str
+    lon: float
+    lat: float
 
 
 class SpaceChartSvgRequest(TypedDict):
@@ -6136,6 +8966,92 @@ class TransitTimelineTransitHouses(TypedDict):
     transit_house_in_month: NotRequired[Union[int, None]]
 
 
+class TransitsCalculateAspect(TypedDict):
+    p1: str
+    p2: str
+    between: "TransitsCalculateAspectBetween"
+    type: str
+    orb: float
+    deg: float
+    is_major: bool
+    is_applying: bool
+
+
+class TransitsCalculateAspectBetween(TypedDict):
+    natal: str
+    transit: str
+
+
+class TransitsCalculateAspectsSummary(TypedDict):
+    total: int
+    major: int
+    minor: int
+    by_type: "TransitsCalculateAspectsSummaryByType"
+    exact: int
+    applying: int
+    separating: int
+
+
+class TransitsCalculateAspectsSummaryByType(TypedDict):
+    opposition: int
+    square: int
+    conjunction: int
+    sextile: int
+    trine: int
+    semi_sextile: NotRequired[Union[int, None]]
+    semi_square: NotRequired[Union[int, None]]
+    quintile: NotRequired[Union[int, None]]
+    sesquiquadrate: NotRequired[Union[int, None]]
+    quincunx: NotRequired[Union[int, None]]
+
+
+class TransitsCalculateNatal(TypedDict):
+    julian_day: float
+    house_system: str
+    zodiac_type: str
+
+
+class TransitsCalculateNatalPlanet(TypedDict):
+    id: str
+    name: str
+    sign: str
+    sign_id: str
+    pos: float
+    abs_pos: float
+    retrograde: bool
+    house: NotRequired[Union[int, None]]
+    declination_deg: NotRequired[Union[float, None]]
+    variant: NotRequired[Union[str, None]]
+
+
+class TransitsCalculateResolvedTime(TypedDict):
+    transit: "ResolvedTime"
+
+
+class TransitsCalculateResponse(TypedDict):
+    mode: str
+    transit_date: str
+    transit_planets: list["TransitsCalculateTransitPlanet"]
+    natal_planets: list["TransitsCalculateNatalPlanet"]
+    natal: "TransitsCalculateNatal"
+    aspects: list["TransitsCalculateAspect"]
+    aspects_summary: "TransitsCalculateAspectsSummary"
+    interpretation: "AtomicInterpretation"
+    resolved_time: NotRequired[Union["TransitsCalculateResolvedTime", None]]
+
+
+class TransitsCalculateTransitPlanet(TypedDict):
+    id: str
+    name: str
+    sign: str
+    pos: float
+    abs_pos: float
+    house: int
+    retrograde: bool
+    speed: float
+    variant: NotRequired[Union[str, None]]
+
+
 class TransliterationInput(TypedDict):
     profile: NotRequired[Union[str, None]]
     birth: NotRequired[Union[str, None]]
@@ -6246,8 +9162,145 @@ class VedicBatchItem(TypedDict):
     payload: dict[str, Any]
 
 
+class VedicBatchItemResult(TypedDict):
+    endpoint: str
+    success: bool
+    status_code: int
+    data: NotRequired[Union[dict[str, Any], None]]
+    error: NotRequired[Union[str, dict[str, Any], list[Any], None]]
+
+
 class VedicBatchRequest(TypedDict):
     items: list["VedicBatchItem"]
+
+
+class VedicBatchResponse(TypedDict):
+    count: int
+    items: list["VedicBatchItemResult"]
+
+
+class VedicCalculateAshtakavarga(TypedDict):
+    sarvashtakavarga: list[int]
+    bhinnashtakavarga: "VedicCalculateAshtakavargaBhinnashtakavarga"
+    total_points: float
+
+
+class VedicCalculateAshtakavargaBhinnashtakavarga(TypedDict):
+    Sun: list[int]
+    Moon: list[int]
+    Mars: list[int]
+    Mercury: list[int]
+    Jupiter: list[int]
+    Venus: list[int]
+    Saturn: list[int]
+
+
+class VedicCalculatePanchang(TypedDict):
+    tithi: "VedicCalculatePanchangTithi"
+    nakshatra: "VedicChartAscendantNakshatra"
+    yoga: "VedicCalculatePanchangYoga"
+    karana: "VedicCalculatePanchangYoga"
+    weekday: str
+    rahu_kalam: "VedicCalculatePanchangRahuKalam"
+
+
+class VedicCalculatePanchangRahuKalam(TypedDict):
+    start: str
+    end: str
+
+
+class VedicCalculatePanchangTithi(TypedDict):
+    number: int
+    name: str
+    paksha: str
+
+
+class VedicCalculatePanchangYoga(TypedDict):
+    number: int
+    name: str
+
+
+class VedicCalculateResponse(TypedDict):
+    ayanamsha: str
+    timezone_used: str
+    house_system: str
+    node_type: str
+    ascendant: "VedicChartAscendant"
+    planets: list["VedicChartPlanet"]
+    houses: list["VedicChartHouse"]
+    vimshottari_dasha: list["VedicDashaPeriod"]
+    sade_sati: "VedicCalculateSadeSati"
+    yogas: NotRequired[Union[list["VedicCalculateYoga"], None]]
+    panchang: NotRequired[Union["VedicCalculatePanchang", None]]
+    shadbala: NotRequired[Union[dict[str, "VedicCalculateShadbalaEntry"], None]]
+    ashtakavarga: NotRequired[Union["VedicCalculateAshtakavarga", None]]
+
+
+class VedicCalculateSadeSati(TypedDict):
+    active: bool
+    phase: NotRequired[Union[str, None]]
+    description: str
+    reference_date: str
+    timezone: str
+    moon_sign: str
+    moon_sign_id: int
+    saturn_sign: str
+    saturn_sign_id: int
+    saturn_degree_in_sign: float
+    saturn_absolute_degree: float
+    saturn_is_retrograde: bool
+
+
+class VedicCalculateShadbalaEntry(TypedDict):
+    sthana_bala: float
+    dig_bala: float
+    kala_bala: float
+    cheshta_bala: float
+    naisargika_bala: float
+    drik_bala: float
+    total: float
+
+
+class VedicCalculateYoga(TypedDict):
+    name: str
+    type: str
+    present: bool
+    description: str
+
+
+class VedicChartAscendant(TypedDict):
+    degree: float
+    sign: str
+    nakshatra: "VedicChartAscendantNakshatra"
+
+
+class VedicChartAscendantNakshatra(TypedDict):
+    id: int
+    name: str
+    pada: int
+    lord: str
+
+
+class VedicChartHouse(TypedDict):
+    house: int
+    sign: str
+    sign_id: int
+    degree_cusp: float
+
+
+class VedicChartPlanet(TypedDict):
+    name: str
+    absolute_degree: float
+    sign: str
+    sign_id: int
+    degree_in_sign: float
+    house: int
+    is_retrograde: bool
+    nakshatra: str
+    nakshatra_id: int
+    pada: int
+    nakshatra_lord: str
+    vargas: dict[str, "VedicPlanetVargaSign"]
 
 
 class VedicChartRequest(TypedDict):
@@ -6270,6 +9323,14 @@ class VedicChartRequest(TypedDict):
     include_shadbala: NotRequired[bool]
     include_ashtakavarga: NotRequired[bool]
     dasha_levels: NotRequired[int]
+
+
+class VedicChartResponse(TypedDict):
+    ayanamsha: str
+    timezone_used: str
+    ascendant: "VedicChartAscendant"
+    planets: list["VedicChartPlanet"]
+    houses: list["VedicChartHouse"]
 
 
 class VedicChatHistoryItem(TypedDict):
@@ -6328,6 +9389,19 @@ class VedicChatResponse(TypedDict):
     tool_trace: NotRequired[Union[dict[str, Any], None]]
 
 
+class VedicCompatibilityResponse(TypedDict):
+    scores: dict[str, "VedicCompatibilityScoresEntry"]
+    total_score: float
+    max_score: float
+    percentage: float
+    recommendation: str
+
+
+class VedicCompatibilityScoresEntry(TypedDict):
+    score: float
+    max: int
+
+
 class VedicDashaInsightFact(TypedDict):
     id: str
     category: str
@@ -6373,6 +9447,21 @@ class VedicDashaInsightsResponse(TypedDict):
     summary: dict[str, dict[str, int]]
     importance: list["VedicDashaInsightImportanceItem"]
     facts: list["VedicDashaInsightFact"]
+
+
+class VedicDashaPeriod(TypedDict):
+    """A Vimshottari period; ``sub_periods`` holds the next level down when more levels are requested."""
+    level: str
+    lord: str
+    start: str
+    end: str
+    duration_years: float
+    sub_periods: NotRequired[Union[list["VedicDashaPeriod"], None]]
+
+
+class VedicDashaResponse(TypedDict):
+    moon_nakshatra: str
+    vimshottari_dasha: list["VedicDashaPeriod"]
 
 
 class VedicGocharTimelineInput(TypedDict):
@@ -6529,6 +9618,21 @@ class VedicGocharTimelineWindow(TypedDict):
     source_fact_ids: list[str]
 
 
+class VedicMatchP1Details(TypedDict):
+    moon_sign: str
+    moon_nakshatra: str
+
+
+class VedicMatchResponse(TypedDict):
+    scores: dict[str, "VedicCompatibilityScoresEntry"]
+    total_score: float
+    max_score: float
+    percentage: float
+    recommendation: str
+    p1_details: "VedicMatchP1Details"
+    p2_details: "VedicMatchP1Details"
+
+
 class VedicMuhuratPersonalizedSearchRequest(TypedDict):
     purpose: NotRequired[str]
     start_date: str
@@ -6619,6 +9723,21 @@ class VedicMuhuratSearchWindow(TypedDict):
 
 class VedicMundanChildContext(TypedDict):
     is_first_child: NotRequired[Union[bool, None]]
+
+
+class VedicPanchangResponse(TypedDict):
+    """Panchang at sunrise for the given date and place."""
+    tithi: "VedicCalculatePanchangTithi"
+    nakshatra: "VedicChartAscendantNakshatra"
+    yoga: "VedicCalculatePanchangYoga"
+    karana: "VedicCalculatePanchangYoga"
+    weekday: str
+    rahu_kalam: "VedicCalculatePanchangRahuKalam"
+
+
+class VedicPlanetVargaSign(TypedDict):
+    sign: str
+    sign_id: int
 
 
 class VedicQAMetadata(TypedDict):
@@ -6712,6 +9831,11 @@ class VedicQAResponse(TypedDict):
     metadata: "VedicQAMetadata"
 
 
+class VedicStrengthResponse(TypedDict):
+    shadbala: dict[str, "VedicCalculateShadbalaEntry"]
+    ashtakavarga: "VedicCalculateAshtakavarga"
+
+
 class VedicTransitInsightFact(TypedDict):
     id: str
     category: str
@@ -6779,6 +9903,16 @@ class VedicTransitInsightsResponse(TypedDict):
     facts: list["VedicTransitInsightFact"]
 
 
+class VedicVargaPlacement(TypedDict):
+    planet: str
+    sign: str
+    sign_id: int
+
+
+class VedicVargasResponse(TypedDict):
+    vargas: dict[str, list["VedicVargaPlacement"]]
+
+
 class VedicVisualChartRequest(TypedDict):
     year: int
     month: int
@@ -6808,6 +9942,11 @@ class VedicVisualChartRequest(TypedDict):
     display_settings: NotRequired[Union[dict[str, Any], None]]
     chart_config: NotRequired[Union[dict[str, Any], None]]
     custom_css: NotRequired[Union[str, None]]
+
+
+class VedicYogasResponse(TypedDict):
+    yogas: list["VedicCalculateYoga"]
+    sade_sati: "VedicCalculateSadeSati"
 
 
 class WeddingElectionFactor(TypedDict):
@@ -7031,7 +10170,7 @@ class YogasV2Response(TypedDict):
 
 class ZodiacData(TypedDict):
     sign: str
-    sign_id: str
+    sign_id: Literal["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"]
     degree: float
     zodiac_type: NotRequired[str]
 
@@ -7061,20 +10200,152 @@ __all__ = [
     "AspectSearchEvent",
     "AspectWeightBreakdown",
     "AspectsPayload",
+    "AstrocartographyCityCheckCity",
+    "AstrocartographyCityCheckCityVisualExplanation",
+    "AstrocartographyCityCheckCityVisualExplanationPrimaryLine",
+    "AstrocartographyCityCheckCityVisualExplanationPrimaryParan",
+    "AstrocartographyCityCheckCityVisualExplanationRelevantCrossing",
+    "AstrocartographyCityCheckFocusScores",
+    "AstrocartographyCityCheckFocusScoresCareer",
+    "AstrocartographyCityCheckFocusScoresCareerNearestFavorableLine",
+    "AstrocartographyCityCheckFocusScoresCareerNearestFavorableParan",
+    "AstrocartographyCityCheckFocusScoresCareerTopFactor",
+    "AstrocartographyCityCheckFocusScoresCareerTopParan",
+    "AstrocartographyCityCheckMeta",
+    "AstrocartographyCityCheckRelocationSummary",
+    "AstrocartographyCityCheckRelocationSummaryAngles",
+    "AstrocartographyCityCheckRelocationSummaryAnglesDetailsEntry",
+    "AstrocartographyCityCheckRelocationSummaryAngularPlanet",
     "AstrocartographyCityCheckRequest",
+    "AstrocartographyCityCheckResponse",
+    "AstrocartographyLinesChartFamily",
+    "AstrocartographyLinesCrossing",
+    "AstrocartographyLinesCrossingGeometry",
+    "AstrocartographyLinesCrossingLine",
+    "AstrocartographyLinesCrossingNearestCity",
+    "AstrocartographyLinesCrossingQuality",
+    "AstrocartographyLinesCrossingQualityFocusScores",
+    "AstrocartographyLinesLine",
+    "AstrocartographyLinesLineGeometry",
+    "AstrocartographyLinesLineLatRange",
+    "AstrocartographyLinesLineSegmentItem",
+    "AstrocartographyLinesMeta",
     "AstrocartographyLinesRequest",
+    "AstrocartographyLinesResponse",
+    "AstrocartographyParansMeta",
+    "AstrocartographyParansParan",
+    "AstrocartographyParansParanGeometry",
     "AstrocartographyParansRequest",
+    "AstrocartographyParansResponse",
+    "AstrocartographyRecommendationsMeta",
     "AstrocartographyRecommendationsRequest",
+    "AstrocartographyRecommendationsResponse",
+    "AstrocartographyRecommendationsResult",
+    "AstrocartographyRecommendationsResultCity",
+    "AstrocartographyRelocationChart",
+    "AstrocartographyRelocationChartAngles",
+    "AstrocartographyRelocationChartAspect",
+    "AstrocartographyRelocationChartAspectsSummary",
+    "AstrocartographyRelocationChartAspectsSummaryByType",
+    "AstrocartographyRelocationChartConfidence",
+    "AstrocartographyRelocationChartHouse",
+    "AstrocartographyRelocationChartPlanet",
+    "AstrocartographyRelocationChartSubject",
+    "AstrocartographyRelocationChartSubjectLocation",
+    "AstrocartographyRelocationChartSubjectSettings",
+    "AstrocartographyRelocationMeta",
     "AstrocartographyRelocationRequest",
+    "AstrocartographyRelocationResponse",
+    "AtomicInterpretation",
+    "AtomicInterpretationAspect",
+    "AtomicInterpretationBlock",
+    "AtomicInterpretationIndex",
+    "AtomicInterpretationMetadata",
+    "AtomicInterpretationPlacement",
+    "AtomicInterpretationSections",
     "AtomicReportRequest",
+    "AtomicReportResponse",
     "BaseChartRequestV1",
     "BaseChartRequestV2",
+    "BaziChartAstroDebug",
+    "BaziChartCurrentYearTriggers",
+    "BaziChartCurrentYearTriggersInteraction",
+    "BaziChartCurrentYearTriggersStar",
+    "BaziChartDayMaster",
+    "BaziChartDayMasterInfo",
+    "BaziChartElements",
+    "BaziChartElementsPercentages",
+    "BaziChartElementsPoints",
+    "BaziChartElementsWeights",
+    "BaziChartInteraction",
+    "BaziChartInteractionTransformEvidence",
+    "BaziChartLuckCycle",
+    "BaziChartLuckCyclePillar",
+    "BaziChartMetadata",
+    "BaziChartPillar",
+    "BaziChartPillarLifeStage",
+    "BaziChartPillarTenGods",
+    "BaziChartPillarTenGodsHiddenItem",
+    "BaziChartPillarZhiInfo",
+    "BaziChartProfessional",
+    "BaziChartProfessionalProfessionalDebug",
+    "BaziChartResponse",
+    "BaziChartStar",
+    "BaziChartStarTriggerRule",
+    "BaziChartStarXunAudit",
+    "BaziChartSummary",
+    "BaziDictionaryEntry",
+    "BaziDictionaryResponse",
     "BaziFlowRequest",
+    "BaziFlowResponse",
+    "BaziFlowYear",
+    "BaziFlowYearActiveLuck",
+    "BaziFlowYearBaselineInteraction",
+    "BaziFlowYearMonth",
+    "BaziFlowYearMonthInteraction",
+    "BaziFlowYearMonthStar",
+    "BaziHealthBaziContext",
+    "BaziHealthBaziContextBalanceStrategy",
+    "BaziHealthConstitution",
+    "BaziHealthDataQuality",
+    "BaziHealthElementBalance",
+    "BaziHealthElementBalanceSeasonalAdjustments",
+    "BaziHealthInstabilityMarkers",
+    "BaziHealthInstabilityMarkersMarkers",
+    "BaziHealthInstabilityMarkersMarkersClash",
+    "BaziHealthInstabilityMarkersMarkersPunishment",
+    "BaziHealthInstabilityMarkersMarkersSelfPunishment",
+    "BaziHealthMetadata",
     "BaziHealthRequest",
+    "BaziHealthResponse",
+    "BaziHealthStressPatterns",
+    "BaziHealthStressPatternsPatterns",
+    "BaziHealthStressPatternsPatternsDepletionRisk",
+    "BaziHealthStressPatternsTenGodDistribution",
+    "BaziHealthSusceptibilityTheme",
+    "BaziHealthTcmCorrespondence",
+    "BaziHealthTiming",
+    "BaziHealthTimingDecadePeak",
+    "BaziHealthTimingDecadePeakStrainBreakdown",
+    "BaziHealthTimingYearPeak",
+    "BaziLifespanCurveItem",
+    "BaziLifespanMetadata",
     "BaziLifespanRequest",
+    "BaziLifespanResponse",
     "BaziRequest",
+    "BaziSynastryConflictScan",
+    "BaziSynastryDayMasterAnalysis",
+    "BaziSynastryElementAnalysis",
+    "BaziSynastryHiddenInteractions",
+    "BaziSynastryPillarInteraction",
+    "BaziSynastryPillarInteractionBranchInteraction",
     "BaziSynastryRequest",
+    "BaziSynastryResponse",
+    "BaziSynastryScoreBreakdown",
+    "BaziSynastrySpousePalaceAnalysis",
+    "BaziTimeCorrectionModalities",
     "BaziTimeCorrectionRequest",
+    "BaziTimeCorrectionResponse",
     "BhavaChalitAscendant",
     "BhavaChalitChart",
     "BhavaChalitHouse",
@@ -7127,6 +10398,11 @@ __all__ = [
     "ChineseCalendarValidatedRange",
     "ChineseCalendarYearProfile",
     "ChineseCalendarYearProfiles",
+    "ChineseTodayPillar",
+    "ChineseTodayPillarInfo",
+    "ChineseTodayPillarInfoBranch",
+    "ChineseTodayPillarInfoStem",
+    "ChineseTodayResponse",
     "CityResult",
     "CitySearchResponse",
     "ClientContext",
@@ -7188,7 +10464,35 @@ __all__ = [
     "EclipseData",
     "EclipseMaximumLocationData",
     "EngineMeta",
+    "EphemerisDataAngles",
+    "EphemerisDataAnglesDetailsEntry",
+    "EphemerisDataAspect",
+    "EphemerisDataAstrology",
+    "EphemerisDataAstrologyAngularBody",
+    "EphemerisDataAstrologyIngress",
+    "EphemerisDataAstrologyMoonPhase",
+    "EphemerisDataAstrologyMoonVoidOfCourse",
+    "EphemerisDataAstrologyMoonVoidOfCourseNextApplyingAspect",
+    "EphemerisDataAstrologyStation",
+    "EphemerisDataBodiesEntry",
+    "EphemerisDataFixedStarError",
+    "EphemerisDataFixedStarsEntry",
+    "EphemerisDataHouse",
+    "EphemerisDataSubject",
+    "EphemerisDataSubjectLocation",
+    "EphemerisDataSubjectSettings",
+    "EphemerisDisplay",
+    "EphemerisDisplayMotionMarkers",
+    "EphemerisGridCell",
+    "EphemerisMeta",
+    "EphemerisRawRow",
     "EphemerisRequest",
+    "EphemerisResponse",
+    "EphemerisRow",
+    "EphemerisRowChart",
+    "EphemerisRowDate",
+    "EphemerisSnapshot",
+    "ErrorResponse",
     "ExactAspectSearchRequest",
     "ExactAspectSearchResponse",
     "ExactIngressSearchRequest",
@@ -7215,6 +10519,73 @@ __all__ = [
     "HTTPValidationError",
     "Highlight",
     "HighlightPayload",
+    "HoroscopeDailyBulkDataEntry",
+    "HoroscopeDailyBulkDataEntryAstro",
+    "HoroscopeDailyBulkDataEntryAstroHighlight",
+    "HoroscopeDailyBulkDataEntryContent",
+    "HoroscopeDailyBulkDataEntryLucky",
+    "HoroscopeDailyBulkDataEntryLuckyColor",
+    "HoroscopeDailyBulkDataEntryLuckyTimeWindow",
+    "HoroscopeDailyBulkDataEntryScoreFactor",
+    "HoroscopeDailyBulkDataEntryScores",
+    "HoroscopeDailyBulkMeta",
+    "HoroscopeDailyBulkMetaCache",
+    "HoroscopeDailyBulkMetaEngine",
+    "HoroscopeDailyBulkMetaSettings",
+    "HoroscopeDailyBulkResponse",
+    "HoroscopeDailyPersonalData",
+    "HoroscopeDailyPersonalDataPersonal",
+    "HoroscopeDailyPersonalDataPersonalTransitsTopItem",
+    "HoroscopeDailyPersonalResponse",
+    "HoroscopeDailyPersonalV2Data",
+    "HoroscopeDailyPersonalV2DataPersonal",
+    "HoroscopeDailyPersonalV2DataPersonalTransitsTopItem",
+    "HoroscopeDailyPersonalV2DataScoresMeta",
+    "HoroscopeDailyPersonalV2DataScoresMetaWeights",
+    "HoroscopeDailyPersonalV2Meta",
+    "HoroscopeDailyPersonalV2MetaSettings",
+    "HoroscopeDailyPersonalV2Response",
+    "HoroscopeDailyPersonalV3Data",
+    "HoroscopeDailyPersonalV3DataContent",
+    "HoroscopeDailyPersonalV3DataPersonal",
+    "HoroscopeDailyPersonalV3DataPersonalDayContext",
+    "HoroscopeDailyPersonalV3DataPersonalDayContextActiveWindow",
+    "HoroscopeDailyPersonalV3DataPersonalDayContextDominantTopic",
+    "HoroscopeDailyPersonalV3DataPersonalDayContextExactHit",
+    "HoroscopeDailyPersonalV3DataPersonalDayContextNextShift",
+    "HoroscopeDailyPersonalV3DataPersonalDayContextSupportiveVsChallenging",
+    "HoroscopeDailyPersonalV3DataPersonalInsightsMeta",
+    "HoroscopeDailyPersonalV3DataPersonalTransitsTopItem",
+    "HoroscopeDailyPersonalV3Meta",
+    "HoroscopeDailyPersonalV3MetaSettings",
+    "HoroscopeDailyPersonalV3Response",
+    "HoroscopeDailySignMeta",
+    "HoroscopeDailySignMetaSettings",
+    "HoroscopeDailySignResponse",
+    "HoroscopeDailySignV2Data",
+    "HoroscopeDailySignV2DataScoreFactor",
+    "HoroscopeDailySignV2DataScoreFactorDriver",
+    "HoroscopeDailySignV2DataScoreFactorReason",
+    "HoroscopeDailySignV2Meta",
+    "HoroscopeDailySignV2MetaSettings",
+    "HoroscopeDailySignV2Response",
+    "HoroscopeDailySignV3Meta",
+    "HoroscopeDailySignV3MetaSettings",
+    "HoroscopeDailySignV3Response",
+    "HoroscopeWeeklyPersonalV3Data",
+    "HoroscopeWeeklyPersonalV3DataContent",
+    "HoroscopeWeeklyPersonalV3DataPeriod",
+    "HoroscopeWeeklyPersonalV3DataPersonal",
+    "HoroscopeWeeklyPersonalV3DataPersonalDay",
+    "HoroscopeWeeklyPersonalV3DataPersonalDayDayContext",
+    "HoroscopeWeeklyPersonalV3DataPersonalDayDayContextActiveWindow",
+    "HoroscopeWeeklyPersonalV3DataPersonalDayDayContextExactHit",
+    "HoroscopeWeeklyPersonalV3DataPersonalInsightsMeta",
+    "HoroscopeWeeklyPersonalV3DataPersonalTransitsTopItem",
+    "HoroscopeWeeklyPersonalV3DataScoresMeta",
+    "HoroscopeWeeklyPersonalV3Meta",
+    "HoroscopeWeeklyPersonalV3MetaSettings",
+    "HoroscopeWeeklyPersonalV3Response",
     "HouseOverlayItem",
     "HouseOverlays",
     "HousePayload",
@@ -7224,6 +10595,7 @@ __all__ = [
     "InterpretationRef",
     "InterpretationResolutionMetadata",
     "InterpretationSettings",
+    "InterpretationUnavailable",
     "InvestMoneyElectionFactor",
     "InvestMoneyElectionInvestorResonance",
     "InvestMoneyElectionLocationRequest",
@@ -7338,6 +10710,58 @@ __all__ = [
     "MovementsPayload",
     "NakshatraInfo",
     "NameAnalysis",
+    "NatalCalculateAngles",
+    "NatalCalculateAnglesDetailsEntry",
+    "NatalCalculateAspect",
+    "NatalCalculateAspectsSummary",
+    "NatalCalculateConfidence",
+    "NatalCalculateConfigurations",
+    "NatalCalculateConfigurationsItem",
+    "NatalCalculateConfigurationsItemAspect",
+    "NatalCalculateDeclinationAspect",
+    "NatalCalculateDeclinationAspectsSummary",
+    "NatalCalculateDominants",
+    "NatalCalculateDominantsElements",
+    "NatalCalculateDominantsModalities",
+    "NatalCalculateDominantsPolarities",
+    "NatalCalculateDominantsProfile",
+    "NatalCalculateDominantsProfileDominantElement",
+    "NatalCalculateDominantsProfileDominantElementTable",
+    "NatalCalculateDominantsProfileDominantElementTableFire",
+    "NatalCalculateDominantsProfileDominantPlanet",
+    "NatalCalculateDominantsProfileSignatureSign",
+    "NatalCalculateDominantsProfileSignatureSignElementCounts",
+    "NatalCalculateDominantsProfileSignatureSignModalityCounts",
+    "NatalCalculateFixedStarError",
+    "NatalCalculateFixedStarsEntry",
+    "NatalCalculateHouse",
+    "NatalCalculateHouseRuler",
+    "NatalCalculatePlanet",
+    "NatalCalculateResponse",
+    "NatalCalculateStelliums",
+    "NatalCalculateStelliumsConcentrations",
+    "NatalCalculateStelliumsConcentrationsHouse",
+    "NatalCalculateStelliumsConcentrationsSign",
+    "NatalCalculateStelliumsHouse",
+    "NatalCalculateStelliumsSign",
+    "NatalCalculateSubject",
+    "NatalCalculateSubjectLocation",
+    "NatalCalculateSubjectSettings",
+    "NatalCalculateTables",
+    "NatalCalculateTablesAspectMatrix",
+    "NatalCalculateTablesAspectMatrixPoint",
+    "NatalCalculateTablesAspectMatrixRow",
+    "NatalCalculateTablesAspectMatrixRowCell",
+    "NatalCalculateTablesElementModality",
+    "NatalCalculateTablesElementModalityColumn",
+    "NatalCalculateTablesElementModalityRow",
+    "NatalCalculateTablesElementModalityRowCell",
+    "NatalCalculateTablesElementModalityRowCellItem",
+    "NatalCalculateTablesMeta",
+    "NatalCalculateTablesPositions",
+    "NatalCalculateTablesPositionsAngleRow",
+    "NatalCalculateTablesPositionsHouseRow",
+    "NatalCalculateTablesPositionsPointRow",
     "NatalChartRequest",
     "NatalComparison",
     "NatalInsightDisplay",
@@ -7351,7 +10775,10 @@ __all__ = [
     "NatalInsightsMeta",
     "NatalInsightsRequest",
     "NatalInsightsResponse",
+    "NatalPsychologicalReportStatus",
     "NatalReference",
+    "NatalStelliumCluster",
+    "NatalStelliumLink",
     "NatalTimeLordDetails",
     "NextMajorPhase",
     "NormalizedInput",
@@ -7442,7 +10869,15 @@ __all__ = [
     "ProgressionSearchMeta",
     "ProgressionTableResponse",
     "ProgressionTablesPayload",
+    "PsychologicalReportChapter",
+    "PsychologicalReportChapterPlan",
+    "PsychologicalReportContent",
+    "PsychologicalReportEvidence",
+    "PsychologicalReportJobResponse",
+    "PsychologicalReportMetadata",
+    "PsychologicalReportSection",
     "PsychologicalReportSettings",
+    "PsychologicalReportSubsectionPlan",
     "PurchaseCarElectionBuyerResonance",
     "PurchaseCarElectionFactor",
     "PurchaseCarElectionLocationRequest",
@@ -7480,11 +10915,13 @@ __all__ = [
     "RashifalMeta",
     "RashifalSection",
     "RashifalTransit",
+    "ReportCreditsResponse",
     "ResolvedAnkJyotishMethod",
     "ResolvedChaldeanMethod",
     "ResolvedDateContext",
     "ResolvedKabbalahMethod",
     "ResolvedPythagoreanMethod",
+    "ResolvedTime",
     "ResponseMeta",
     "ReturnEventMetaDetails",
     "ReturnTarget",
@@ -7503,7 +10940,13 @@ __all__ = [
     "SharedPosition",
     "SignInfo",
     "SignResponse",
+    "SimpleNatalHouse",
+    "SimpleNatalMeta",
+    "SimpleNatalPlanet",
     "SimpleNatalRequest",
+    "SimpleNatalResponse",
+    "SimpleNatalSubject",
+    "SimpleNatalSummary",
     "SkyEvent",
     "SkyEventsPreset",
     "SkyEventsResponse",
@@ -7517,7 +10960,16 @@ __all__ = [
     "SolarReturnSettings",
     "SolarReturnTarget",
     "SolarReturnUncertainty",
+    "SpaceChartEngine",
+    "SpaceChartHouses",
+    "SpaceChartHousesCusp",
+    "SpaceChartInstant",
+    "SpaceChartMarsTime",
+    "SpaceChartPlanet",
+    "SpaceChartPoint",
     "SpaceChartRequest",
+    "SpaceChartResponse",
+    "SpaceChartSite",
     "SpaceChartSvgRequest",
     "SpecialMoonData",
     "StartingJourneyElectionFactor",
@@ -7586,6 +11038,15 @@ __all__ = [
     "TransitTimelineResponse",
     "TransitTimelineTransit",
     "TransitTimelineTransitHouses",
+    "TransitsCalculateAspect",
+    "TransitsCalculateAspectBetween",
+    "TransitsCalculateAspectsSummary",
+    "TransitsCalculateAspectsSummaryByType",
+    "TransitsCalculateNatal",
+    "TransitsCalculateNatalPlanet",
+    "TransitsCalculateResolvedTime",
+    "TransitsCalculateResponse",
+    "TransitsCalculateTransitPlanet",
     "TransliterationInput",
     "ValidationError",
     "VargaAscendant",
@@ -7597,17 +11058,38 @@ __all__ = [
     "VargasRequest",
     "VargasV2Response",
     "VedicBatchItem",
+    "VedicBatchItemResult",
     "VedicBatchRequest",
+    "VedicBatchResponse",
+    "VedicCalculateAshtakavarga",
+    "VedicCalculateAshtakavargaBhinnashtakavarga",
+    "VedicCalculatePanchang",
+    "VedicCalculatePanchangRahuKalam",
+    "VedicCalculatePanchangTithi",
+    "VedicCalculatePanchangYoga",
+    "VedicCalculateResponse",
+    "VedicCalculateSadeSati",
+    "VedicCalculateShadbalaEntry",
+    "VedicCalculateYoga",
+    "VedicChartAscendant",
+    "VedicChartAscendantNakshatra",
+    "VedicChartHouse",
+    "VedicChartPlanet",
     "VedicChartRequest",
+    "VedicChartResponse",
     "VedicChatHistoryItem",
     "VedicChatProfile",
     "VedicChatQuota",
     "VedicChatRequest",
     "VedicChatResponse",
+    "VedicCompatibilityResponse",
+    "VedicCompatibilityScoresEntry",
     "VedicDashaInsightFact",
     "VedicDashaInsightImportanceItem",
     "VedicDashaInsightMeta",
     "VedicDashaInsightsResponse",
+    "VedicDashaPeriod",
+    "VedicDashaResponse",
     "VedicGocharTimelineInput",
     "VedicGocharTimelineInsightFact",
     "VedicGocharTimelineInsightImportanceItem",
@@ -7619,6 +11101,8 @@ __all__ = [
     "VedicGocharTimelineRequest",
     "VedicGocharTimelineResponse",
     "VedicGocharTimelineWindow",
+    "VedicMatchP1Details",
+    "VedicMatchResponse",
     "VedicMuhuratPersonalizedSearchRequest",
     "VedicMuhuratSearchMetadata",
     "VedicMuhuratSearchRange",
@@ -7626,18 +11110,24 @@ __all__ = [
     "VedicMuhuratSearchResponse",
     "VedicMuhuratSearchWindow",
     "VedicMundanChildContext",
+    "VedicPanchangResponse",
+    "VedicPlanetVargaSign",
     "VedicQAMetadata",
     "VedicQAMuhurat",
     "VedicQAPanchangContext",
     "VedicQAPeriod",
     "VedicQARequest",
     "VedicQAResponse",
+    "VedicStrengthResponse",
     "VedicTransitInsightFact",
     "VedicTransitInsightImportanceItem",
     "VedicTransitInsightsMeta",
     "VedicTransitInsightsRequest",
     "VedicTransitInsightsResponse",
+    "VedicVargaPlacement",
+    "VedicVargasResponse",
     "VedicVisualChartRequest",
+    "VedicYogasResponse",
     "WeddingElectionFactor",
     "WeddingElectionLocationRequest",
     "WeddingElectionNatalRequest",

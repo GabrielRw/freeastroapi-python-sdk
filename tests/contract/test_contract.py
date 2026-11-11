@@ -3,7 +3,8 @@
 Prism validates each request (path, query, headers, JSON body) against the spec and answers 4xx
 with an ``sl-violations`` header when it does not match, so a passing run means the SDK builds
 requests the API accepts. Each response must then validate against the method's return type
-(TypedDicts via pydantic, hand-written models, ``str`` or ``bytes``).
+(TypedDicts via pydantic, ``str`` or ``bytes``). The hand-written v0.1 methods must decode
+Prism's spec-valid data without falling back to lenient decoding, so their models match the spec.
 
     python3 scripts/with_prism.py -- pytest -m contract
     PRISM_URL=http://127.0.0.1:4010 pytest -m contract    # Prism already running
@@ -24,18 +25,17 @@ from typing import Any
 
 import httpx
 import pytest
-from pydantic import BaseModel, TypeAdapter
+from pydantic import TypeAdapter
 from pydantic import ValidationError as PydanticValidationError
 
 from freeastroapi import OPERATIONS, FreeAstro, FreeAstroError, OperationInfo, _generated, schemas
-from freeastroapi.models import MoonMonthParams, MoonPhaseParams, SkyEventsParams, WesternSignRequest
+from freeastroapi.models import MoonMonthParams, MoonPhaseParams, ResponseModel, SkyEventsParams, WesternSignRequest
 
 PRISM_URL = os.environ.get("PRISM_URL")
 ROOT = Path(__file__).resolve().parents[2]
 SPEC = json.loads((ROOT / "spec" / "freeastro.json").read_text(encoding="utf-8"))
-# Hand-written v0.1 methods parse into stricter models than the spec describes (fixed enums and
-# keys the spec leaves open), which Prism's spec-valid mock data does not satisfy. Their raw
-# responses are checked against the spec's own schema type instead.
+# Hand-written v0.1 methods return Pydantic models; their raw responses are also checked against
+# the spec's own schema type.
 HAND_WRITTEN = {"v2_geo_search", "v1_moon_phase", "v1_moon_month", "v1_sky_events"} | {
     f"v1_western_signs_{point}" for point in ("sun", "moon", "rising", "midheaven")
 }
@@ -118,12 +118,16 @@ def test_operation(
 ) -> None:
     generator = _load_generator()
     recorded.clear()
+    fallbacks: list[str] = []
+
+    def strict(cls: type[ResponseModel], data: Any) -> Any:
+        fallbacks.append(f"{cls.__name__}: {json.dumps(data)[:300]}")
+        return original(data)
+
+    original = ResponseModel._construct_leniently.__func__  # type: ignore[attr-defined]
     try:
-        if info.operation_id in HAND_WRITTEN:
-            with pytest.MonkeyPatch.context() as patch:
-                patch.setattr(BaseModel, "model_validate", classmethod(lambda cls, data: data))
-                result = _call(client, info, samples[info.operation_id], generator.py_ident)
-        else:
+        with pytest.MonkeyPatch.context() as patch:
+            patch.setattr(ResponseModel, "_construct_leniently", classmethod(lambda cls, data: strict(cls, data)))
             result = _call(client, info, samples[info.operation_id], generator.py_ident)
     except FreeAstroError as error:
         # Prism validates the request, then cannot serialise schemaless image bodies
@@ -140,9 +144,17 @@ def test_operation(
     assert [v for v in violations if v["location"][0] == "request"] == []
     assert response.status_code < 300
 
+    if info.operation_id in HAND_WRITTEN:
+        # Prism's mock data is spec-valid, so the models must not need lenient decoding.
+        assert fallbacks == [], f"model does not match the spec: {fallbacks[:3]}"
+        result = response.json()
+
     expected = _expected_type(client, info)
+    adapter: TypeAdapter[Any] = TypeAdapter(expected)
+    # Aliases such as ``dict[str, "Entry"]`` resolve their quoted names in ``schemas``.
+    adapter.rebuild(_types_namespace=vars(schemas))
     try:
-        TypeAdapter(expected).validate_python(result, strict=False)
+        adapter.validate_python(result, strict=False)
     except PydanticValidationError as exc:
         prism_broke = {
             tuple(str(p) for p in v["location"][2:]) for v in violations if v["location"][:2] == ["response", "body"]
